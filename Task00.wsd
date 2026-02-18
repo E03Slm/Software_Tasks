@@ -1,0 +1,60 @@
+@startuml Task00
+left to right direction
+skinparam packageStyle rectangle
+
+actor Patient
+actor Clinician
+actor "System Administrator" as Admin
+
+rectangle "Telemedicine Platform\n(Chronic Heart Failure Monitoring)" {
+
+  package "Functional Requirements" {
+
+    usecase "Enter Daily Weight" as UC1
+    usecase "Enter Blood Pressure" as UC2
+    usecase "Receive Out-of-Range Alert" as UC3
+
+    usecase "View Patient Trends" as UC4
+    usecase "Receive High Priority Alerts" as UC5
+    usecase "Access Historical Data" as UC6
+
+    usecase "Manage Users" as UC7
+    usecase "Audit Logging" as UC8
+    usecase "Backup & Recovery" as UC9
+  }
+
+  package "Non-Functional Requirements" {
+
+    usecase "Usability & Accessibility\n(Simple UI)" as NFR1
+    usecase "Performance\n(Fast Chart Loading)" as NFR2
+    usecase "Security\n(HIPAA Compliance)" as NFR3
+    usecase "Maintainability" as NFR4
+    usecase "High Availability" as NFR5
+  }
+}
+
+Patient --> UC1
+Patient --> UC2
+Patient --> UC3
+
+Clinician --> UC4
+Clinician --> UC5
+Clinician --> UC6
+
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+
+UC1 ..> NFR1
+UC2 ..> NFR1
+UC3 ..> NFR1
+
+UC4 ..> NFR2
+UC5 ..> NFR2
+UC6 ..> NFR3
+
+UC7 ..> NFR4
+UC8 ..> NFR3
+UC9 ..> NFR5
+
+@enduml
