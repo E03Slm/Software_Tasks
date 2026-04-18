@@ -1,24 +1,44 @@
 import bcrypt
+import pyodbc
 
-# 1. The original password from the user
-user_password = "my_super_secret_password_123"
+def update_user_password(username, new_plain_password):
+    # 1. Connection String
+    conn_str = (
+        r"DRIVER={ODBC Driver 17 for SQL Server};"
+        r"SERVER=(localdb)\MSSQLLocalDB;"
+        r"DATABASE=SmartInfusionPump;"
+        r"Trusted_Connection=yes;"
+    )
 
-# 2. Generate a 'Salt' and Hash the password
-# The 'rounds' parameter determines the complexity (12 is standard)
-salt = bcrypt.gensalt(rounds=12)
-hashed_password = bcrypt.hashpw(user_password.encode('utf-8'), salt)
+    # 2. Generate a valid Bcrypt hash
+    # This creates a string starting with $2b$ which is a valid salt format
+    new_hash = bcrypt.hashpw(new_plain_password.encode('utf-8'), bcrypt.gensalt())
 
-print(f"Stored Hash: {hashed_password.decode('utf-8')}")
+    conn = None
+    try:
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
 
-# --- LOGIN SIMULATION ---
+        # 3. Update the passwordHash column
+        # We use [User] in brackets because it is a reserved SQL keyword
+        sql = "UPDATE [SmartInfusionPump].[dbo].[User] SET [passwordHash] = ? WHERE [username] = ?"
+        
+        # We decode the hash to a string to store it in a VARCHAR column
+        cursor.execute(sql, (new_hash.decode('utf-8'), username))
+        
+        conn.commit()
+        
+        if cursor.rowcount > 0:
+            print(f"Success: Password for '{username}' has been updated.")
+        else:
+            print(f"Error: User '{username}' not found.")
 
-# 3. Verifying a password during login
-attempt_correct = "my_super_secret_password_123"
-attempt_wrong = "wrong_password"
+    except pyodbc.Error as e:
+        print(f"Database error: {e}")
+    finally:
+        if conn:
+            conn.close()
 
-# bcrypt.checkpw handles extracting the salt from the hash automatically
-is_valid = bcrypt.checkpw(attempt_correct.encode('utf-8'), hashed_password)
-is_invalid = bcrypt.checkpw(attempt_wrong.encode('utf-8'), hashed_password)
-
-print(f"Login success: {is_valid}")   # Returns True
-print(f"Login failure: {is_invalid}") # Returns False
+# --- RUN THIS TO FIX YOUR TABLE ---
+update_user_password("nurse.carlos.martinez", "p@ssw0rd") 
+# Use this to set a known password for all users (for testing)
