@@ -81,3 +81,8 @@ if __name__ == "__main__":
 # --- Calling the Controller ---
     result =  login_controller(user_input, pass_input)
     print(result)
+    user_input = "nurse.carlos.martinez' OR '1'='1"  # Attempting SQL Injection
+    pass_input = "p@ssw0rd"  # The password the user types in the UI
+# --- Calling the Controller ---
+    result =  login_controller(user_input, pass_input)
+    print(result)
