@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Sentinel - Nurse Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#fc6451",
+                    "tertiary-fixed-dim": "#ffb961",
+                    "inverse-surface": "#2d3131",
+                    "on-tertiary-fixed": "#2b1700",
+                    "tertiary-fixed": "#ffddb9",
+                    "inverse-primary": "#9bccf6",
+                    "on-tertiary-fixed-variant": "#663e00",
+                    "on-surface": "#181c1c",
+                    "on-primary-fixed": "#001e30",
+                    "secondary-fixed-dim": "#ffb4a9",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#d7dbda",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f1f4f3",
+                    "outline": "#72787f",
+                    "primary": "#003b5a",
+                    "surface-bright": "#f7faf9",
+                    "on-surface-variant": "#41474e",
+                    "surface-container-high": "#e6e9e8",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#c1c7cf",
+                    "primary-fixed-dim": "#9bccf6",
+                    "primary-container": "#1a5276",
+                    "on-secondary-fixed": "#410000",
+                    "background": "#f7faf9",
+                    "error": "#ba1a1a",
+                    "on-background": "#181c1c",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#cbe6ff",
+                    "secondary-fixed": "#ffdad5",
+                    "surface-container-highest": "#e0e3e2",
+                    "on-tertiary-container": "#ffae42",
+                    "on-error": "#ffffff",
+                    "surface": "#f7faf9",
+                    "on-secondary-fixed-variant": "#8e130c",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#650001",
+                    "secondary": "#b02d21",
+                    "inverse-on-surface": "#eef1f0",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#503000",
+                    "tertiary-container": "#6f4400",
+                    "on-primary-fixed-variant": "#0e4b6e",
+                    "on-primary-container": "#94c5ee",
+                    "surface-container": "#ebeeed",
+                    "surface-tint": "#2f6388",
+                    "surface-variant": "#e0e3e2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-line-boundary {
+            border: none !important;
+        }
+        .clinical-shadow {
+            box-shadow: 0 24px 48px -12px rgba(24, 28, 28, 0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface flex min-h-screen overflow-hidden">
+<!-- NavigationDrawer (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col p-4 bg-[#f1f4f3] dark:bg-slate-950 h-full w-72 rounded-r-lg shadow-2xl shadow-blue-900/5">
+<div class="mb-8 px-2">
+<h2 class="text-lg font-black text-[#003b5a] font-['Inter'] uppercase tracking-widest">Sentinel Access</h2>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-[#1a5276] shadow-sm rounded-md my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="vaccines">vaccines</span>
+<span>Infusion Control</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Drug Library</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>System Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>Role Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="text-xs font-bold text-primary">Nurse J. Doe</p>
+<p class="text-[10px] text-outline">ICU North Wing</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-72 flex flex-col relative h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-6 py-4 bg-[#f7faf9] dark:bg-slate-900 bg-gradient-to-b from-[#f7faf9] to-[#f1f4f3] shadow-sm z-30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#1a5276]" data-icon="monitor_heart">monitor_heart</span>
+<h1 class="text-xl font-black bg-gradient-to-r from-[#003b5a] to-[#1a5276] bg-clip-text text-transparent font-['Inter'] tracking-tight">The Clinical Sentinel</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-tertiary-container/10 rounded-full">
+<span class="material-symbols-outlined text-on-tertiary-container text-sm" data-icon="warning">warning</span>
+<span class="text-[10px] font-bold text-on-tertiary-container uppercase tracking-wider">KVO Mode Active</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1a5276]" data-icon="battery_charging_full" style="font-variation-settings: 'FILL' 1;">battery_charging_full</span>
+<span class="text-xs font-bold text-primary">98%</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Content: Bento Grid Layout -->
+<section class="p-6 grid grid-cols-12 gap-6 overflow-y-auto flex-1">
+<!-- Left Column: Critical Status & Real-time Data -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+<!-- Main Infusion Display -->
+<div class="bg-surface-container-lowest p-8 rounded-xl clinical-shadow flex flex-col justify-between h-[400px]">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-xs font-bold text-outline uppercase tracking-widest mb-1 block">Active Medication</span>
+<h2 class="text-4xl font-extrabold text-primary tracking-tight">Dopamine</h2>
+<p class="text-lg font-medium text-primary-container">400 mg / 250 mL D5W</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-outline uppercase tracking-widest mb-1 block">Infusion Progress</span>
+<span class="text-2xl font-black text-primary">72%</span>
+</div>
+</div>
+<!-- Large Rate Display -->
+<div class="flex flex-col items-center justify-center py-4">
+<div class="flex items-baseline gap-2">
+<span class="text-9xl font-black text-on-surface tracking-tighter">12.5</span>
+<span class="text-2xl font-bold text-outline">mL/hr</span>
+</div>
+</div>
+<!-- Custom Progress Bar (Infusion Gauge) -->
+<div class="space-y-3">
+<div class="flex justify-between text-[10px] font-bold text-outline uppercase">
+<span>0 mL</span>
+<span>Remaining: 68.4 mL</span>
+<span>250 mL</span>
+</div>
+<div class="h-4 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-fixed-dim rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+</div>
+<!-- Secondary Vitals & Trends -->
+<div class="grid grid-cols-2 gap-6">
+<!-- Pressure Trend -->
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col h-40">
+<div class="flex justify-between items-center mb-4">
+<span class="text-xs font-bold text-primary uppercase tracking-wider">Line Pressure</span>
+<span class="text-sm font-bold text-on-surface">42 mmHg</span>
+</div>
+<div class="flex-1 flex items-end gap-1 px-1">
+<!-- Visual placeholder for trend graph bars -->
+<div class="flex-1 bg-primary-container/20 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t h-[35%]"></div>
+<div class="flex-1 bg-primary-container/30 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-primary-container/40 rounded-t h-[50%]"></div>
+<div class="flex-1 bg-primary-container/30 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary-container/60 rounded-t h-[70%]"></div>
+<div class="flex-1 bg-primary-container/50 rounded-t h-[55%]"></div>
+<div class="flex-1 bg-primary-container/70 rounded-t h-[65%]"></div>
+<div class="flex-1 bg-primary-container rounded-t h-[80%]"></div>
+</div>
+</div>
+<!-- VTBI Display -->
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-center items-center h-40">
+<span class="text-xs font-bold text-outline uppercase tracking-widest mb-1">VTBI Remaining</span>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-black text-primary">181.6</span>
+<span class="text-sm font-bold text-primary-container uppercase">mL</span>
+</div>
+<span class="text-[10px] text-outline mt-2">Est. Finish: 14:32 (4h 12m)</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Controls & Configuration -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<!-- Drug Selection & Input -->
+<div class="bg-surface-container-high/50 p-6 rounded-xl flex flex-col gap-6">
+<!-- Searchable Drug Selection -->
+<div class="relative">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest mb-2 block">Drug Library Search</label>
+<div class="flex items-center bg-surface-container-lowest rounded-lg px-4 py-3">
+<span class="material-symbols-outlined text-outline mr-3" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-sm font-medium" placeholder="Start typing medication name..." type="text"/>
+</div>
+</div>
+<!-- Digital Keypad Interface -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest">Target Rate</label>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center justify-between border-b-2 border-primary">
+<span class="text-xl font-bold text-primary">12.5</span>
+<span class="text-[10px] font-bold text-outline">mL/hr</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest">Set VTBI</label>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center justify-between">
+<span class="text-xl font-bold text-outline-variant">250.0</span>
+<span class="text-[10px] font-bold text-outline">mL</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 p-2 bg-surface-container rounded-xl">
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">1</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">2</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">3</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">4</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">5</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">6</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">7</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">8</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">9</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">.</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">0</button>
+<button class="aspect-square bg-surface-container-lowest rounded-lg font-bold text-xl hover:bg-white active:scale-95 transition-all text-primary">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+</div>
+</div>
+<!-- Critical Controls -->
+<div class="flex flex-col gap-4 mt-auto">
+<div class="grid grid-cols-2 gap-4">
+<!-- Pause Button -->
+<button class="flex items-center justify-center gap-3 py-6 bg-tertiary-container text-white rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="pause">pause</span>
+<span class="font-bold text-xl uppercase tracking-tighter">Pause</span>
+</button>
+<!-- Start Button -->
+<button class="flex items-center justify-center gap-3 py-6 bg-[#2d6a4f] text-white rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="play_arrow">play_arrow</span>
+<span class="font-bold text-xl uppercase tracking-tighter">Start</span>
+</button>
+</div>
+<!-- massive Red Emergency Stop -->
+<button class="w-full flex items-center justify-center gap-4 py-8 bg-secondary text-white rounded-xl shadow-lg shadow-secondary/20 active:scale-95 transition-transform group">
+<span class="material-symbols-outlined text-5xl" data-icon="stop_circle" style="font-variation-settings: 'FILL' 1;">stop_circle</span>
+<div class="text-left">
+<span class="block text-2xl font-black uppercase leading-tight">Emergency Stop</span>
+<span class="block text-xs font-medium opacity-80 uppercase tracking-widest">Cease All Fluid Delivery Immediately</span>
+</div>
+</button>
+</div>
+</div>
+</section>
+<!-- BottomNavBar (Shared Component) - Mobile Only/Hidden on Web -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-[#f7faf9] shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-t border-[#f1f4f3] dark:border-slate-800">
+<button class="flex flex-col items-center justify-center bg-[#1a5276] text-white rounded-md p-2 scale-105 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-['Inter'] text-[12px] font-bold">Status</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2 hover:bg-[#f1f4f3]">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Inter'] text-[12px] font-bold">Alarms</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2 hover:bg-[#f1f4f3]">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[12px] font-bold">Settings</span>
+</button>
+</nav>
+</main>
+</body></html>

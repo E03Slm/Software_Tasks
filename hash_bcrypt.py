@@ -40,5 +40,8 @@ def update_user_password(username, new_plain_password):
             conn.close()
 
 # --- RUN THIS TO FIX YOUR TABLE ---
-update_user_password("nurse.carlos.martinez", "p@ssw0rd") 
+#update_user_password("nurse.carlos.martinez", "p@ssw0rd") 
 # Use this to set a known password for all users (for testing)
+new_plain_password = "p@ssw0rd"
+new_hash = bcrypt.hashpw(new_plain_password.encode('utf-8'), bcrypt.gensalt())
+print(new_hash)

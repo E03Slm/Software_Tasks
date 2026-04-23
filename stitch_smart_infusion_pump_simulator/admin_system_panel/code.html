@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Sentinel - Admin System Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fc6451",
+                        "tertiary-fixed-dim": "#ffb961",
+                        "inverse-surface": "#2d3131",
+                        "on-tertiary-fixed": "#2b1700",
+                        "tertiary-fixed": "#ffddb9",
+                        "inverse-primary": "#9bccf6",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-surface": "#181c1c",
+                        "on-primary-fixed": "#001e30",
+                        "secondary-fixed-dim": "#ffb4a9",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbda",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f1f4f3",
+                        "outline": "#72787f",
+                        "primary": "#003b5a",
+                        "surface-bright": "#f7faf9",
+                        "on-surface-variant": "#41474e",
+                        "surface-container-high": "#e6e9e8",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c1c7cf",
+                        "primary-fixed-dim": "#9bccf6",
+                        "primary-container": "#1a5276",
+                        "on-secondary-fixed": "#410000",
+                        "background": "#f7faf9",
+                        "error": "#ba1a1a",
+                        "on-background": "#181c1c",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#cbe6ff",
+                        "secondary-fixed": "#ffdad5",
+                        "surface-container-highest": "#e0e3e2",
+                        "on-tertiary-container": "#ffae42",
+                        "on-error": "#ffffff",
+                        "surface": "#f7faf9",
+                        "on-secondary-fixed-variant": "#8e130c",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#650001",
+                        "secondary": "#b02d21",
+                        "inverse-on-surface": "#eef1f0",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#503000",
+                        "tertiary-container": "#6f4400",
+                        "on-primary-fixed-variant": "#0e4b6e",
+                        "on-primary-container": "#94c5ee",
+                        "surface-container": "#ebeeed",
+                        "surface-tint": "#2f6388",
+                        "surface-variant": "#e0e3e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c1c7cf; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface selection:bg-primary-fixed-dim">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-6 py-4 bg-[#f7faf9] dark:bg-slate-900 shadow-sm bg-gradient-to-b from-[#f7faf9] to-[#f1f4f3]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#1a5276] dark:text-blue-400" data-icon="monitor_heart">monitor_heart</span>
+<h1 class="text-xl font-black bg-gradient-to-r from-[#003b5a] to-[#1a5276] bg-clip-text text-transparent font-['Inter'] font-bold tracking-tight">The Clinical Sentinel</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Network Status</span>
+<span class="text-xs font-bold text-[#1a5276]">ENCRYPTED NODE 04</span>
+</div>
+<span class="material-symbols-outlined text-[#1a5276]" data-icon="battery_charging_full">battery_charging_full</span>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col p-4 w-72 bg-[#f1f4f3] dark:bg-slate-950 pt-20 shadow-2xl shadow-blue-900/5">
+<div class="mb-8 px-2">
+<h2 class="text-lg font-black text-[#003b5a] font-['Inter'] text-sm uppercase tracking-widest font-semibold">Sentinel Access</h2>
+<div class="h-1 w-12 bg-primary mt-1"></div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="vaccines">vaccines</span>
+<span>Infusion Control</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Drug Library</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold hover:bg-white/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>System Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-[#1a5276] shadow-sm rounded-md my-1 font-['Inter'] text-sm uppercase tracking-widest font-semibold duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>Role Settings</span>
+</a>
+</nav>
+<div class="p-4 bg-surface-container-high rounded-lg mt-auto">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs">SA</div>
+<div>
+<p class="text-xs font-bold text-on-surface leading-tight">SysAdmin_Alpha</p>
+<p class="text-[10px] text-on-surface-variant font-medium">Privileged Access</p>
+</div>
+</div>
+<button class="w-full py-2 text-[10px] font-bold uppercase tracking-tighter text-error border border-error/20 rounded hover:bg-error/5 transition-colors">Terminate Session</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-72 pt-20 pb-24 min-h-screen bg-background">
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Health Metrics (Bento Style) -->
+<section class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-xs font-black uppercase tracking-widest text-primary">System Vitality</h3>
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-[10px] font-bold uppercase text-on-surface-variant mb-2">
+<span>CPU Load</span>
+<span>24%</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[24%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-bold uppercase text-on-surface-variant mb-2">
+<span>RAM Utilization</span>
+<span>4.2 GB / 16 GB</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[26%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary p-6 rounded-xl text-white space-y-4 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="text-xs font-black uppercase tracking-widest text-primary-fixed-dim">Encryption Engine</h3>
+<p class="text-2xl font-bold mt-2">AES-256-GCM</p>
+<p class="text-[10px] opacity-70 mt-1 uppercase tracking-tighter">Active Protocol: Sentinel-Secure V4</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10" data-icon="verified_user">verified_user</span>
+</div>
+</section>
+<!-- System Settings Sliders -->
+<section class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+<h3 class="text-xs font-black uppercase tracking-widest text-primary mb-8 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+                        Operational Calibration
+                    </h3>
+<div class="grid md:grid-cols-2 gap-12">
+<div class="space-y-6">
+<label class="block">
+<span class="flex justify-between items-end mb-4">
+<span class="text-sm font-bold text-on-surface">Simulation Time</span>
+<span class="text-headline-md font-black text-primary">120<span class="text-xs ml-1 font-medium">min</span></span>
+</span>
+<input class="w-full h-3 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="360" min="10" type="range" value="120"/>
+<span class="flex justify-between text-[10px] font-bold text-on-surface-variant mt-2">
+<span>10m</span>
+<span>360m</span>
+</span>
+</label>
+</div>
+<div class="space-y-6">
+<label class="block">
+<span class="flex justify-between items-end mb-4">
+<span class="text-sm font-bold text-on-surface">Alarm Volume</span>
+<span class="text-headline-md font-black text-primary">85<span class="text-xs ml-1 font-medium">%</span></span>
+</span>
+<input class="w-full h-3 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="85"/>
+<span class="flex justify-between text-[10px] font-bold text-on-surface-variant mt-2">
+<span>MUTE</span>
+<span>CRITICAL</span>
+</span>
+</label>
+</div>
+</div>
+</section>
+<!-- Fault Injection (Toggles) -->
+<section class="col-span-12 lg:col-span-12 bg-white p-8 rounded-xl shadow-sm border-l-4 border-secondary">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="text-xs font-black uppercase tracking-widest text-secondary">Stress Test Module</h3>
+<p class="text-sm text-on-surface-variant font-medium mt-1">Simulate clinical failures to validate provider response.</p>
+</div>
+<button class="px-6 py-2 bg-secondary text-on-secondary text-xs font-bold rounded-md hover:opacity-90 active:scale-95 transition-all">EMERGENCY RESET</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Manual Occlusion -->
+<div class="p-6 rounded-lg bg-surface-container-low border border-transparent hover:border-secondary/20 transition-all group">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="block">block</span>
+<span class="text-sm font-bold uppercase tracking-tight">Manual Occlusion</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<p class="text-[11px] text-on-surface-variant mt-3 leading-relaxed">Simulates physical line blockage. Triggers High Pressure Alarm immediately.</p>
+</div>
+<!-- Air-in-Line -->
+<div class="p-6 rounded-lg bg-surface-container-low border border-transparent hover:border-secondary/20 transition-all group">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="air">air</span>
+<span class="text-sm font-bold uppercase tracking-tight">Air-in-Line</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<p class="text-[11px] text-on-surface-variant mt-3 leading-relaxed">Injects virtual air bubbles into sensing path. Requires manual clearing.</p>
+</div>
+<!-- Power Failure -->
+<div class="p-6 rounded-lg bg-surface-container-low border border-transparent hover:border-secondary/20 transition-all group">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="power_off">power_off</span>
+<span class="text-sm font-bold uppercase tracking-tight">Power Failure</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<p class="text-[11px] text-on-surface-variant mt-3 leading-relaxed">Forces immediate switch to battery backup. Tests power-loss protocols.</p>
+</div>
+</div>
+</section>
+<!-- User Role Management -->
+<section class="col-span-12 lg:col-span-7 bg-surface-container-lowest p-8 rounded-xl shadow-sm overflow-hidden">
+<h3 class="text-xs font-black uppercase tracking-widest text-primary mb-6 flex items-center justify-between">
+                        Personnel Authorizations
+                        <span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded">6 ACTIVE NODES</span>
+</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="professional portrait of a male clinical engineer in a modern hospital setting wearing a white lab coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjblEVMooM4LvhN-AsOG9IgKsNGObBqpJT2MqZlShgRt2B1M5tW_4ATPAjovy0Xl1pTu9dzbnRtg7L22MKVja-l9xR1_E4cHftRJrW0miI7ABEbu-Kr2IOpvVLLeaujU_zaryL3AJXYOO4PfD7Sc8nW2fQoZexGN9-SkH6H9jOGiXz3Ho0mlaC_-Pt5cXqT3hF70VVCMNwrJby5dm1Suz6w8Q46O8Tmz0C5_CVDhQGglohPnPLOBOVw68fxy8LmYQULmtGGAIQEjos"/>
+<div>
+<p class="text-sm font-bold">Dr. Julian Vance</p>
+<p class="text-[10px] uppercase font-medium text-on-surface-variant">Chief Pharmacist</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-3 py-1 bg-primary text-white rounded-full">SUPERUSER</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="portrait of a female medical professional looking focused and serious wearing clinical scrubs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAyPkxRK5G49pR4ttrpEW3LY6aRGYkiwVwVZ3q75aQOuETEEaqv8yNaXRMVt5kOPodde6Le3u4AtS-dAf5E8O6kaHvgjmLzn9W-0XpbeWRo4IWvwBm0wPeVTRvt2IQS6scNRuKhVmS6SHiSoeUpbHhfN0KpbscME-p8vpupvkItY75ajvuv7VMUN4nr4t-_pVnLWEMNsb8pEBPzinzmELSlH5vrtQLqrJKw96wWzbKufteD7q1H-MH_ghpyBBkec2BBLlZh8zJSedd"/>
+<div>
+<p class="text-sm font-bold">Nurse Elena Rossi</p>
+<p class="text-[10px] uppercase font-medium text-on-surface-variant">Simulation Lead</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-3 py-1 bg-primary-container text-on-primary-container rounded-full">OPERATOR</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg opacity-60 grayscale">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="focused male technician working in a technical clinical laboratory environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwyWqR3BKsP2Snzg4FRJqsohg-uvQDFSqYtKq1jvJm3Lkso4ZmS6EPyhLEvDeOWauX7-Ik7MzYQNNvi69epfYepGeKIvhhjUi8jKwbNC_xleuSaunbd3NSWLxn979ilx9W6Yj2YWknm9v7P02OmlkQ0xOhEql27idf_WX6NJtqIO54Ht2j1seynXGjBvFvsll3AfdMz0dAHEcNqlK2StRO1MH81yU0OLQWpJpYbsTlIJPB4vRnyT0r_7ceSI22m-ni0jwOspBgrHR0"/>
+<div>
+<p class="text-sm font-bold">Marcus Thorne</p>
+<p class="text-[10px] uppercase font-medium text-on-surface-variant">Maintenance Tech</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-3 py-1 bg-outline-variant text-on-surface-variant rounded-full">SUSPENDED</span>
+</div>
+</div>
+</section>
+<!-- Audit Trail Log Viewer -->
+<section class="col-span-12 lg:col-span-5 bg-surface-container-lowest p-8 rounded-xl shadow-sm flex flex-col max-h-[400px]">
+<h3 class="text-xs font-black uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span>
+                        Immutable Audit Trail
+                    </h3>
+<div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
+<div class="text-[11px] leading-relaxed border-l-2 border-primary pl-3 py-1">
+<span class="font-bold text-primary block">14:22:15.003 - SEC_EVENT</span>
+<span class="text-on-surface-variant">New session initialized by SysAdmin_Alpha. IP: 192.168.1.144</span>
+</div>
+<div class="text-[11px] leading-relaxed border-l-2 border-secondary pl-3 py-1 bg-secondary/5">
+<span class="font-bold text-secondary block">14:20:02.941 - FLT_INJECT</span>
+<span class="text-on-surface-variant">Air-in-Line simulation toggled to [ACTIVE] by Operator Rossi.</span>
+</div>
+<div class="text-[11px] leading-relaxed border-l-2 border-primary pl-3 py-1">
+<span class="font-bold text-primary block">14:15:33.119 - CFG_CHANGE</span>
+<span class="text-on-surface-variant">Alarm Volume modified from 70% to 85%. Authorized change.</span>
+</div>
+<div class="text-[11px] leading-relaxed border-l-2 border-primary pl-3 py-1">
+<span class="font-bold text-primary block">14:02:44.552 - SYS_HEARTBEAT</span>
+<span class="text-on-surface-variant">System integrity check passed. All nodes reporting healthy state.</span>
+</div>
+<div class="text-[11px] leading-relaxed border-l-2 border-primary pl-3 py-1">
+<span class="font-bold text-primary block">13:58:10.221 - LOG_START</span>
+<span class="text-on-surface-variant">Audit rotation complete. Historical logs archived to cold storage.</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-[#f7faf9] shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-t border-[#f1f4f3]">
+<a class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2 hover:bg-[#f1f4f3] transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Inter'] text-[12px] font-bold">Status</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2 hover:bg-[#f1f4f3] transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Inter'] text-[12px] font-bold">Alarms</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#1a5276] text-white rounded-md p-2 scale-105 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-['Inter'] text-[12px] font-bold">Settings</span>
+</a>
+</nav>
+</body></html>

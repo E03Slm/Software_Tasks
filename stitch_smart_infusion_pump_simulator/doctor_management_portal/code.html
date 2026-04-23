@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Sentinel | Doctor Management Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fc6451",
+                        "tertiary-fixed-dim": "#ffb961",
+                        "inverse-surface": "#2d3131",
+                        "on-tertiary-fixed": "#2b1700",
+                        "tertiary-fixed": "#ffddb9",
+                        "inverse-primary": "#9bccf6",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-surface": "#181c1c",
+                        "on-primary-fixed": "#001e30",
+                        "secondary-fixed-dim": "#ffb4a9",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbda",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f1f4f3",
+                        "outline": "#72787f",
+                        "primary": "#003b5a",
+                        "surface-bright": "#f7faf9",
+                        "on-surface-variant": "#41474e",
+                        "surface-container-high": "#e6e9e8",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c1c7cf",
+                        "primary-fixed-dim": "#9bccf6",
+                        "primary-container": "#1a5276",
+                        "on-secondary-fixed": "#410000",
+                        "background": "#f7faf9",
+                        "error": "#ba1a1a",
+                        "on-background": "#181c1c",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#cbe6ff",
+                        "secondary-fixed": "#ffdad5",
+                        "surface-container-highest": "#e0e3e2",
+                        "on-tertiary-container": "#ffae42",
+                        "on-error": "#ffffff",
+                        "surface": "#f7faf9",
+                        "on-secondary-fixed-variant": "#8e130c",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#650001",
+                        "secondary": "#b02d21",
+                        "inverse-on-surface": "#eef1f0",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#503000",
+                        "tertiary-container": "#6f4400",
+                        "on-primary-fixed-variant": "#0e4b6e",
+                        "on-primary-container": "#94c5ee",
+                        "surface-container": "#ebeeed",
+                        "surface-tint": "#2f6388",
+                        "surface-variant": "#e0e3e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-6 py-4 bg-[#f7faf9] dark:bg-slate-900 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#1a5276] text-3xl" data-icon="monitor_heart">monitor_heart</span>
+<h1 class="text-xl font-black bg-gradient-to-r from-[#003b5a] to-[#1a5276] bg-clip-text text-transparent">The Clinical Sentinel</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6">
+<button class="text-[#1a5276] font-bold border-b-4 border-[#1a5276] px-2 py-1">Infusion Control</button>
+<button class="text-slate-500 font-medium hover:bg-[#f1f4f3] transition-colors px-2 py-1">Drug Library</button>
+<button class="text-slate-500 font-medium hover:bg-[#f1f4f3] transition-colors px-2 py-1">System Logs</button>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full">
+<span class="material-symbols-outlined text-xs text-primary" data-icon="battery_charging_full">battery_charging_full</span>
+<span class="text-[10px] font-bold text-primary">STATION 04 - ONLINE</span>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col p-4 pt-24 bg-[#f1f4f3] dark:bg-slate-950 h-full w-72 rounded-r-lg shadow-2xl shadow-blue-900/5 hidden md:flex">
+<div class="mb-8 px-4">
+<p class="font-['Inter'] text-sm uppercase tracking-widest font-semibold text-slate-500 mb-2">Sentinel Access</p>
+<div class="h-1 w-12 bg-primary"></div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-[#1a5276] shadow-sm rounded-md my-1 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="vaccines">vaccines</span>
+<span class="font-['Inter'] text-sm uppercase tracking-widest font-semibold">Infusion Control</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] hover:bg-white/50 dark:hover:bg-slate-800/50 my-1 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-['Inter'] text-sm uppercase tracking-widest font-semibold">Drug Library</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] hover:bg-white/50 dark:hover:bg-slate-800/50 my-1 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['Inter'] text-sm uppercase tracking-widest font-semibold">System Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-[#1a5276] hover:bg-white/50 dark:hover:bg-slate-800/50 my-1 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-['Inter'] text-sm uppercase tracking-widest font-semibold">Role Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-high rounded-xl">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white font-bold">DR</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Dr. Aris Thorne</p>
+<p class="text-[10px] text-on-surface-variant">Medical Director</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary text-on-primary text-xs font-bold rounded-lg active:scale-95 transition-transform">SESSION LOGOUT</button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-72 pt-24 pb-24 px-6 md:px-10 max-w-7xl">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<h2 class="text-4xl font-black tracking-tighter text-primary mb-2">Analytics &amp; Library Management</h2>
+<p class="text-on-surface-variant max-w-xl">Real-time surveillance of clinical infusion protocols and pharmaceutical limit compliance across Ward 04.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-5 py-3 bg-surface-container-highest text-primary font-bold rounded-lg hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+                    Last 24 Hours
+                </button>
+<button class="flex items-center gap-2 px-5 py-3 bg-primary text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                    Export PDF/CSV
+                </button>
+</div>
+</div>
+<!-- Bento Grid: Analytics & Status -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+<!-- Active Infusions Gauge -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[300px]">
+<div class="z-10">
+<p class="text-xs font-bold text-primary opacity-60 uppercase tracking-widest mb-1">Live Load</p>
+<h3 class="text-2xl font-bold text-on-surface">Active Infusions</h3>
+</div>
+<div class="flex flex-col items-center justify-center py-4 z-10">
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-5xl font-black text-primary">75</span>
+<span class="text-[10px] font-bold text-on-surface-variant">PUMPS ACTIVE</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center text-xs font-bold z-10">
+<span class="text-on-surface-variant">Capacity: 100 Units</span>
+<span class="text-primary">75% Utilization</span>
+</div>
+<div class="absolute bottom-0 right-0 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" data-icon="speed">speed</span>
+</div>
+</div>
+<!-- Alarm Frequency Chart -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-8 flex flex-col shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="text-xs font-bold text-secondary uppercase tracking-widest mb-1">Risk Assessment</p>
+<h3 class="text-2xl font-bold text-on-surface">Alarm Frequency (24h)</h3>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="text-[10px] font-bold">Critical</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary-container"></div>
+<span class="text-[10px] font-bold">Warning</span>
+</div>
+</div>
+</div>
+<!-- Mock Chart Visualization -->
+<div class="flex-1 flex items-end gap-3 h-40">
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[40%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[20%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[60%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[35%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[90%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[45%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[70%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[30%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[50%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[15%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[85%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[55%] rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[65%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-secondary h-[40%] rounded-t-lg"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-on-surface-variant px-1">
+<span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:59</span>
+</div>
+</div>
+</div>
+<!-- Drug Library Editor Section -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-black text-primary">Master Drug Library</h3>
+<button class="flex items-center gap-2 px-6 py-4 bg-primary-container text-on-primary-container font-bold rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    Register New Drug
+                </button>
+</div>
+<div class="bg-surface-container-low rounded-2xl overflow-hidden shadow-inner">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary text-white text-[11px] uppercase tracking-[0.2em] font-black">
+<th class="px-6 py-5">Medication Name</th>
+<th class="px-6 py-5">Concentration</th>
+<th class="px-6 py-5 text-center">Soft Limit (Low/High)</th>
+<th class="px-6 py-5 text-center">Hard Limit (Ceiling)</th>
+<th class="px-6 py-5">Unit</th>
+<th class="px-6 py-5 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-5">
+<p class="text-lg font-bold text-on-surface">Dopamine</p>
+<p class="text-[10px] text-on-surface-variant">Cardiovascular / Vasopressor</p>
+</td>
+<td class="px-6 py-5 font-mono text-sm">400 mg / 250 mL</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary-container text-xs font-bold rounded-full">2.0 — 20.0</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-bold rounded-full">50.0</span>
+</td>
+<td class="px-6 py-5 font-medium">mcg/kg/min</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-secondary hover:bg-secondary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-5">
+<p class="text-lg font-bold text-on-surface">Heparin</p>
+<p class="text-[10px] text-on-surface-variant">Anticoagulant / Critical Care</p>
+</td>
+<td class="px-6 py-5 font-mono text-sm">25,000 units / 250 mL</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary-container text-xs font-bold rounded-full">10.0 — 25.0</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-bold rounded-full">40.0</span>
+</td>
+<td class="px-6 py-5 font-medium">units/kg/hr</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-secondary hover:bg-secondary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-6 py-5">
+<p class="text-lg font-bold text-on-surface">Insulin (Regular)</p>
+<p class="text-[10px] text-on-surface-variant">Endocrine / Glycemic Control</p>
+</td>
+<td class="px-6 py-5 font-mono text-sm">100 units / 100 mL</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary-container text-xs font-bold rounded-full">1.0 — 15.0</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-bold rounded-full">25.0</span>
+</td>
+<td class="px-6 py-5 font-medium">units/hr</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-secondary hover:bg-secondary/10 rounded-lg"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-6 flex items-center justify-center border-t border-outline-variant/10">
+<button class="text-primary font-bold text-sm flex items-center gap-2 hover:underline">
+                        VIEW ALL 142 ENTRIES <span class="material-symbols-outlined" data-icon="keyboard_double_arrow_down">keyboard_double_arrow_down</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Regulatory Traceability Section -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-[#f7faf9] border border-outline-variant/30 rounded-2xl p-8">
+<div class="flex items-center gap-4 mb-8">
+<div class="p-3 bg-primary/10 rounded-xl">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<h4 class="text-xl font-black text-primary">Regulatory Traceability Matrix</h4>
+<p class="text-xs text-on-surface-variant font-medium">Compliance: ISO 13485 / FDA 510(k) Pre-Market Cleared</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+<div class="flex gap-4 items-center">
+<span class="text-xs font-black text-on-surface-variant">REQ-402</span>
+<span class="text-sm font-bold text-on-surface">Dual-Validation Dose Confirmation</span>
+</div>
+<span class="flex items-center gap-1 text-green-600 text-[10px] font-black uppercase">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> Verified
+                        </span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+<div class="flex gap-4 items-center">
+<span class="text-xs font-black text-on-surface-variant">REQ-819</span>
+<span class="text-sm font-bold text-on-surface">Battery Back-up Cold-Start Recovery</span>
+</div>
+<span class="flex items-center gap-1 text-green-600 text-[10px] font-black uppercase">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> Verified
+                        </span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border-l-4 border-secondary">
+<div class="flex gap-4 items-center">
+<span class="text-xs font-black text-on-surface-variant text-secondary">REQ-105</span>
+<span class="text-sm font-bold text-on-surface">Wireless Library Auto-Sync Integrity</span>
+</div>
+<span class="flex items-center gap-1 text-tertiary-container text-[10px] font-black uppercase">
+<span class="material-symbols-outlined text-sm" data-icon="pending">pending</span> In Testing
+                        </span>
+</div>
+</div>
+</div>
+<div class="bg-primary p-8 rounded-2xl text-on-primary relative overflow-hidden flex flex-col justify-between">
+<div class="z-10">
+<h4 class="text-2xl font-black mb-4">Clinical Report Generator</h4>
+<p class="text-sm opacity-80 mb-6 leading-relaxed">Aggregate infusion data and drug library changes for institutional auditing.</p>
+</div>
+<div class="space-y-3 z-10">
+<div class="bg-primary-container p-4 rounded-xl">
+<p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Target Version</p>
+<p class="text-sm font-bold">V4.2.0-SENTINEL</p>
+</div>
+<button class="w-full py-4 bg-white text-primary font-black rounded-xl hover:bg-on-primary-container transition-colors">
+                        BUILD AUDIT BUNDLE
+                    </button>
+</div>
+<div class="absolute -bottom-10 -right-10 opacity-10">
+<span class="material-symbols-outlined text-[240px]" data-icon="assignment">assignment</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-[#f7faf9] shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-t border-[#f1f4f3] dark:border-slate-800">
+<a class="flex flex-col items-center justify-center bg-[#1a5276] text-white rounded-md p-2 scale-105 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Inter'] text-[12px] font-bold">Status</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Inter'] text-[12px] font-bold">Alarms</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a5276]/60 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[12px] font-bold">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button Contextual Logic -->
+<!-- Suppressed on this Management View as per Rules: "Suppress the FAB on Settings, Profile, Details" -->
+</body></html>

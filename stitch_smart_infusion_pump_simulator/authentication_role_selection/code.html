@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Sentinel - Authentication</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fc6451",
+                        "tertiary-fixed-dim": "#ffb961",
+                        "inverse-surface": "#2d3131",
+                        "on-tertiary-fixed": "#2b1700",
+                        "tertiary-fixed": "#ffddb9",
+                        "inverse-primary": "#9bccf6",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-surface": "#181c1c",
+                        "on-primary-fixed": "#001e30",
+                        "secondary-fixed-dim": "#ffb4a9",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbda",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f1f4f3",
+                        "outline": "#72787f",
+                        "primary": "#003b5a",
+                        "surface-bright": "#f7faf9",
+                        "on-surface-variant": "#41474e",
+                        "surface-container-high": "#e6e9e8",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c1c7cf",
+                        "primary-fixed-dim": "#9bccf6",
+                        "primary-container": "#1a5276",
+                        "on-secondary-fixed": "#410000",
+                        "background": "#f7faf9",
+                        "error": "#ba1a1a",
+                        "on-background": "#181c1c",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#cbe6ff",
+                        "secondary-fixed": "#ffdad5",
+                        "surface-container-highest": "#e0e3e2",
+                        "on-tertiary-container": "#ffae42",
+                        "on-error": "#ffffff",
+                        "surface": "#f7faf9",
+                        "on-secondary-fixed-variant": "#8e130c",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#650001",
+                        "secondary": "#b02d21",
+                        "inverse-on-surface": "#eef1f0",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#503000",
+                        "tertiary-container": "#6f4400",
+                        "on-primary-fixed-variant": "#0e4b6e",
+                        "on-primary-container": "#94c5ee",
+                        "surface-container": "#ebeeed",
+                        "surface-tint": "#2f6388",
+                        "surface-variant": "#e0e3e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7faf9;
+        }
+        .tonal-glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- Top Navigation Anchor (Manual construction based on JSON guidance) -->
+<header class="bg-gradient-to-b from-[#f7faf9] to-[#f1f4f3] shadow-sm flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#1a5276] text-2xl" style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+<h1 class="text-xl font-black bg-gradient-to-r from-[#003b5a] to-[#1a5276] bg-clip-text text-transparent">The Clinical Sentinel</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400">wifi</span>
+<span class="material-symbols-outlined text-[#1a5276]">battery_charging_full</span>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center p-6 relative">
+<!-- Background Aesthetic Element -->
+<div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a5276" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+<!-- Left Panel: Authentication -->
+<section class="md:col-span-5 bg-surface-container-lowest p-8 shadow-sm flex flex-col justify-center border-l-4 border-primary">
+<div class="mb-8">
+<h2 class="text-2xl font-extrabold tracking-tight text-primary mb-1">System Access</h2>
+<p class="text-on-surface-variant text-sm font-medium">Please authenticate to initiate pump protocols.</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1">User Identification</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">badge</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none focus:ring-0 text-headline-md font-bold text-on-surface" placeholder="EMP-ID-0000" type="text"/>
+<div class="absolute bottom-0 left-0 w-full h-0.5 bg-primary/20 group-focus-within:bg-primary transition-colors"></div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1">Secure Passkey</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">lock</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none focus:ring-0 text-headline-md font-bold text-on-surface" placeholder="••••••••" type="password"/>
+<div class="absolute bottom-0 left-0 w-full h-0.5 bg-primary/20"></div>
+</div>
+</div>
+<button class="w-full h-16 bg-primary text-on-primary font-bold text-lg active:scale-95 transition-transform flex items-center justify-center gap-2 group" type="button">
+                        VALIDATE IDENTITY
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward_ios</span>
+</button>
+</form>
+<div class="mt-8 pt-6 border-t border-surface-container-highest flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Terminal Online</span>
+</div>
+<button class="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider">Emergency Override</button>
+</div>
+</section>
+<!-- Right Panel: Role Selection (Bento Grid Style) -->
+<section class="md:col-span-7 space-y-4">
+<div class="bg-primary-container p-6 flex items-center justify-between">
+<h3 class="text-on-primary-container font-bold tracking-tight">Select Operational Role</h3>
+<span class="material-symbols-outlined text-on-primary-container/40">groups</span>
+</div>
+<div class="grid grid-cols-2 gap-4 h-[calc(100%-80px)]">
+<!-- Nurse Role Card -->
+<button class="col-span-1 bg-surface-container-lowest hover:bg-surface-bright transition-all group p-6 flex flex-col justify-between items-start text-left border-l-4 border-primary/10 hover:border-primary">
+<div class="bg-primary-fixed-dim/20 p-3 rounded-lg group-hover:bg-primary-fixed-dim/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">vaccines</span>
+</div>
+<div>
+<h4 class="text-xl font-black text-primary leading-tight">Nurse</h4>
+<p class="text-xs text-on-surface-variant mt-1 font-medium">Standard clinical protocols, dose titration, and drug library access.</p>
+</div>
+</button>
+<!-- Doctor Role Card -->
+<button class="col-span-1 bg-surface-container-lowest hover:bg-surface-bright transition-all group p-6 flex flex-col justify-between items-start text-left border-l-4 border-primary/10 hover:border-primary">
+<div class="bg-primary-fixed-dim/20 p-3 rounded-lg group-hover:bg-primary-fixed-dim/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div>
+<h4 class="text-xl font-black text-primary leading-tight">Physician</h4>
+<p class="text-xs text-on-surface-variant mt-1 font-medium">Order verification, complex infusion profile setup, and analytics.</p>
+</div>
+</button>
+<!-- Admin Role Card -->
+<button class="col-span-2 bg-surface-container-low hover:bg-surface-bright transition-all group p-6 flex items-center gap-6 text-left border-l-4 border-primary/10 hover:border-primary">
+<div class="bg-primary-fixed-dim/20 p-4 rounded-lg group-hover:bg-primary-fixed-dim/40 transition-colors shrink-0">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+</div>
+<div class="flex-grow">
+<h4 class="text-xl font-black text-primary leading-tight">System Admin</h4>
+<p class="text-xs text-on-surface-variant mt-1 font-medium">Drug library updates, network configuration, and hardware logs.</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">settings_applications</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Content -->
+<footer class="p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 bg-primary/5 px-4 py-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-[10px] font-black text-primary tracking-widest uppercase">Encrypted Session</span>
+</div>
+<div class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">
+                AES-256 Bit Encryption Active
+            </div>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex flex-col items-end">
+<span class="text-[9px] font-bold text-on-surface-variant uppercase">Pump ID</span>
+<span class="text-[11px] font-black text-primary">SENTINEL-X-9942</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] font-bold text-on-surface-variant uppercase">Facility</span>
+<span class="text-[11px] font-black text-primary">ST. CENTRAL GENERAL</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img alt="Hospital Identity" class="w-full h-full object-cover grayscale opacity-50" data-alt="Modern high-tech hospital corridor with soft cool clinical lighting and clean white surfaces" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9xUSoX1rljwr08DpQw8_f0Zwrc4nYRdEhWwOd28J6EJil2_1Y7I9LkYjNhzsf6f4nhW9VA4EbKtFvX5C93RW9NMCemDihlMHGxYxnGLfBXbAncuuAtSVRZ7uLh3jjOp0FoIwGfnLY4lN__Hf9Ya_9RLuN-NZH04Eoks1koItCL8F8emiTv9vaByw9jY5CX5c2Args-J8Sg1ea4c0M6ekSiH2Ei4Ticr8ON0eJFTPOL3xZSMXZ1pQdA6AMNJLNGymes8F337SOI9G7"/>
+</div>
+</div>
+</footer>
+<!-- Role Selection suppression logic: On auth screens, we don't show the BottomNavBar from JSON -->
+</body></html>
