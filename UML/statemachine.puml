@@ -1,0 +1,37 @@
+@startuml
+[*] --> Idle
+
+Idle --> Programming : Drug selected
+Programming --> Idle : Cancel
+Programming --> Running : Start infusion
+
+Running --> Paused : Pause
+Paused --> Running : Resume
+
+' KVO State Implementation
+Running --> KVO : Infusion complete AND KVO configured
+KVO --> Complete : KVO stopped / volume reached
+KVO --> EmergencyStop : Emergency stop
+
+' Safety-conscious Alarm Transitions
+Running --> Alarm : Alarm condition (occlusion, air, etc.)
+Alarm --> Alarm : New alarm while in alarm
+Alarm --> Running : Acknowledge non-critical alarm
+Alarm --> Programming : Resolve critical alarm
+
+' Emergency Stop Paths
+Running --> EmergencyStop : Emergency stop
+Paused --> EmergencyStop : Emergency stop
+Alarm --> EmergencyStop : Emergency stop
+EmergencyStop --> Idle : Reset
+
+' Battery Logic : CriticalBattery Redirection
+Running --> BatteryLow : Battery low
+BatteryLow --> Running : Charging connected
+BatteryLow --> CriticalBattery : Battery critically low
+CriticalBattery --> EmergencyStop : Auto-stop (battery depleted)
+
+' Completion Logic
+Running --> Complete : Infusion finished (No KVO)
+Complete --> Idle : Remove cassette
+@enduml

@@ -1,0 +1,146 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' --- User Management & RBAC (F-A-01, S-ALL-01) ---
+abstract class User {
+  -userId: UUID
+  -username: String
+  -passwordHash: String
+  -role: RoleType
+  +login()
+  +logout()
+}
+
+enum RoleType {
+  DOCTOR
+  NURSE
+  ADMIN
+}
+
+class Doctor {
+  ' Clinical Governance (1.2, 2.1)
+  +manageDrugLibrary()
+  +setSafetyLimits()
+  +generateReports()
+  +viewAuditTrail()
+  +exportReports(format: String) 
+}
+
+class Nurse {
+  ' Pump Operator (1.2, 2.2)
+  +selectDrug()
+  +programParameters()
+  +manageInfusion()
+  +acknowledgeAlarm()
+  +viewSessionAuditLogs() 
+}
+
+class Admin {
+  ' Technical Operator (1.2, 45)
+  +manageUserAccounts()
+  +configureSystem()
+  +viewSystemHealth()
+}
+
+' --- Drug Library & Safety (F-D-01, F-D-02, SF-D-01) ---
+class Drug {
+  -name: String
+  -concentration: float
+  -concentrationUnit: String
+  -defaultRate: float
+  -hardLimitCeiling: float
+  -softLimitThreshold: float
+  -isArchived: boolean
+}
+
+class DrugLibrary {
+  -activeDrugs: List<Drug>
+  +addDrug(Drug)
+  +editDrug(Drug)
+  +archiveDrug(Drug)
+  +findDrugByName(String): Drug
+}
+
+' --- Infusion & Simulation (F-N-04, F-N-06, SF-N-05) ---
+class InfusionSession {
+  -sessionId: UUID
+  -startTime: DateTime
+  -currentRate: float
+  -volumeInfused: float
+  -volumeRemaining: float
+  -status: InfusionState
+  -selectedDrug: Drug 
+  +initializeFromDrug(Drug) 
+  +start()
+  +pause()
+  +stop()
+  +emergencyStop()
+  +switchToKVO()
+}
+
+class BatterySimulator {
+  ' Requirement SF-N-05
+  -batteryLevel: float
+  -isCharging: boolean
+  +drain(duration: int)
+  +checkStatus(): BatteryState
+}
+
+' --- Alarms & Safety Logic (F-N-07, SF-N-03) ---
+class Alarm {
+  -alarmId: UUID
+  -type: AlarmType
+  -severity: SeverityLevel
+  -isAcknowledged: boolean
+  +trigger()
+  +resolve()
+}
+
+class AuditLog {
+  ' Immutable Audit Trail (S-D-02, F-D-05)
+  -entries: List<AuditEntry>
+  +appendImmutable(AuditEntry)
+  +queryByDateRange()
+  +queryBySession(sessionId: UUID) 
+}
+
+class AuditEntry {
+  -timestamp: DateTime
+  -performingUser: UUID
+  -actionType: String
+  -oldValue: String
+  -newValue: String
+  -traceabilityID: UUID
+  +addEntry()
+  +previewLastTen()
+}
+
+' --- Relations based on SRS constraints ---
+User <|-- Doctor
+User <|-- Nurse
+User <|-- Admin
+
+' Doctor governs DrugLibrary (F-D-01)
+Doctor --> DrugLibrary : manages
+DrugLibrary "1" *-- "*" Drug
+
+' Nurse operates InfusionSession (F-N-04)
+Nurse --> InfusionSession : operates
+
+Nurse --> AuditLog : views (Session only)
+
+InfusionSession "1" *-- "1" BatterySimulator : monitors
+InfusionSession "1" o-- "*" Alarm : triggers
+
+InfusionSession --> Drug : "takes data from"
+
+' Logging Relations (S-D-02, S-N-03)
+InfusionSession --> AuditEntry : records to
+AuditLog "1" *-- "*" AuditEntry
+Doctor --> AuditLog : views (Full access)
+Admin --> AuditLog : views (Full access)
+
+' Admin manages Users (F-A-01)
+Admin --> User : manages
+
+@enduml

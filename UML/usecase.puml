@@ -1,0 +1,79 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Doctor" as D
+actor "Nurse" as N
+actor "System Admin" as A
+
+rectangle "Smart Infusion Pump Software Simulator" {
+  
+  '--- CORE OPERATIONS ---
+  usecase "Operate Infusion" as UC_Op
+  usecase "Select Drug" as UC_Select
+  usecase "Enter Parameters" as UC_Params
+  usecase "Validate Safety Limits" as UC_Validate
+  usecase "Handle Alarms" as UC_Handle_Alarms
+  usecase "Emergency Stop" as UC_EStop
+  usecase "View Real Time Status" as UC_RTStatus
+  usecase "Acknowledge Alarm" as UC_Ack_Alarms
+  usecase "Trigger Manual Alarm" as UC_TMA
+
+  '--- CLINICAL GOVERNANCE ---
+  usecase "Manage Drug Library" as UC_Library
+  usecase "Manage Drug Parameters" as UC_Drug
+  usecase "Import/Export Data" as UC_Data
+  usecase "Review Clinical Analytics" as UC_Analytics
+  usecase "Generate Reports" as UC_GReports
+
+  '--- ADMINISTRATION ---
+  usecase "System Configuration" as UC_Config
+  usecase "Manage User Accounts" as UC_Users
+  usecase "View Immutable Audit Trail" as UC_Audit
+  
+
+
+  '--- RELATIONSHIPS ---
+  
+  ' Nurse Interactions
+  N --> UC_Op
+  N --> UC_Handle_Alarms
+  N --> UC_EStop
+  N --> UC_Select
+  N --> UC_Params
+  N --> UC_RTStatus
+  N --> UC_Ack_Alarms
+  N --> UC_TMA
+  N --> UC_Audit
+  
+  
+  UC_Op <.. UC_Select : <<include>>
+  UC_Op <.. UC_Params : <<include>>
+  UC_Params <.. UC_Validate : <<include>>
+  UC_RTStatus ..> UC_Op : <<include>>
+  UC_RTStatus <.. UC_Ack_Alarms : <<extend>>
+  UC_Ack_Alarms ..> UC_Handle_Alarms : <<include>>
+  UC_Ack_Alarms ..> UC_Op : <<include>>
+  UC_TMA ..> UC_Op : <<extend>>
+
+  ' Doctor Interactions
+  D --> UC_Library
+  D --> UC_Analytics
+  D --> UC_Audit
+  D --> UC_GReports
+  D --> UC_Drug
+
+  UC_Library <.. UC_Data : <<extend>>
+  UC_Analytics <.. UC_Data : <<extend>>
+  UC_GReports <.. UC_Data : <<extend>>
+  UC_Drug <.. UC_Data : <<extend>>
+  UC_GReports <.. UC_Audit : <<extend>>
+
+  ' Admin Interactions
+  A --> UC_Config
+  A --> UC_Users
+  A --> UC_Audit
+  
+  UC_Config ..> UC_Audit : <<include>>
+}
+@enduml
