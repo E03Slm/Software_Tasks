@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Doctor Logs Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#171d1b",
+                        "surface-tint": "#006b5f",
+                        "surface-container-high": "#e4e9e7",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#8a99fe",
+                        "on-tertiary-fixed": "#071e27",
+                        "on-secondary-fixed": "#000d5f",
+                        "surface-container": "#eaefec",
+                        "on-primary-container": "#f4fffb",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#00201c",
+                        "secondary-fixed-dim": "#bbc3ff",
+                        "on-surface": "#171d1b",
+                        "primary-container": "#008376",
+                        "surface-container-highest": "#dfe4e1",
+                        "success-green": "#2E7D32",
+                        "primary": "#00685d",
+                        "doctor-primary": "#303F9F",
+                        "surface-container-low": "#f0f5f2",
+                        "surface-neutral": "#F5F5F5",
+                        "tertiary": "#4a5f69",
+                        "surface-bright": "#f6faf8",
+                        "inverse-surface": "#2c3130",
+                        "on-tertiary-container": "#fbfdff",
+                        "on-primary": "#ffffff",
+                        "surface": "#f6faf8",
+                        "nurse-primary": "#00897B",
+                        "on-tertiary": "#ffffff",
+                        "critical-red": "#D32F2F",
+                        "secondary": "#4755b6",
+                        "text-high-contrast": "#212121",
+                        "on-secondary-fixed-variant": "#2d3c9c",
+                        "outline-variant": "#bcc9c5",
+                        "surface-variant": "#dfe4e1",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#005048",
+                        "error-container": "#ffdad6",
+                        "admin-primary": "#455A64",
+                        "background": "#f6faf8",
+                        "hard-limit-bg": "#FFEBEE",
+                        "on-secondary-container": "#1b2b8c",
+                        "primary-fixed-dim": "#70d8c8",
+                        "inverse-primary": "#70d8c8",
+                        "outline": "#6d7a77",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#627882",
+                        "on-surface-variant": "#3d4946",
+                        "surface-dim": "#d6dbd9",
+                        "inverse-on-surface": "#edf2ef",
+                        "on-tertiary-fixed-variant": "#354a53",
+                        "tertiary-fixed-dim": "#b4cad6",
+                        "primary-fixed": "#8df5e4",
+                        "soft-limit-bg": "#FFF8E1",
+                        "tertiary-fixed": "#cfe6f2",
+                        "secondary-fixed": "#dfe0ff",
+                        "warning-amber": "#FFB300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-edge": "20px",
+                        "stack-sm": "8px",
+                        "touch-target-min": "48px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "input-height": "56px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "metric-xl": ["Inter"],
+                        "helper-text": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "metric-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "metric-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "helper-text": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "metric-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg text-body-lg">
+<!-- TopAppBar -->
+<header class="bg-slate-50 dark:bg-slate-950 border-b-2 border-slate-200 dark:border-slate-800 fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 h-16">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="text-[#00897B] dark:text-[#26A69A] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-12 h-12 flex items-center justify-center rounded-DEFAULT">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</button>
+<h1 class="font-['Inter'] font-bold tracking-tighter text-sm uppercase text-slate-900 dark:text-slate-100 flex items-center gap-2">SMART INFUSION <span class="bg-doctor-primary text-on-primary px-2 py-1 rounded-DEFAULT text-[10px] tracking-widest ml-2">DOCTOR</span></h1>
+</div>
+<button aria-label="Logout" class="text-[#00897B] dark:text-[#26A69A] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-12 h-12 flex items-center justify-center rounded-DEFAULT">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow pt-[80px] pb-[100px] px-margin-edge md:pl-80 max-w-7xl mx-auto w-full">
+<!-- Filter Bar -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md mb-stack-lg shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-xs">Date Range</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
+<input class="w-full h-input-height pl-12 pr-4 bg-surface-neutral border border-outline-variant rounded-DEFAULT text-on-surface font-body-lg text-body-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" readonly="" type="text" value="Oct 24, 2023 - Oct 25, 2023"/>
+</div>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-xs">Drug</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">medication</span>
+<select class="w-full h-input-height pl-12 pr-10 bg-surface-neutral border border-outline-variant rounded-DEFAULT text-on-surface font-body-lg text-body-lg appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+<option>All Drugs</option>
+<option>Propofol</option>
+<option>Norepinephrine</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-xs">Patient ID</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">person</span>
+<input class="w-full h-input-height pl-12 pr-4 bg-surface-neutral border border-outline-variant rounded-DEFAULT text-on-surface font-body-lg text-body-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Search ID..." type="text"/>
+</div>
+</div>
+</div>
+<div class="mt-stack-md flex justify-end">
+<button class="h-touch-target-min px-6 bg-surface-neutral text-on-surface border border-outline-variant rounded-DEFAULT font-label-bold text-label-bold hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">filter_list</span>
+                    Apply Filters
+                </button>
+</div>
+</section>
+<!-- Log List -->
+<section class="flex flex-col gap-stack-sm">
+<!-- Log Item: Warning -->
+<div class="bg-surface-container-lowest border border-warning-amber border-l-4 rounded-lg p-stack-md flex flex-col md:flex-row md:items-center justify-between gap-stack-md cursor-pointer hover:bg-surface-neutral transition-colors shadow-sm">
+<div class="flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-full bg-soft-limit-bg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-warning-amber">warning</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-helper-text text-helper-text text-on-surface-variant">10:42 AM · Oct 25</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-helper-text text-helper-text text-on-surface-variant uppercase">ID: DOC-902</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Soft Limit Override</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Propofol rate increased past soft maximum. User acknowledged.</p>
+</div>
+</div>
+<div class="bg-surface-variant px-4 py-2 rounded-DEFAULT shrink-0">
+<p class="font-label-bold text-label-bold text-on-surface text-center">Rate changed</p>
+<p class="font-metric-lg text-metric-lg text-warning-amber tracking-tight text-center">5.0 <span class="material-symbols-outlined text-sm align-middle mx-1 text-outline">arrow_forward</span> 5.5 <span class="text-sm font-normal text-on-surface-variant">mg/kg/hr</span></p>
+</div>
+</div>
+<!-- Log Item: Info -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md flex flex-col md:flex-row md:items-center justify-between gap-stack-md cursor-pointer hover:bg-surface-neutral transition-colors shadow-sm">
+<div class="flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">play_arrow</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-helper-text text-helper-text text-on-surface-variant">09:15 AM · Oct 25</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-helper-text text-helper-text text-on-surface-variant uppercase">ID: NUR-114</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Infusion Started</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Norepinephrine infusion initiated standard protocol.</p>
+</div>
+</div>
+<div class="bg-surface-variant px-4 py-2 rounded-DEFAULT shrink-0">
+<p class="font-label-bold text-label-bold text-on-surface text-center">Initial Rate</p>
+<p class="font-metric-lg text-metric-lg text-primary tracking-tight text-center">0.05 <span class="text-sm font-normal text-on-surface-variant">mcg/kg/min</span></p>
+</div>
+</div>
+<!-- Log Item: Critical -->
+<div class="bg-surface-container-lowest border border-critical-red border-l-4 rounded-lg p-stack-md flex flex-col md:flex-row md:items-center justify-between gap-stack-md cursor-pointer hover:bg-surface-neutral transition-colors shadow-sm">
+<div class="flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-full bg-hard-limit-bg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-critical-red">block</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-helper-text text-helper-text text-on-surface-variant">08:30 AM · Oct 25</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-helper-text text-helper-text text-on-surface-variant uppercase">ID: DOC-902</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Hard Limit Blocked</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Attempted to set rate beyond hard maximum. Action prevented.</p>
+</div>
+</div>
+<div class="bg-surface-variant px-4 py-2 rounded-DEFAULT shrink-0">
+<p class="font-label-bold text-label-bold text-on-surface text-center">Attempted Rate</p>
+<p class="font-metric-lg text-metric-lg text-critical-red tracking-tight text-center line-through">12.0 <span class="text-sm font-normal text-on-surface-variant no-underline">mg/kg/hr</span></p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-white dark:bg-slate-900 border-t-2 border-slate-200 dark:border-slate-800 fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 pb-safe rounded-t-none shadow-none">
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 w-16 h-16 rounded-DEFAULT">
+<span class="material-symbols-outlined mb-1">gas_meter</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Pump</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 w-16 h-16 rounded-DEFAULT">
+<span class="material-symbols-outlined mb-1">notifications</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Alarms</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 w-16 h-16 rounded-DEFAULT">
+<span class="material-symbols-outlined mb-1">local_hospital</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Drug Lib</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-[#00897B] dark:text-[#26A69A] rounded-md p-2 w-16 h-16 scale-95 duration-75">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Logs</span>
+</button>
+</nav>
+<!-- NavigationDrawer (Web Only) -->
+<aside class="hidden md:flex flex-col bg-slate-50 dark:bg-slate-900 border-r-2 border-slate-200 dark:border-slate-800 fixed left-0 top-0 h-full w-72 p-5 z-40 shadow-none pt-24">
+<div class="mb-8 px-2 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-doctor-primary flex items-center justify-center text-on-primary font-bold text-xl shrink-0">
+                DR
+            </div>
+<div>
+<h2 class="font-['Inter'] text-sm font-semibold text-slate-900">Dr. Sarah Jenkins</h2>
+<p class="text-xs text-slate-500">Attending Physician</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:pl-2 transition-all duration-200 rounded-DEFAULT font-['Inter'] text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">monitor_heart</span>
+                System Health
+            </a>
+<a class="flex items-center gap-4 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:pl-2 transition-all duration-200 rounded-DEFAULT font-['Inter'] text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">group</span>
+                User Mgmt
+            </a>
+<a class="flex items-center gap-4 px-4 py-3 bg-[#7E57C2]/10 text-[#7E57C2] border-r-4 border-[#7E57C2] rounded-l-DEFAULT font-['Inter'] text-sm font-semibold brightness-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+                System Logs
+            </a>
+<a class="flex items-center gap-4 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:pl-2 transition-all duration-200 rounded-DEFAULT font-['Inter'] text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Config
+            </a>
+</nav>
+</aside>
+</body></html>

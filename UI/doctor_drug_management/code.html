@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Drug Library Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "warning-amber": "#FFB300",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#8a99fe",
+                        "surface-container-high": "#e4e9e7",
+                        "inverse-surface": "#2c3130",
+                        "primary-container": "#008376",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#171d1b",
+                        "surface-variant": "#dfe4e1",
+                        "doctor-primary": "#303F9F",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#071e27",
+                        "secondary-fixed": "#dfe0ff",
+                        "surface": "#f6faf8",
+                        "surface-container": "#eaefec",
+                        "primary": "#00685d",
+                        "tertiary-fixed-dim": "#b4cad6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#fbfdff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#000d5f",
+                        "primary-fixed-dim": "#70d8c8",
+                        "on-surface-variant": "#3d4946",
+                        "on-secondary-fixed-variant": "#2d3c9c",
+                        "primary-fixed": "#8df5e4",
+                        "success-green": "#2E7D32",
+                        "surface-tint": "#006b5f",
+                        "on-tertiary-fixed-variant": "#354a53",
+                        "soft-limit-bg": "#FFF8E1",
+                        "surface-container-highest": "#dfe4e1",
+                        "hard-limit-bg": "#FFEBEE",
+                        "nurse-primary": "#00897B",
+                        "surface-bright": "#f6faf8",
+                        "outline-variant": "#bcc9c5",
+                        "surface-neutral": "#F5F5F5",
+                        "outline": "#6d7a77",
+                        "on-secondary-container": "#1b2b8c",
+                        "admin-primary": "#455A64",
+                        "secondary-fixed-dim": "#bbc3ff",
+                        "tertiary-container": "#627882",
+                        "text-high-contrast": "#212121",
+                        "tertiary-fixed": "#cfe6f2",
+                        "tertiary": "#4a5f69",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#005048",
+                        "background": "#f6faf8",
+                        "on-primary-fixed": "#00201c",
+                        "critical-red": "#D32F2F",
+                        "surface-container-low": "#f0f5f2",
+                        "on-background": "#171d1b",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#f4fffb",
+                        "inverse-on-surface": "#edf2ef",
+                        "inverse-primary": "#70d8c8",
+                        "secondary": "#4755b6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "input-height": "56px",
+                        "margin-edge": "20px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "metric-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "metric-lg": ["Inter"],
+                        "helper-text": ["Inter"],
+                        "label-bold": ["Inter"]
+                    },
+                    "fontSize": {
+                        "metric-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "metric-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "helper-text": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom toggle styles to ensure pure CSS functionality without JS */
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: var(--tw-colors-doctor-primary);
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+        .toggle-checkbox-error:checked + .toggle-label {
+            background-color: var(--tw-colors-error);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-lg antialiased overflow-hidden selection:bg-doctor-primary selection:text-white">
+<div class="flex h-screen w-full">
+<!-- JSON Component: NavigationDrawer -->
+<nav class="hidden md:flex flex-col h-full w-80 border-r border-r border-slate-200 dark:border-slate-800 shadow-2xl dark:shadow-none bg-white dark:bg-slate-900 py-6 z-20 shrink-0">
+<!-- Header -->
+<div class="px-6 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant overflow-hidden shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined text-2xl" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface">Admin User</span>
+<span class="font-helper-text text-helper-text text-on-surface-variant">System Administrator</span>
+<span class="font-helper-text text-helper-text text-on-surface-variant">ID: 992834 | Role: ADMIN</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex-1 flex flex-col gap-1 pr-4">
+<li>
+<a class="flex items-center gap-4 bg-slate-100 dark:bg-slate-800 text-[#00897B] font-bold rounded-r-full px-4 py-3 group" href="#">
+<span class="material-symbols-outlined text-[#00897B]" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">System Config</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 rounded-r-full group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-[#00897B] transition-colors" data-icon="group">group</span>
+<span class="font-body-lg text-body-lg group-hover:text-[#00897B] transition-colors">User Management</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 rounded-r-full group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-[#00897B] transition-colors" data-icon="list_alt">list_alt</span>
+<span class="font-body-lg text-body-lg group-hover:text-[#00897B] transition-colors">Pump Logs</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 rounded-r-full group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-[#00897B] transition-colors" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="font-body-lg text-body-lg group-hover:text-[#00897B] transition-colors">Calibration</span>
+</a>
+</li>
+</ul>
+<div class="px-6 mt-auto">
+<div class="text-xl font-black text-[#00897B]">Brand Logo</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 h-full relative">
+<!-- JSON Component: TopAppBar -->
+<header class="flex justify-between items-center w-full px-5 h-16 docked full-width top-0 border-b border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shrink-0 z-10">
+<div class="flex items-center gap-4">
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 active:opacity-80 transition-opacity md:hidden text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-2xl" data-icon="menu">menu</span>
+</button>
+<h1 class="font-inter text-sm font-bold tracking-tight text-[#00897B] dark:text-[#00897B]">Infusion Monitor</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="bg-[#00897B] text-white px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest">NURSE</span>
+</div>
+</header>
+<!-- Canvas Body -->
+<main class="flex-1 flex flex-col p-margin-edge gap-gutter overflow-hidden bg-background">
+<!-- Context Header (Satisfying specific prompt details) -->
+<div class="flex justify-between items-end shrink-0">
+<div>
+<h2 class="font-metric-lg text-metric-lg text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl text-doctor-primary" data-icon="medication">medication</span>
+                        Drug Library Management
+                    </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Select a medication to configure critical safety limits and baseline parameters.</p>
+</div>
+<div class="flex items-center gap-2 bg-doctor-primary/10 text-doctor-primary px-4 py-2 rounded-full border border-doctor-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-bold text-label-bold uppercase tracking-wider">Doctor Mode</span>
+</div>
+</div>
+<!-- Split View Layout -->
+<div class="flex-1 flex gap-gutter overflow-hidden">
+<!-- Left Panel: Searchable List -->
+<div class="w-1/3 min-w-[320px] max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col overflow-hidden">
+<!-- Search Header -->
+<div class="p-4 border-b border-surface-variant bg-surface">
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-4 flex items-center text-outline pointer-events-none">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</span>
+<input class="w-full h-12 pl-12 pr-4 bg-surface-container border border-outline-variant rounded-lg font-body-lg text-body-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-doctor-primary focus:ring-1 focus:ring-doctor-primary transition-shadow" placeholder="Search drug by name or class..." type="text"/>
+</div>
+</div>
+<!-- Scrollable List -->
+<div class="flex-1 overflow-y-auto">
+<!-- Active Item -->
+<button class="w-full text-left p-4 border-b border-surface-variant bg-doctor-primary/5 border-l-4 border-l-doctor-primary hover:bg-surface-container transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Dopamine</h3>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">400 mg / 250 mL</p>
+</div>
+<span class="material-symbols-outlined text-doctor-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Inactive Items -->
+<button class="w-full text-left p-4 border-b border-surface-variant border-l-4 border-l-transparent hover:bg-surface-container transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Epinephrine</h3>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">4 mg / 250 mL</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full text-left p-4 border-b border-surface-variant border-l-4 border-l-transparent hover:bg-surface-container transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Heparin</h3>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">25,000 Units / 250 mL</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full text-left p-4 border-b border-surface-variant border-l-4 border-l-transparent hover:bg-surface-container transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Norepinephrine</h3>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">4 mg / 250 mL</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Right Panel: Edit Profile -->
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col overflow-hidden relative">
+<!-- Header -->
+<div class="px-8 py-5 border-b border-surface-variant bg-surface flex justify-between items-center shrink-0">
+<h3 class="font-headline-md text-headline-md text-on-surface">Edit Profile: Dopamine</h3>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Last updated: Today, 08:42</span>
+</div>
+<!-- Scrollable Form Body -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Section: General Parameters -->
+<section>
+<h4 class="font-label-bold text-label-bold text-doctor-primary uppercase tracking-wider mb-4 border-b border-surface-variant pb-2">Base Parameters</h4>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Drug Name</label>
+<input class="h-input-height w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 font-body-lg text-body-lg text-on-surface focus:outline-none cursor-not-allowed" readonly="" type="text" value="Dopamine"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Clinical Class</label>
+<input class="h-input-height w-full bg-surface-container-lowest border border-outline rounded-lg px-4 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-doctor-primary" type="text" value="Inotrope / Vasopressor"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Standard Concentration</label>
+<div class="flex items-center h-input-height w-full bg-surface-container-lowest border border-outline rounded-lg overflow-hidden focus-within:border-doctor-primary transition-colors">
+<input class="flex-1 h-full px-4 font-body-lg text-body-lg text-on-surface bg-transparent border-none focus:ring-0" type="number" value="400"/>
+<div class="h-full px-4 bg-surface flex items-center border-l border-outline font-label-bold text-label-bold text-on-surface-variant">mg</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Standard Volume</label>
+<div class="flex items-center h-input-height w-full bg-surface-container-lowest border border-outline rounded-lg overflow-hidden focus-within:border-doctor-primary transition-colors">
+<input class="flex-1 h-full px-4 font-body-lg text-body-lg text-on-surface bg-transparent border-none focus:ring-0" type="number" value="250"/>
+<div class="h-full px-4 bg-surface flex items-center border-l border-outline font-label-bold text-label-bold text-on-surface-variant">mL</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Soft Limits -->
+<section class="bg-soft-limit-bg border border-warning-amber rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-warning-amber"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-warning-amber" data-icon="warning">warning</span>
+                                        Soft Limits (Warning)
+                                    </h4>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">Triggers a yellow advisory alert. User can bypass after acknowledgment.</p>
+</div>
+<!-- CSS Toggle -->
+<label class="flex items-center cursor-pointer">
+<div class="relative">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label block bg-surface-variant w-14 h-8 rounded-full border border-outline-variant transition-colors duration-300">
+<div class="toggle-dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 shadow-sm flex items-center justify-center">
+<!-- Optional icon inside dot could go here -->
+</div>
+</div>
+</div>
+<span class="ml-3 font-label-bold text-label-bold text-on-surface">Enabled</span>
+</label>
+</div>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Minimum Dose Rate</label>
+<div class="flex items-center h-input-height w-full bg-surface-container-lowest border border-warning-amber/50 rounded-lg overflow-hidden focus-within:border-warning-amber transition-colors shadow-sm">
+<input class="flex-1 h-full px-4 font-body-lg text-body-lg text-on-surface bg-transparent border-none focus:ring-0" type="number" value="2.0"/>
+<div class="h-full px-4 bg-surface-neutral flex items-center border-l border-warning-amber/50 font-label-bold text-label-bold text-on-surface-variant">mcg/kg/min</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant">Maximum Dose Rate</label>
+<div class="flex items-center h-input-height w-full bg-surface-container-lowest border border-warning-amber/50 rounded-lg overflow-hidden focus-within:border-warning-amber transition-colors shadow-sm">
+<input class="flex-1 h-full px-4 font-body-lg text-body-lg text-on-surface bg-transparent border-none focus:ring-0" type="number" value="15.0"/>
+<div class="h-full px-4 bg-surface-neutral flex items-center border-l border-warning-amber/50 font-label-bold text-label-bold text-on-surface-variant">mcg/kg/min</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Hard Limits -->
+<section class="bg-hard-limit-bg border border-error rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-error"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error" data-icon="error">error</span>
+                                        Hard Limits (Critical)
+                                    </h4>
+<p class="font-helper-text text-helper-text text-on-surface-variant mt-1">Triggers a red critical alarm. System strictly prevents exceeding this value.</p>
+</div>
+<!-- CSS Toggle (Error State) -->
+<label class="flex items-center cursor-pointer">
+<div class="relative">
+<input checked="" class="sr-only toggle-checkbox-error" type="checkbox"/>
+<div class="toggle-label block bg-surface-variant w-14 h-8 rounded-full border border-outline-variant transition-colors duration-300">
+<div class="toggle-dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 shadow-sm"></div>
+</div>
+</div>
+<span class="ml-3 font-label-bold text-label-bold text-on-surface">Enabled</span>
+</label>
+</div>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="col-start-2 flex flex-col gap-1">
+<label class="font-helper-text text-helper-text text-on-surface-variant text-error font-bold">Absolute Maximum Dose</label>
+<div class="flex items-center h-input-height w-full bg-surface-container-lowest border-2 border-error rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-error/20 transition-all shadow-sm">
+<input class="flex-1 h-full px-4 font-metric-lg text-metric-lg text-on-surface bg-transparent border-none focus:ring-0" type="number" value="20.0"/>
+<div class="h-full px-4 bg-error/10 flex items-center border-l-2 border-error font-label-bold text-label-bold text-error">mcg/kg/min</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Padding for scrolling past bottom elements -->
+<div class="h-4"></div>
+</div>
+<!-- Footer Actions -->
+<div class="p-4 border-t border-surface-variant bg-surface-container-lowest flex justify-end gap-4 shrink-0">
+<button class="h-input-height px-8 rounded-lg font-label-bold text-label-bold text-on-surface border-2 border-outline-variant hover:bg-surface-variant transition-colors min-w-[120px]">
+                            Cancel
+                        </button>
+<button class="h-input-height px-8 rounded-lg font-label-bold text-label-bold text-on-primary bg-doctor-primary hover:bg-doctor-primary/90 transition-colors shadow-sm flex items-center gap-2 min-w-[160px] justify-center">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                            Save Profile
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

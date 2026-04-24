@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Infusion Setup Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "warning-amber": "#FFB300",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#8a99fe",
+                        "surface-container-high": "#e4e9e7",
+                        "inverse-surface": "#2c3130",
+                        "primary-container": "#008376",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#171d1b",
+                        "surface-variant": "#dfe4e1",
+                        "doctor-primary": "#303F9F",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#071e27",
+                        "secondary-fixed": "#dfe0ff",
+                        "surface": "#f6faf8",
+                        "surface-container": "#eaefec",
+                        "primary": "#00685d",
+                        "tertiary-fixed-dim": "#b4cad6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#fbfdff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#000d5f",
+                        "primary-fixed-dim": "#70d8c8",
+                        "on-surface-variant": "#3d4946",
+                        "on-secondary-fixed-variant": "#2d3c9c",
+                        "primary-fixed": "#8df5e4",
+                        "success-green": "#2E7D32",
+                        "surface-tint": "#006b5f",
+                        "on-tertiary-fixed-variant": "#354a53",
+                        "soft-limit-bg": "#FFF8E1",
+                        "surface-container-highest": "#dfe4e1",
+                        "hard-limit-bg": "#FFEBEE",
+                        "nurse-primary": "#00897B",
+                        "surface-bright": "#f6faf8",
+                        "outline-variant": "#bcc9c5",
+                        "surface-neutral": "#F5F5F5",
+                        "outline": "#6d7a77",
+                        "on-secondary-container": "#1b2b8c",
+                        "admin-primary": "#455A64",
+                        "secondary-fixed-dim": "#bbc3ff",
+                        "tertiary-container": "#627882",
+                        "text-high-contrast": "#212121",
+                        "tertiary-fixed": "#cfe6f2",
+                        "tertiary": "#4a5f69",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#005048",
+                        "background": "#f6faf8",
+                        "on-primary-fixed": "#00201c",
+                        "critical-red": "#D32F2F",
+                        "surface-container-low": "#f0f5f2",
+                        "on-background": "#171d1b",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#f4fffb",
+                        "inverse-on-surface": "#edf2ef",
+                        "inverse-primary": "#70d8c8",
+                        "secondary": "#4755b6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "input-height": "56px",
+                        "margin-edge": "20px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "metric-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "metric-lg": ["Inter"],
+                        "helper-text": ["Inter"],
+                        "label-bold": ["Inter"]
+                    },
+                    "fontSize": {
+                        "metric-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "metric-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "helper-text": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen antialiased selection:bg-nurse-primary selection:text-white">
+<!-- TopAppBar (Generated from JSON) -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center w-full px-5 h-16 sticky top-0 z-40">
+<button class="text-[#00897B] dark:text-[#00897B] hover:bg-slate-50 dark:hover:bg-slate-800 active:opacity-80 transition-opacity flex items-center justify-center w-10 h-10 -ml-2 rounded-full">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-[#00897B] dark:text-[#00897B] font-inter text-sm font-bold tracking-tight">Infusion Monitor</h1>
+<div class="bg-[#00897B] text-white px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest">NURSE</div>
+</header>
+<!-- Main Content Canvas (Navigation Shell excluded due to transactional nature of Setup) -->
+<main class="max-w-2xl mx-auto px-margin-edge py-stack-lg pb-32">
+<!-- Page Header -->
+<div class="flex items-center gap-stack-sm mb-stack-lg">
+<span class="material-symbols-outlined text-nurse-primary" style="font-variation-settings: 'FILL' 1;">vaccines</span>
+<h2 class="font-headline-md text-headline-md text-text-high-contrast">Infusion Setup - Dopamine</h2>
+</div>
+<!-- Soft Limit Warning Banner -->
+<div class="bg-soft-limit-bg border-2 border-warning-amber rounded-lg p-stack-md mb-stack-lg flex gap-stack-md items-start shadow-sm active:opacity-80 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-warning-amber mt-1" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<p class="font-label-bold text-label-bold text-text-high-contrast mb-1">Soft Limit Exceeded</p>
+<p class="font-body-lg text-body-lg text-text-high-contrast">Rate exceeds soft limit (5.0 mL/h). Tap to confirm override.</p>
+</div>
+</div>
+<!-- Input Section -->
+<div class="flex flex-col gap-gutter">
+<!-- Rate Input (Highlighted for Soft Limit) -->
+<div class="bg-surface-container-lowest border-2 border-warning-amber rounded-xl p-stack-md shadow-sm">
+<div class="flex justify-between items-center mb-stack-sm">
+<label class="font-label-bold text-label-bold text-outline uppercase tracking-wider">Rate</label>
+<span class="material-symbols-outlined text-warning-amber" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="bg-surface-container-low rounded-lg px-stack-md py-stack-sm flex items-baseline justify-end border border-surface-variant">
+<input class="bg-transparent border-none text-right font-metric-xl text-metric-xl text-text-high-contrast w-full p-0 focus:ring-0 focus:outline-none" readonly="" type="text" value="5.5"/>
+<span class="font-headline-md text-headline-md text-outline ml-stack-sm select-none">mL/h</span>
+</div>
+</div>
+<!-- VTBI Input -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-sm">
+<label class="font-label-bold text-label-bold text-outline uppercase tracking-wider block mb-stack-sm">VTBI</label>
+<div class="bg-surface-container-low rounded-lg px-stack-md py-stack-sm flex items-baseline justify-end border border-surface-variant">
+<input class="bg-transparent border-none text-right font-metric-xl text-metric-xl text-text-high-contrast w-full p-0 focus:ring-0 focus:outline-none" readonly="" type="text" value="250"/>
+<span class="font-headline-md text-headline-md text-outline ml-stack-sm select-none">mL</span>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="mt-stack-lg pt-stack-md border-t border-surface-variant">
+<button class="w-full bg-nurse-primary text-on-primary rounded-full h-[72px] flex flex-col items-center justify-center shadow-md active:scale-[0.98] transition-transform relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/20 scale-x-0 origin-left group-active:scale-x-100 transition-transform duration-1000 ease-linear"></div>
+<span class="font-label-bold text-label-bold uppercase tracking-widest z-10">Confirm &amp; Start</span>
+<span class="font-helper-text text-helper-text opacity-90 mt-1 z-10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">touch_app</span>
+                    Hold for 2 seconds
+                </span>
+</button>
+</div>
+</main>
+<!-- Emergency Stop FAB -->
+<button class="fixed bottom-margin-edge right-margin-edge w-[76px] h-[76px] bg-critical-red text-on-error rounded-full shadow-xl flex flex-col items-center justify-center z-50 border-[6px] border-surface active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 32px; font-variation-settings: 'FILL' 1;">front_hand</span>
+<span class="font-helper-text text-[10px] font-bold mt-[-2px] tracking-wider">STOP</span>
+</button>
+</body></html>

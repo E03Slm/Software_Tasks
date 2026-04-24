@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Infusion - Parameter Entry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#171d1b",
+                      "surface-tint": "#006b5f",
+                      "surface-container-high": "#e4e9e7",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#8a99fe",
+                      "on-tertiary-fixed": "#071e27",
+                      "on-secondary-fixed": "#000d5f",
+                      "surface-container": "#eaefec",
+                      "on-primary-container": "#f4fffb",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#00201c",
+                      "secondary-fixed-dim": "#bbc3ff",
+                      "on-surface": "#171d1b",
+                      "primary-container": "#008376",
+                      "surface-container-highest": "#dfe4e1",
+                      "success-green": "#2E7D32",
+                      "primary": "#00685d",
+                      "doctor-primary": "#303F9F",
+                      "surface-container-low": "#f0f5f2",
+                      "surface-neutral": "#F5F5F5",
+                      "tertiary": "#4a5f69",
+                      "surface-bright": "#f6faf8",
+                      "inverse-surface": "#2c3130",
+                      "on-tertiary-container": "#fbfdff",
+                      "on-primary": "#ffffff",
+                      "surface": "#f6faf8",
+                      "nurse-primary": "#00897B",
+                      "on-tertiary": "#ffffff",
+                      "critical-red": "#D32F2F",
+                      "secondary": "#4755b6",
+                      "text-high-contrast": "#212121",
+                      "on-secondary-fixed-variant": "#2d3c9c",
+                      "outline-variant": "#bcc9c5",
+                      "surface-variant": "#dfe4e1",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#005048",
+                      "error-container": "#ffdad6",
+                      "admin-primary": "#455A64",
+                      "background": "#f6faf8",
+                      "hard-limit-bg": "#FFEBEE",
+                      "on-secondary-container": "#1b2b8c",
+                      "primary-fixed-dim": "#70d8c8",
+                      "inverse-primary": "#70d8c8",
+                      "outline": "#6d7a77",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#627882",
+                      "on-surface-variant": "#3d4946",
+                      "surface-dim": "#d6dbd9",
+                      "inverse-on-surface": "#edf2ef",
+                      "on-tertiary-fixed-variant": "#354a53",
+                      "tertiary-fixed-dim": "#b4cad6",
+                      "primary-fixed": "#8df5e4",
+                      "soft-limit-bg": "#FFF8E1",
+                      "tertiary-fixed": "#cfe6f2",
+                      "secondary-fixed": "#dfe0ff",
+                      "warning-amber": "#FFB300"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-edge": "20px",
+                      "stack-sm": "8px",
+                      "touch-target-min": "48px",
+                      "stack-lg": "24px",
+                      "stack-md": "16px",
+                      "input-height": "56px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "metric-xl": ["Inter"],
+                      "helper-text": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-bold": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "metric-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "metric-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "helper-text": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "metric-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen text-on-background pb-[100px]">
+<!-- TopAppBar Shared Component -->
+<header class="bg-slate-50 dark:bg-slate-950 font-['Inter'] font-bold tracking-tighter text-sm uppercase docked full-width top-0 border-b-2 border-slate-200 dark:border-slate-800 flat no shadows fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 h-16">
+<button aria-label="Medical Services" class="flex items-center justify-center w-touch-target-min h-touch-target-min text-[#00897B] dark:text-[#26A69A] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors opacity-80 duration-100">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</button>
+<div class="text-lg font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            SMART INFUSION
+        </div>
+<button aria-label="Logout" class="flex items-center justify-center w-touch-target-min h-touch-target-min text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+</button>
+</header>
+<main class="pt-[80px] px-margin-edge flex flex-col gap-gutter max-w-2xl mx-auto">
+<!-- Role Indicator -->
+<div class="flex items-center gap-stack-sm bg-nurse-primary text-on-primary font-label-bold text-label-bold px-3 py-1.5 rounded-lg w-fit shadow-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span>NURSE</span>
+<span class="opacity-50 mx-1">|</span>
+<span>SETUP</span>
+</div>
+<!-- Drug Selection Header (Selected State) -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-stack-md flex justify-between items-center shadow-sm">
+<div>
+<span class="font-helper-text text-helper-text text-on-surface-variant uppercase tracking-wider block mb-1">Selected Medication</span>
+<h1 class="font-headline-md text-headline-md text-on-surface">Dopamine</h1>
+</div>
+<div class="w-touch-target-min h-touch-target-min flex items-center justify-center bg-success-green/10 rounded-full">
+<span class="material-symbols-outlined text-success-green text-[28px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Parameters Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Concentration (Locked) -->
+<div class="bg-surface-neutral border border-surface-variant rounded-xl p-stack-md col-span-1 md:col-span-2 flex flex-col justify-center opacity-80">
+<div class="flex justify-between items-center mb-stack-sm">
+<label class="font-label-bold text-label-bold text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+                        Concentration
+                    </label>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-metric-lg text-metric-lg text-on-surface-variant">400</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">mg</span>
+<span class="font-metric-lg text-metric-lg text-on-surface-variant text-opacity-50 mx-1">/</span>
+<span class="font-metric-lg text-metric-lg text-on-surface-variant">250</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">mL</span>
+</div>
+</div>
+<!-- Rate Input (Warning State Focus) -->
+<div class="bg-surface-container-lowest border-2 border-warning-amber rounded-xl p-stack-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-warning-amber"></div>
+<div class="flex justify-between items-center mb-stack-sm pl-2">
+<label class="font-label-bold text-label-bold text-on-surface">Rate</label>
+<span class="font-label-bold text-label-bold text-on-surface-variant">mL/h</span>
+</div>
+<div class="flex justify-between items-end pl-2">
+<span class="font-metric-xl text-metric-xl text-on-surface">5.5</span>
+<span class="material-symbols-outlined text-warning-amber text-[32px] mb-1" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<!-- VTBI Input -->
+<div class="bg-surface-container-lowest border border-outline rounded-xl p-stack-md shadow-sm hover:border-nurse-primary transition-colors cursor-pointer">
+<div class="flex justify-between items-center mb-stack-sm">
+<label class="font-label-bold text-label-bold text-on-surface-variant">VTBI</label>
+<span class="font-label-bold text-label-bold text-on-surface-variant">mL</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-metric-xl text-metric-xl text-on-surface">250.0</span>
+<span class="material-symbols-outlined text-outline text-[24px] mb-2">edit</span>
+</div>
+</div>
+</div>
+<!-- Soft Limit Warning Banner -->
+<div class="bg-soft-limit-bg border-2 border-warning-amber rounded-xl p-stack-md mt-stack-sm flex gap-stack-md shadow-md items-start">
+<span class="material-symbols-outlined text-warning-amber text-[32px] mt-1" style="font-variation-settings: 'FILL' 1;">report_problem</span>
+<div class="flex-1">
+<h3 class="font-label-bold text-label-bold text-on-surface mb-1">Soft Limit Exceeded</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md leading-snug">Rate exceeds 5.0 mL/h. Tap to confirm override.</p>
+<!-- Large Checkbox for Gloved Interaction -->
+<button class="flex items-center gap-stack-md w-full p-2 -ml-2 rounded-lg hover:bg-warning-amber/10 transition-colors">
+<div class="w-touch-target-min h-touch-target-min border-2 border-warning-amber rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<!-- Unchecked state (visually empty, implies action needed) -->
+</div>
+<span class="font-label-bold text-label-bold text-on-surface">Acknowledge Override</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant p-margin-edge z-40 pb-safe">
+<div class="max-w-2xl mx-auto">
+<button class="w-full h-16 bg-surface-variant text-on-surface-variant font-headline-md text-headline-md rounded-xl flex items-center justify-center gap-stack-sm cursor-not-allowed shadow-none" disabled="">
+<span class="material-symbols-outlined text-[28px]">play_circle</span>
+                Confirm &amp; Start
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doctor Reports Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#171d1b",
+                    "surface-tint": "#006b5f",
+                    "surface-container-high": "#e4e9e7",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#8a99fe",
+                    "on-tertiary-fixed": "#071e27",
+                    "on-secondary-fixed": "#000d5f",
+                    "surface-container": "#eaefec",
+                    "on-primary-container": "#f4fffb",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#00201c",
+                    "secondary-fixed-dim": "#bbc3ff",
+                    "on-surface": "#171d1b",
+                    "primary-container": "#008376",
+                    "surface-container-highest": "#dfe4e1",
+                    "success-green": "#2E7D32",
+                    "primary": "#00685d",
+                    "doctor-primary": "#303F9F",
+                    "surface-container-low": "#f0f5f2",
+                    "surface-neutral": "#F5F5F5",
+                    "tertiary": "#4a5f69",
+                    "surface-bright": "#f6faf8",
+                    "inverse-surface": "#2c3130",
+                    "on-tertiary-container": "#fbfdff",
+                    "on-primary": "#ffffff",
+                    "surface": "#f6faf8",
+                    "nurse-primary": "#00897B",
+                    "on-tertiary": "#ffffff",
+                    "critical-red": "#D32F2F",
+                    "secondary": "#4755b6",
+                    "text-high-contrast": "#212121",
+                    "on-secondary-fixed-variant": "#2d3c9c",
+                    "outline-variant": "#bcc9c5",
+                    "surface-variant": "#dfe4e1",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#005048",
+                    "error-container": "#ffdad6",
+                    "admin-primary": "#455A64",
+                    "background": "#f6faf8",
+                    "hard-limit-bg": "#FFEBEE",
+                    "on-secondary-container": "#1b2b8c",
+                    "primary-fixed-dim": "#70d8c8",
+                    "inverse-primary": "#70d8c8",
+                    "outline": "#6d7a77",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#627882",
+                    "on-surface-variant": "#3d4946",
+                    "surface-dim": "#d6dbd9",
+                    "inverse-on-surface": "#edf2ef",
+                    "on-tertiary-fixed-variant": "#354a53",
+                    "tertiary-fixed-dim": "#b4cad6",
+                    "primary-fixed": "#8df5e4",
+                    "soft-limit-bg": "#FFF8E1",
+                    "tertiary-fixed": "#cfe6f2",
+                    "secondary-fixed": "#dfe0ff",
+                    "warning-amber": "#FFB300"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-edge": "20px",
+                    "stack-sm": "8px",
+                    "touch-target-min": "48px",
+                    "stack-lg": "24px",
+                    "stack-md": "16px",
+                    "input-height": "56px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "metric-xl": [
+                            "Inter"
+                    ],
+                    "helper-text": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "label-bold": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "metric-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "metric-xl": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "helper-text": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-bold": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "metric-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg text-body-lg min-h-screen pt-16 pb-20 md:pb-0 md:pl-72">
+<!-- Web Navigation Drawer -->
+<nav class="hidden md:flex flex-col p-5 h-full w-72 border-r-2 border-surface-variant bg-surface-container shadow-none fixed left-0 top-0">
+<div class="flex items-center gap-2 mb-8 text-[#00897B] font-black text-lg">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span>SMART INFUSION</span>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="gas_meter">gas_meter</span>
+<span class="font-label-bold text-label-bold">Pump</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+<span class="font-label-bold text-label-bold">Drug Lib</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-bold text-label-bold">Logs</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg bg-[#00897B]/10 text-[#00897B] border-r-4 border-[#00897B]" href="#">
+<span class="material-symbols-outlined" data-icon="summarize">summarize</span>
+<span class="font-label-bold text-label-bold">Reports</span>
+</a>
+</div>
+<div class="mt-auto flex items-center gap-3 p-3">
+<div class="w-10 h-10 rounded-full bg-doctor-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-on-surface">Dr. Smith</p>
+<p class="font-helper-text text-helper-text text-on-surface-variant">Attending</p>
+</div>
+</div>
+</nav>
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 md:left-72 w-full md:w-[calc(100%-18rem)] z-50 flex justify-between items-center px-5 h-16 bg-surface-container border-b-2 border-surface-variant shadow-none">
+<div class="flex items-center gap-2 text-lg font-black text-[#00897B]">
+<span class="material-symbols-outlined md:hidden text-lg" data-icon="medical_services">medical_services</span>
+<h1 class="md:hidden">SMART INFUSION</h1>
+<h1 class="hidden md:block font-headline-md text-headline-md text-on-surface">REPORTS</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-doctor-primary text-on-primary px-3 py-1 rounded-full font-label-bold text-label-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="stethoscope">stethoscope</span>
+                DOCTOR
+            </div>
+<button class="text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="p-margin-edge md:p-8 max-w-7xl mx-auto space-y-gutter">
+<!-- Controls Header -->
+<section class="bg-surface-container-lowest p-6 border border-surface-variant rounded-xl flex flex-col md:flex-row gap-gutter justify-between items-end">
+<div class="w-full md:w-auto flex flex-col md:flex-row gap-gutter flex-grow">
+<!-- Report Type Selector -->
+<div class="flex flex-col gap-2 w-full md:w-64">
+<label class="font-label-bold text-label-bold text-on-surface-variant" for="reportType">Report Type</label>
+<div class="relative">
+<select class="w-full h-input-height appearance-none bg-surface-container-low border border-outline rounded-lg px-4 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" id="reportType">
+<option>Infusion Summary</option>
+<option>Alarm Frequency</option>
+<option>Drug Usage</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+<!-- Date Filter -->
+<div class="flex flex-col gap-2 w-full md:w-48">
+<label class="font-label-bold text-label-bold text-on-surface-variant" for="dateRange">Date Range</label>
+<div class="relative">
+<select class="w-full h-input-height appearance-none bg-surface-container-low border border-outline rounded-lg px-4 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" id="dateRange">
+<option>Last 24 Hours</option>
+<option>Last 7 Days</option>
+<option>Custom Range</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full md:w-auto h-input-height min-w-[160px] bg-primary text-on-primary font-label-bold text-label-bold rounded-lg px-6 flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span>
+                Export PDF
+            </button>
+</section>
+<!-- Preview Pane -->
+<section class="bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-surface-variant bg-surface-container-low flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">Preview: Infusion Summary</h2>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="print">print</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="fullscreen">fullscreen</span>
+</div>
+</div>
+<div class="p-6 flex-grow flex flex-col gap-stack-lg min-h-[500px]">
+<!-- Chart Area Placeholder -->
+<div class="w-full h-64 bg-surface-variant rounded-lg border border-outline-variant flex items-center justify-center relative overflow-hidden">
+<!-- Faux Chart Lines -->
+<div class="absolute bottom-0 left-0 w-full h-full flex items-end p-4 gap-2 opacity-50">
+<div class="w-1/12 bg-primary h-1/4 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-2/4 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-1/3 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-3/4 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-1/2 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-4/5 rounded-t-sm"></div>
+<div class="w-1/12 bg-primary h-full rounded-t-sm"></div>
+</div>
+<div class="z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl text-outline mb-2" data-icon="bar_chart">bar_chart</span>
+<span class="font-helper-text text-helper-text text-on-surface-variant">Volume Over Time (mL)</span>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto border border-surface-variant rounded-lg">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant">
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant">Time</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant">Medication</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant">Rate (mL/h)</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant">Vol (mL)</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-lg text-body-lg text-on-surface divide-y divide-surface-variant bg-surface-container-lowest">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4">08:00</td>
+<td class="p-4 font-label-bold text-label-bold">Dopamine</td>
+<td class="p-4">10.0</td>
+<td class="p-4">50.0</td>
+<td class="p-4"><span class="bg-surface-container text-primary px-2 py-1 rounded text-xs font-bold uppercase">Complete</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4">10:30</td>
+<td class="p-4 font-label-bold text-label-bold">Propofol</td>
+<td class="p-4">25.0</td>
+<td class="p-4">100.0</td>
+<td class="p-4"><span class="bg-surface-container text-primary px-2 py-1 rounded text-xs font-bold uppercase">Complete</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4">14:15</td>
+<td class="p-4 font-label-bold text-label-bold">Norepinephrine</td>
+<td class="p-4 text-warning-amber font-bold">15.0 <span class="material-symbols-outlined text-sm align-middle" data-icon="warning">warning</span></td>
+<td class="p-4">75.5</td>
+<td class="p-4"><span class="bg-surface-container text-primary px-2 py-1 rounded text-xs font-bold uppercase">Complete</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-4">16:00</td>
+<td class="p-4 font-label-bold text-label-bold">Fentanyl</td>
+<td class="p-4">5.0</td>
+<td class="p-4">20.0</td>
+<td class="p-4"><span class="bg-[#00897B]/10 text-[#00897B] border border-[#00897B] px-2 py-1 rounded text-xs font-bold uppercase">Active</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 pb-safe bg-surface-container-lowest border-t-2 border-surface-variant shadow-none">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-low w-16" href="#">
+<span class="material-symbols-outlined" data-icon="gas_meter">gas_meter</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest mt-1">Pump</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-low w-16" href="#">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest mt-1">Drug Lib</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-low w-16" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest mt-1">Logs</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-surface-variant text-[#00897B] rounded-md p-2 scale-95 duration-75 w-16" href="#">
+<span class="material-symbols-outlined" data-icon="summarize" style="font-variation-settings: 'FILL' 1;">summarize</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest mt-1">Reports</span>
+</a>
+</nav>
+</body></html>
