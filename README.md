@@ -1,4 +1,4 @@
 # Software-Tasks
-3rd biomedical engineer  
-2nd term tasks  
-Software Engineering
+3rd Biomedical Engineer  
+2nd Term  
+Software Engineering Tasks  
