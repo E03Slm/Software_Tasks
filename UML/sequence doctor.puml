@@ -1,0 +1,35 @@
+@startuml
+skinparam style strictuml
+actor Doctor
+participant "Doctor UI" as UI
+participant "Drug Library" as DrugLib
+participant "Logical System" as LogicSys
+participant "Audit Logger" as Logger
+database "System DB" as DB
+
+Doctor -> UI : Login (Doctor Credentials)
+UI -> Auth : Authenticate
+Auth --> UI : Success (Role: Doctor)
+
+Doctor -> UI : Access Drug Library
+UI -> DrugLib : Fetch All Drugs
+DrugLib -> DB : Query Drugs
+DB --> UI : Display List
+
+Doctor -> UI : Edit Safety Limits (Hard Limit Ceiling)
+UI -> DrugLib : Update Drug Parameters
+DrugLib -> Logger : Log Immutable: "Hard Limit Changed for [Drug]"
+DrugLib -> DB : Commit Changes
+DB --> UI : Updated
+UI --> Doctor : Confirmation Message
+
+== Analytics & Reporting ==
+Doctor -> UI : Request Clinical Analytics [F-D-05]
+UI -> LogicSys : Generate Report (Last 30 Days)
+LogicSys -> Logger : Fetch Audit History
+Logger --> LogicSys : Data Points
+LogicSys -> LogicSys : Format PDF/CSV
+UI -> Doctor : Display Report & Provide Export Link
+Doctor -> UI : Export to PDF
+UI --> Doctor : Download Triggered
+@enduml

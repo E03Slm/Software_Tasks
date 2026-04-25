@@ -1,0 +1,76 @@
+@startuml
+actor Nurse
+participant "NurseUI" as UI
+participant "SessionController" as Controller
+participant "DrugLibrary" as Library
+participant "InfusionSession" as Session
+participant "SimulationEngine" as Engine
+participant "AlarmService" as Alarm
+participant "Log" as Log
+participant "LogDB" as LogDB
+
+== Authentication (Issue 20) ==
+Nurse -> UI: login()
+UI -> Controller: authenticate(credentials)
+alt credentials valid
+    Controller --> UI: success
+else credentials invalid
+    Controller --> UI: showError("Invalid credentials")
+end
+
+== Parameter Setup ==
+Nurse -> UI: selectDrug(drugName)
+UI -> Controller: getDrug(drugName)
+Controller -> Library: findDrug(drugName)
+Library --> Controller: drug
+Controller --> UI: drugDetails
+
+Nurse -> UI: enterParameters(rate, volume)
+UI -> Controller: validateParameters(drug, rate, volume)
+Controller -> Library: getLimits(drug)
+Library --> Controller: hardLimit, softLimit
+
+alt rate > hardLimit
+  Controller --> UI: reject with alarm
+else rate > softLimit
+  Controller --> UI: warning, require acknowledge
+  Nurse -> UI: acknowledge()
+  UI -> Controller: acknowledgeWarning()
+end
+Controller --> UI: valid
+
+== Start Infusion & Logging (Issue 19) ==
+Nurse -> UI: start()
+UI -> Controller: startInfusion(sessionData)
+Controller -> Session: create(drug, rate, volume)
+Session --> Controller: session
+Controller -> Engine: start(session)
+Engine -> Session: run()
+Engine --> Controller: started
+
+Controller -> Log: logEvent("Infusion started", nurse)
+Log -> LogDB: persistEntry() 
+Controller --> UI: updateStatus()
+
+== Execution Loop (Issue 17) ==
+loop every second
+  Engine -> Session: updateVolumeInfused()
+  Session --> Engine: current status
+  Engine -> Controller: updateStatus(currentData)
+  Controller -> UI: refreshDisplay(data)
+end
+
+== Alarm Handling (Issue 18) ==
+Engine -> Engine: detectAlarmCondition()
+Engine -> Controller: notifyAlarm(condition)
+Controller -> Alarm: triggerAlarm(condition)
+Alarm -> Session: pause()
+Controller -> UI: displayAlarm(condition)
+
+Nurse -> UI: acknowledge()
+UI -> Controller: resolveAlarm()
+Controller -> Alarm: clear()
+Alarm -> Session: resume()
+Controller -> UI: updateStatus("Resumed")
+
+@enduml

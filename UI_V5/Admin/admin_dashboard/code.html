@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>InfusionAdmin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "severity-warning": "#FFA000",
+                      "surface-container": "#eaefec",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#91462c",
+                      "surface-variant": "#dfe4e1",
+                      "on-background": "#171d1b",
+                      "outline-variant": "#bcc9c5",
+                      "text-secondary": "#757575",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed": "#390c00",
+                      "tertiary-fixed": "#ffdbcf",
+                      "text-primary": "#212121",
+                      "doctor-primary": "#00897B",
+                      "on-tertiary-container": "#fffbff",
+                      "primary-fixed-dim": "#70d8c8",
+                      "primary-fixed": "#8df5e4",
+                      "primary": "#00685d",
+                      "secondary-fixed-dim": "#a2c9ff",
+                      "surface-container-high": "#e4e9e7",
+                      "on-secondary-fixed": "#001c38",
+                      "secondary": "#0060a8",
+                      "admin-light": "#9C4DCC",
+                      "on-primary-fixed": "#00201c",
+                      "severity-critical": "#E53935",
+                      "on-surface-variant": "#3d4946",
+                      "admin-primary": "#6A1B9A",
+                      "on-tertiary-fixed-variant": "#763219",
+                      "secondary-container": "#47a1ff",
+                      "severity-info": "#039BE5",
+                      "on-secondary-fixed-variant": "#004881",
+                      "tertiary-fixed-dim": "#ffb59c",
+                      "surface-dim": "#d6dbd9",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#005048",
+                      "primary-container": "#008376",
+                      "surface": "#FFFFFF",
+                      "doctor-light": "#4DB6AC",
+                      "surface-container-low": "#f0f5f2",
+                      "bg-main": "#F5F5F5",
+                      "on-secondary-container": "#003663",
+                      "inverse-surface": "#2c3130",
+                      "on-primary-container": "#f4fffb",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#edf2ef",
+                      "tertiary-container": "#b05e41",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#006b5f",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#171d1b",
+                      "nurse-primary": "#1E88E5",
+                      "surface-bright": "#f6faf8",
+                      "border-default": "#E0E0E0",
+                      "secondary-fixed": "#d3e4ff",
+                      "nurse-light": "#64B5F6",
+                      "background": "#f6faf8",
+                      "surface-container-highest": "#dfe4e1",
+                      "outline": "#6d7a77",
+                      "inverse-primary": "#70d8c8",
+                      "severity-success": "#43A047"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-padding": "16px",
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "touch-target-min": "44px"
+              },
+              "fontFamily": {
+                      "caption-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "data-display": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "caption-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-display": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-text-primary font-body-md text-body-md h-screen flex overflow-hidden">
+<!-- Side Navigation (Web) -->
+<nav class="hidden md:flex flex-col h-full w-72 border-r divide-y divide-slate-200 dark:divide-slate-800 shadow-xl bg-slate-50 dark:bg-slate-950 font-sans text-sm font-medium transition-all duration-200 ease-in-out">
+<div class="flex items-center px-4 py-6">
+<div class="h-10 w-10 rounded-full bg-admin-primary flex items-center justify-center text-white font-bold mr-3">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<div class="font-title-lg text-title-lg text-admin-primary">System Administrator</div>
+<div class="font-caption-sm text-caption-sm text-text-secondary">ID: ADMIN-0892</div>
+</div>
+</div>
+<div class="flex-1 py-4 overflow-y-auto">
+<a class="flex items-center px-4 py-3 text-slate-700 dark:text-slate-300 mx-2 mb-1 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="history_edu">history_edu</span>
+                Audit Log
+            </a>
+<a class="flex items-center px-4 py-3 bg-purple-600 text-white rounded-lg mx-2 mb-1 hover:bg-purple-50 dark:hover:bg-purple-900/20 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center px-4 py-3 text-slate-700 dark:text-slate-300 mx-2 mb-1 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group">group</span>
+                User Management
+            </a>
+</div>
+<div class="p-4 border-t border-slate-200">
+<div class="font-caption-sm text-caption-sm text-text-secondary text-center">Session: 14:22 left</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- TopAppBar (Mobile & Web Context Header) -->
+<header class="md:hidden fixed top-0 w-full z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center h-14 px-4 font-sans text-sm font-semibold tracking-tight">
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-purple-800 dark:text-purple-400 active:opacity-70">
+<span class="material-symbols-outlined" data-icon="settings_remote">settings_remote</span>
+</button>
+<div class="text-lg font-black text-purple-800 dark:text-purple-400 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+                InfusionAdmin
+            </div>
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-purple-800 dark:text-purple-400 active:opacity-70">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</header>
+<!-- Web Header (Alternative to Mobile TopAppBar) -->
+<header class="hidden md:flex justify-between items-center h-[56px] px-gutter bg-surface border-b border-border-default z-40 shrink-0 shadow-[0_4px_4px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-unit">
+<div class="px-3 py-1 bg-admin-primary text-white font-caption-sm text-caption-sm rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="admin_panel_settings">admin_panel_settings</span>
+                    Admin
+                </div>
+<h1 class="font-title-lg text-title-lg text-text-primary ml-2">System Dashboard</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-text-secondary hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-text-secondary hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</div>
+</header>
+<!-- Session Timeout Banner -->
+<div class="bg-severity-warning/10 border-b border-severity-warning/20 px-container-padding py-3 flex items-center justify-between z-30 shrink-0 mt-14 md:mt-0">
+<div class="flex items-center gap-3 text-severity-warning">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="font-body-md text-body-md font-medium">Session expiring in 60s</span>
+</div>
+<button class="px-4 py-2 bg-severity-warning text-white font-caption-sm text-caption-sm rounded shadow-sm hover:bg-severity-warning/90 transition-colors h-[36px] flex items-center">
+                Renew
+            </button>
+</div>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto p-container-padding md:p-6 pb-24 md:pb-6 space-y-6">
+<!-- Bento Grid Structure -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- System Health Summary (Span 2 cols) -->
+<div class="md:col-span-2 grid grid-cols-2 gap-4">
+<!-- Uptime Card -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 flex flex-col justify-between h-[140px]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-severity-success" data-icon="check_circle">check_circle</span>
+<span class="font-caption-sm text-caption-sm">System Uptime</span>
+</div>
+<div class="font-data-display text-data-display text-text-primary">99.9%</div>
+<div class="font-caption-sm text-caption-sm text-text-secondary">Last restart: 14d ago</div>
+</div>
+<!-- Active Sessions Card -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 flex flex-col justify-between h-[140px]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-admin-primary" data-icon="group">group</span>
+<span class="font-caption-sm text-caption-sm">Active Sessions</span>
+</div>
+<div class="font-data-display text-data-display text-text-primary">42</div>
+<div class="font-caption-sm text-caption-sm text-text-secondary">3 Admins, 39 Nurses</div>
+</div>
+<!-- Simulation Engine Card -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 flex flex-col justify-between h-[140px]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-severity-info" data-icon="memory">memory</span>
+<span class="font-caption-sm text-caption-sm">Engine Status</span>
+</div>
+<div class="font-title-lg text-title-lg text-text-primary">Stable</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2">
+<div class="bg-severity-info h-1.5 rounded-full w-full"></div>
+</div>
+</div>
+<!-- Memory Usage Card -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 flex flex-col justify-between h-[140px]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-severity-warning" data-icon="storage">storage</span>
+<span class="font-caption-sm text-caption-sm">Memory Usage</span>
+</div>
+<div class="font-data-display text-data-display text-text-primary">82%</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2">
+<div class="bg-severity-warning h-1.5 rounded-full w-[82%]"></div>
+</div>
+</div>
+</div>
+<!-- Alerts & Quick Access Column -->
+<div class="space-y-6 flex flex-col">
+<!-- Active Alerts List -->
+<div class="bg-surface rounded-xl shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 flex-1 flex flex-col">
+<div class="p-4 border-b border-border-default flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-text-primary">Active Alerts</h3>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full font-caption-sm text-caption-sm font-bold">2</span>
+</div>
+<div class="p-2 space-y-2 flex-1 overflow-y-auto">
+<!-- Alert Item -->
+<div class="bg-surface-container-low p-3 rounded-lg border-l-4 border-severity-warning flex gap-3 items-start min-h-[64px]">
+<span class="material-symbols-outlined text-severity-warning shrink-0" data-icon="warning">warning</span>
+<div>
+<div class="font-caption-sm text-caption-sm font-semibold text-text-primary">Admin Accounts</div>
+<div class="font-caption-sm text-caption-sm text-text-secondary">Only one Admin account remaining. Create backup account.</div>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="bg-surface-container-low p-3 rounded-lg border-l-4 border-severity-critical flex gap-3 items-start min-h-[64px]">
+<span class="material-symbols-outlined text-severity-critical shrink-0" data-icon="disc_full">disc_full</span>
+<div>
+<div class="font-caption-sm text-caption-sm font-semibold text-text-primary">Storage Low</div>
+<div class="font-caption-sm text-caption-sm text-text-secondary">Log partition at 95% capacity. Archive required.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Safety Limits Quick Access -->
+<button class="bg-admin-primary text-white rounded-xl p-4 shadow-sm hover:bg-admin-primary/90 transition-colors flex items-center justify-between h-[88px] group text-left w-full">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center shrink-0 group-active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
+</div>
+<div>
+<div class="font-body-md text-body-md font-semibold">Safety Limits</div>
+<div class="font-caption-sm text-caption-sm text-white/80">View global guardrails</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-white/50" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Audit Trail Snippet -->
+<div class="bg-surface rounded-xl shadow-[0_4px_4px_rgba(0,0,0,0.05)] border border-border-default/50 overflow-hidden">
+<div class="p-4 border-b border-border-default flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-secondary" data-icon="history">history</span>
+<h3 class="font-title-lg text-title-lg text-text-primary">Recent Audit Trail</h3>
+</div>
+<button class="text-admin-primary font-caption-sm text-caption-sm font-semibold hover:underline">View All</button>
+</div>
+<div class="divide-y divide-border-default">
+<div class="p-4 flex gap-4 items-center min-h-[64px]">
+<div class="font-caption-sm text-caption-sm text-text-secondary shrink-0 w-20">10:42 AM</div>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-text-primary">User <strong>NURSE-102</strong> authenticated successfully.</span>
+</div>
+<span class="bg-surface-container px-2 py-1 rounded text-text-secondary font-caption-sm text-caption-sm">AUTH</span>
+</div>
+<div class="p-4 flex gap-4 items-center min-h-[64px]">
+<div class="font-caption-sm text-caption-sm text-text-secondary shrink-0 w-20">10:38 AM</div>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-text-primary">Drug Library version <strong>v2.4.1</strong> deployed to node A.</span>
+</div>
+<span class="bg-surface-container px-2 py-1 rounded text-text-secondary font-caption-sm text-caption-sm">SYSTEM</span>
+</div>
+<div class="p-4 flex gap-4 items-center min-h-[64px]">
+<div class="font-caption-sm text-caption-sm text-text-secondary shrink-0 w-20">10:15 AM</div>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-text-primary">Global hard limit modified for <strong>Heparin</strong>.</span>
+</div>
+<span class="bg-severity-warning/20 text-severity-warning px-2 py-1 rounded font-caption-sm text-caption-sm border border-severity-warning/30">CONFIG</span>
+</div>
+</div>
+</div>
+<!-- Empty State Example (Hidden structurally, shown for reference as requested) -->
+<!-- 
+            <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-border-default rounded-xl bg-surface-container-low/50">
+                <span class="material-symbols-outlined text-[64px] text-text-secondary/30 mb-4" data-icon="check_circle_outline">check_circle_outline</span>
+                <h3 class="font-title-lg text-title-lg text-text-primary mb-2">No active alerts</h3>
+                <p class="font-body-md text-body-md text-text-secondary">System operational and running smoothly.</p>
+            </div>
+            -->
+<div class="h-24 md:h-0"></div> <!-- Spacer for mobile bottom nav -->
+</main>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] bg-white dark:bg-slate-900 flex justify-around items-center h-16 pb-safe text-[10px] font-bold tracking-wide uppercase">
+<a class="flex flex-col items-center text-purple-700 dark:text-purple-400 scale-95 active:scale-90 transition-transform h-touch-target-min justify-center w-1/4" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Status</span>
+</a>
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform h-touch-target-min justify-center w-1/4" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="badge">badge</span>
+<span>Users</span>
+</a>
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform h-touch-target-min justify-center w-1/4" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="list_alt">list_alt</span>
+<span>Logs</span>
+</a>
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform h-touch-target-min justify-center w-1/4" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="construction">construction</span>
+<span>Setup</span>
+</a>
+</nav>
+<!-- Overlay Modal (Hidden by default, shown structurally for 'Safety Limits' click) -->
+<div class="hidden fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+<div class="bg-surface w-full max-w-lg rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[707px]">
+<div class="p-4 border-b border-border-default flex justify-between items-center bg-surface-container-low">
+<h2 class="font-title-lg text-title-lg text-text-primary">Global Safety Limits</h2>
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-text-secondary hover:bg-border-default rounded-full">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-4 overflow-y-auto">
+<p class="font-body-md text-body-md text-text-secondary mb-4">Current organizational guardrails applied to all simulator nodes.</p>
+<!-- Modal content would go here -->
+</div>
+<div class="p-4 border-t border-border-default bg-surface-container-lowest flex justify-end gap-3">
+<button class="px-6 py-2 border border-admin-primary text-admin-primary font-body-md text-body-md font-medium rounded h-touch-target-min">Cancel</button>
+<button class="px-6 py-2 bg-admin-primary text-white font-body-md text-body-md font-medium rounded shadow-sm h-touch-target-min">Edit Limits</button>
+</div>
+</div>
+</div>
+</body></html>

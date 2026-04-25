@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Infusion Monitor - Logs Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#00685d",
+                    "inverse-surface": "#2c3130",
+                    "surface-variant": "#dfe4e1",
+                    "on-secondary-container": "#476b65",
+                    "inverse-on-surface": "#edf2ef",
+                    "secondary": "#41655f",
+                    "secondary-fixed-dim": "#a8cec6",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#c3ebe2",
+                    "on-tertiary-fixed": "#390c00",
+                    "tertiary-fixed-dim": "#ffb59c",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#006b5f",
+                    "on-primary-fixed": "#00201c",
+                    "inverse-primary": "#70d8c8",
+                    "on-tertiary-fixed-variant": "#763219",
+                    "on-primary-container": "#f4fffb",
+                    "on-surface": "#171d1b",
+                    "outline-variant": "#bcc9c5",
+                    "tertiary-fixed": "#ffdbcf",
+                    "secondary-fixed": "#c3ebe2",
+                    "outline": "#6d7a77",
+                    "on-background": "#171d1b",
+                    "on-secondary-fixed-variant": "#294d47",
+                    "on-primary-fixed-variant": "#005048",
+                    "background": "#f6faf8",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#eaefec",
+                    "surface-dim": "#d6dbd9",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#91462c",
+                    "primary-container": "#008376",
+                    "surface-container-highest": "#dfe4e1",
+                    "surface": "#f6faf8",
+                    "on-secondary-fixed": "#00201c",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#3d4946",
+                    "tertiary-container": "#b05e41",
+                    "surface-bright": "#f6faf8",
+                    "surface-container-high": "#e4e9e7",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#70d8c8",
+                    "primary-fixed": "#8df5e4",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-container-low": "#f0f5f2",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "sm": "8px",
+                    "card_padding": "16px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "data-display": ["Inter"],
+                    "caption": ["Inter"],
+                    "title": ["Inter"],
+                    "body": ["Inter"]
+            },
+            "fontSize": {
+                    "data-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                    "caption": ["13pt", {"lineHeight": "18pt", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}],
+                    "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f6faf8; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex min-h-screen">
+<!-- NavigationDrawer (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-50 h-screen w-64 border-r rounded-none bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flat no shadows">
+<div class="px-6 py-8 flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<span class="text-teal-700 font-black text-xl tracking-tighter">INFUSION</span>
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">SIM</span>
+</div>
+<!-- Profile Header -->
+<div class="flex items-center gap-3 p-2">
+<img alt="Doctor Avatar" class="w-10 h-10 rounded-full object-cover border border-slate-200" data-alt="professional portrait of a medical doctor in white coat with a stethoscope around their neck, clean studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGp_fbDRAutA_lwn6xP7-6FSsIkkSv8sEZRvWji1TZsmO58UGAow6tGAriCpvCTBP7UdwA4mJrahI56w0p6sMocppaMcGqmXRxKkyk1nc2xjQJYCWq80dwdWDl-x7R_-3mQiD24KcIaUGq8kbS9TsYl_n4RquFFA2MUDq54U5eEci5XVnqntSKxvAJp3KXJTQoLg8WK_-oVrjm6diJY5x061DNb_T-7SLI_qVQlyJtP7iz2Pwzys8RQhOuJmfqmgCnJQD7SuLhVkY"/>
+<div class="flex flex-col">
+<span class="font-sans text-[13px] font-bold text-slate-900 dark:text-white">Dr. Sterling</span>
+<span class="bg-primary text-white text-[11px] font-bold uppercase px-1.5 py-0.5 rounded w-fit mt-0.5">Doctor</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 duration-200 ease-in-out hover:bg-teal-50/50 dark:hover:bg-teal-900/10 text-slate-600 dark:text-slate-400 px-4 py-3 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 duration-200 ease-in-out hover:bg-teal-50/50 dark:hover:bg-teal-900/10 text-slate-600 dark:text-slate-400 px-4 py-3 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="medication">medication</span>
+<span>Drug Library</span>
+</a>
+<!-- Active Tab: Logs -->
+<a class="flex items-center gap-3 duration-200 ease-in-out bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 border-r-4 border-teal-600 font-bold px-4 py-3 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="history" style="font-variation-settings: 'FILL' 1;">history</span>
+<span>Logs</span>
+</a>
+<a class="flex items-center gap-3 duration-200 ease-in-out hover:bg-teal-50/50 dark:hover:bg-teal-900/10 text-slate-600 dark:text-slate-400 px-4 py-3 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase">System Online</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">v4.2.1-b</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 docked full-width top-0 z-40 flat no shadows">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 cursor-pointer active:opacity-70" data-icon="menu">menu</button>
+<h1 class="font-sans text-sm font-semibold tracking-tight text-teal-600 dark:text-teal-400">Logs Viewer</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-4 text-slate-500 font-sans text-[12px] font-medium">
+<span class="hover:bg-slate-50 dark:hover:bg-slate-800 px-3 py-1 rounded transition-colors cursor-pointer">Support</span>
+<span class="hover:bg-slate-50 dark:hover:bg-slate-800 px-3 py-1 rounded transition-colors cursor-pointer">Documentation</span>
+</div>
+<button class="px-4 py-1.5 rounded-lg border border-slate-200 font-sans text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">Logout</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-lg md:p-xl space-y-md">
+<!-- Filters Section -->
+<div class="bg-white border border-outline-variant p-card_padding rounded shadow-sm">
+<div class="flex flex-col md:flex-row md:items-end gap-md">
+<div class="flex-1 space-y-xs">
+<label class="font-caption text-[11px] text-on-surface-variant uppercase font-bold">Date Range</label>
+<div class="flex items-center gap-2 border-b-2 border-primary-container py-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="calendar_today">calendar_today</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body text-on-surface" type="text" value="Oct 24, 2023 - Oct 31, 2023"/>
+</div>
+</div>
+<div class="flex-1 space-y-xs">
+<label class="font-caption text-[11px] text-on-surface-variant uppercase font-bold">Drug Name</label>
+<div class="flex items-center gap-2 border-b-2 border-outline py-2 focus-within:border-primary">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body text-on-surface" placeholder="Enter drug name..." type="text"/>
+</div>
+</div>
+<div class="flex-1 space-y-xs">
+<label class="font-caption text-[11px] text-on-surface-variant uppercase font-bold">Patient ID</label>
+<div class="flex items-center gap-2 border-b-2 border-outline py-2 focus-within:border-primary">
+<span class="material-symbols-outlined text-outline" data-icon="person">person</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body text-on-surface" placeholder="ID (e.g. 882-X)" type="text"/>
+</div>
+</div>
+<button class="bg-primary hover:bg-primary-container text-white px-xl py-3 rounded-lg font-title text-[14px] flex items-center justify-center gap-2 transition-all shadow-md active:translate-y-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                        Apply Filters
+                    </button>
+</div>
+</div>
+<!-- Bento Layout for Logs & Details -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md h-full">
+<!-- Event List Area -->
+<div class="lg:col-span-2 space-y-sm">
+<div class="flex items-center justify-between px-2">
+<h2 class="font-title text-title text-on-surface">Event Logs</h2>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[12px] font-bold">1,248 Records</span>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm">
+<!-- Table Header -->
+<div class="grid grid-cols-12 bg-surface-container py-3 px-card_padding border-b border-outline-variant">
+<div class="col-span-3 font-caption text-[12px] text-on-surface-variant uppercase font-bold">Timestamp</div>
+<div class="col-span-4 font-caption text-[12px] text-on-surface-variant uppercase font-bold">Event Type</div>
+<div class="col-span-3 font-caption text-[12px] text-on-surface-variant uppercase font-bold">Patient ID</div>
+<div class="col-span-2 font-caption text-[12px] text-on-surface-variant uppercase font-bold text-right">User</div>
+</div>
+<!-- Rows -->
+<div class="divide-y divide-slate-100 max-h-[600px] overflow-y-auto no-scrollbar">
+<!-- Row 1: Active/Selected -->
+<div class="grid grid-cols-12 py-4 px-card_padding items-center bg-teal-50 border-l-4 border-primary cursor-pointer transition-colors">
+<div class="col-span-3">
+<p class="font-body text-[14px] text-on-surface">10/31/2023</p>
+<p class="text-[12px] text-on-surface-variant">09:42:12 AM</p>
+</div>
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<span class="font-title text-[14px] text-on-surface">Infusion Started</span>
+</div>
+<div class="col-span-3 text-[14px] text-on-surface font-medium">PT-8921-A</div>
+<div class="col-span-2 text-right">
+<span class="text-[12px] font-bold text-primary px-2 py-1 bg-primary/10 rounded">RN-442</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 py-4 px-card_padding items-center hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="col-span-3">
+<p class="font-body text-[14px] text-on-surface">10/31/2023</p>
+<p class="text-[12px] text-on-surface-variant">09:15:04 AM</p>
+</div>
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error text-[18px]" data-icon="warning">warning</span>
+</div>
+<span class="font-title text-[14px] text-on-surface">Air-in-Line Alarm</span>
+</div>
+<div class="col-span-3 text-[14px] text-on-surface font-medium">PT-4402-Z</div>
+<div class="col-span-2 text-right">
+<span class="text-[12px] font-bold text-slate-500 px-2 py-1 bg-slate-100 rounded">SYS-AUTO</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 py-4 px-card_padding items-center hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="col-span-3">
+<p class="font-body text-[14px] text-on-surface">10/31/2023</p>
+<p class="text-[12px] text-on-surface-variant">08:55:30 AM</p>
+</div>
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="edit">edit</span>
+</div>
+<span class="font-title text-[14px] text-on-surface">Rate Change</span>
+</div>
+<div class="col-span-3 text-[14px] text-on-surface font-medium">PT-8921-A</div>
+<div class="col-span-2 text-right">
+<span class="text-[12px] font-bold text-primary px-2 py-1 bg-primary/10 rounded">RN-442</span>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-12 py-4 px-card_padding items-center hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="col-span-3">
+<p class="font-body text-[14px] text-on-surface">10/31/2023</p>
+<p class="text-[12px] text-on-surface-variant">08:30:11 AM</p>
+</div>
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500 text-[18px]" data-icon="settings">settings</span>
+</div>
+<span class="font-title text-[14px] text-on-surface">Bolus Delivered</span>
+</div>
+<div class="col-span-3 text-[14px] text-on-surface font-medium">PT-1156-C</div>
+<div class="col-span-2 text-right">
+<span class="text-[12px] font-bold text-primary px-2 py-1 bg-primary/10 rounded">DR-009</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Event Details Panel -->
+<div class="space-y-sm">
+<h2 class="font-title text-title text-on-surface invisible">Details</h2>
+<div class="bg-white border border-outline-variant rounded-lg p-card_padding shadow-lg h-fit sticky top-24">
+<div class="flex items-start justify-between border-b border-slate-100 pb-4 mb-4">
+<div>
+<span class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase">Details</span>
+<h3 class="font-title text-title text-primary mt-2">Infusion Started</h3>
+<p class="text-[13px] text-on-surface-variant">Log ID: #LOG-8820-X1</p>
+</div>
+<button class="material-symbols-outlined text-slate-400" data-icon="close">close</button>
+</div>
+<div class="space-y-lg">
+<div class="grid grid-cols-2 gap-md">
+<div class="space-y-1">
+<p class="text-[11px] font-bold text-outline uppercase tracking-wider">Patient Name</p>
+<p class="font-body text-[15px] font-bold text-on-surface">Johnathan Miller</p>
+</div>
+<div class="space-y-1 text-right">
+<p class="text-[11px] font-bold text-outline uppercase tracking-wider">Patient ID</p>
+<p class="font-body text-[15px] font-bold text-on-surface">PT-8921-A</p>
+</div>
+</div>
+<div class="bg-background p-4 rounded-lg border border-outline-variant space-y-md">
+<div class="flex items-center gap-3">
+<img alt="Drug Molecule" class="w-12 h-12 rounded bg-white object-cover border border-outline-variant" data-alt="microscopic view of medicine molecules or stylized chemical structure on clean laboratory background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPxMEmL5MbsESNfFM8axmpAScVqokHYzzZgpvJXlO0XgZOPIrulnYpGXtQTjrYbDiO2EjBcVzfVndRZm-mWFIxsKG_RBP06a-H1E-APvKYufzYBlzocNFokDWSJblCtr8-cIJYAfwUN0U_XHnIT2UXk_mgVRi4Ng33Q6YNFTLckfRl3SXkI5IKP67D4fDWdbRoNCHrHRXH2N5CYhcBELD1ctHBKMxW5TBz18gW3_WEBZ4dAaR0xOjlM0cADCXNsYPlIz1erb77mgc"/>
+<div>
+<p class="text-[11px] font-bold text-primary-container uppercase tracking-wider">Medication</p>
+<p class="font-title text-[18px] text-on-surface">Heparin Sodium</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-[11px] font-bold text-outline uppercase">Dosage Rate</p>
+<p class="font-data-display text-[20pt] text-primary">12.5 <span class="text-[12pt] font-medium text-slate-500">ml/hr</span></p>
+</div>
+<div class="space-y-1">
+<p class="text-[11px] font-bold text-outline uppercase">Total Vol.</p>
+<p class="font-data-display text-[20pt] text-primary">250 <span class="text-[12pt] font-medium text-slate-500">ml</span></p>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<h4 class="text-[12px] font-bold text-on-surface border-b border-slate-100 pb-2">Execution Audit</h4>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]" data-icon="verified_user">verified_user</span>
+<span class="text-[13px] text-on-surface">Verified by Primary Nurse</span>
+</div>
+<span class="text-[11px] font-bold text-primary bg-primary/5 px-2 py-1 rounded">RN-442</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]" data-icon="devices">devices</span>
+<span class="text-[13px] text-on-surface">Pump Serial Number</span>
+</div>
+<span class="text-[11px] font-bold text-slate-600">SP-992-TX</span>
+</div>
+</div>
+<button class="w-full bg-white border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold text-[14px] flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                                Export Log Entry
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

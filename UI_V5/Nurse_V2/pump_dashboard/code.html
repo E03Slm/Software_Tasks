@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Infusion Simulator - Nurse Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#fdfcff",
+                        "tertiary-fixed": "#ffdcc4",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-primary-fixed": "#001c38",
+                        "on-background": "#181c22",
+                        "secondary": "#5e5e5e",
+                        "primary": "#005ea4",
+                        "on-primary-fixed-variant": "#004881",
+                        "background": "#f8f9ff",
+                        "primary-container": "#0077ce",
+                        "surface-dim": "#d7dae2",
+                        "surface-container-low": "#f1f3fc",
+                        "surface": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "outline": "#707783",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "tertiary": "#8f4a00",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "tertiary-container": "#b35e00",
+                        "on-secondary-fixed-variant": "#464747",
+                        "surface-container": "#ebeef6",
+                        "primary-fixed-dim": "#a2c9ff",
+                        "on-surface-variant": "#404752",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "surface-bright": "#f8f9ff",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#e3e2e2",
+                        "on-secondary-container": "#646464",
+                        "surface-container-highest": "#e0e2ea",
+                        "on-tertiary-fixed": "#2f1400",
+                        "surface-tint": "#0060a8",
+                        "on-tertiary-container": "#fffbff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d3e4ff",
+                        "secondary-container": "#e3e2e2",
+                        "inverse-on-surface": "#eef0f9",
+                        "inverse-surface": "#2d3137",
+                        "outline-variant": "#c0c7d4",
+                        "on-surface": "#181c22",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#a2c9ff",
+                        "surface-variant": "#e0e2ea",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e5e8f0",
+                        // Specific Brand Tones for UI states
+                        "success-green": "#43A047",
+                        "pause-amber": "#FFA000",
+                        "stop-grey": "#757575",
+                        "emergency-red": "#E53935"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin_edge": "24px",
+                        "stack_space": "12px",
+                        "base_unit": "8px",
+                        "internal_padding": "16px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "title": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "numeric-display": ["Inter", "monospace"],
+                        "caption": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}],
+                        "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}],
+                        "numeric-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                        "caption": ["13pt", {"lineHeight": "18pt", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-none">
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 ease-in-out">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-blue-600 dark:text-blue-400 font-sans font-bold text-lg tracking-tight">Infusion Simulator</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-primary text-on-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Nurse</span>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="close-up portrait of a professional nurse in blue medical scrubs smiling softly, clean clinical studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRh24210uTg4twvc2IvI00CfibO-4ALl3tjS83fdhGglFzisSHKbLT_lEbvk1Xt6NQ5UzMAlXkRGCJNWGD3VDMZbTLOg-qD347TqCPGUw-hjAd4UinGOa2ltakX2PsiMnwBB6R_1kjsiKw-RmJlOEuwzZqI2NGZr0dYUJtvL8-rAkwAYJD81mD5n4XQOMPQNZtq55N0eRV9mbR6gxiMaJu1XasGOvBg-DAZTOE2hWGxZYZlELHnCD6V2rakks_gWQEx54kJq766pk"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed inset-y-0 left-0 z-[60] p-4 flex flex-col h-full w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-xl hidden md:flex">
+<div class="mb-8 px-4 flex items-center gap-3">
+<div class="h-12 w-12 rounded-lg bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="medical_services" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Staff Nurse</p>
+<p class="text-xs text-on-surface-variant">Critical Care Unit</p>
+</div>
+</div>
+<nav class="space-y-1">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold rounded-lg transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-sans text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="font-sans text-sm">Pump</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-sans text-sm">Alarm</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-sans text-sm">Session Log</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-low rounded-xl">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-tighter">Device Station</span>
+<span class="text-xs font-bold text-primary">Station 4</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success-green text-sm" data-icon="wifi">wifi</span>
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Network Stable</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-16 pb-24 md:pb-8 md:pl-80 min-h-screen">
+<div class="p-margin_edge max-w-5xl mx-auto space-y-gutter">
+<!-- Pump State Indicator & Battery -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-stack_space">
+<div class="flex items-center gap-4 bg-success-green/10 border border-success-green/20 px-6 py-4 rounded-xl w-full md:w-auto">
+<div class="h-12 w-12 rounded-full bg-success-green flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div>
+<p class="text-success-green font-black text-xl tracking-widest uppercase">RUNNING</p>
+<p class="text-on-surface-variant text-caption">Infusion Active - Channel A</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-surface-container px-6 py-4 rounded-xl w-full md:w-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success-green" data-icon="battery_5_bar">battery_5_bar</span>
+<span class="font-numeric-display text-body text-success-green">85%</span>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+<span class="text-caption text-on-surface-variant font-bold uppercase">AC Power</span>
+</div>
+</div>
+</div>
+<!-- Bento Layout for Data and Progress -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Real-Time Data Card (2/3 width on desktop) -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="bg-surface-container p-internal_padding border-b border-outline-variant/30 flex justify-between items-center">
+<h2 class="font-title text-caption text-on-surface uppercase tracking-wider">Active Parameters</h2>
+<span class="text-xs font-mono bg-white px-2 py-1 rounded border border-outline-variant">ID: 884920-A</span>
+</div>
+<div class="grid grid-cols-2 p-internal_padding gap-8">
+<div class="space-y-1">
+<label class="text-caption text-on-surface-variant uppercase block">Infusion Rate</label>
+<div class="flex items-baseline gap-2">
+<span class="font-numeric-display text-numeric-display text-on-surface">125.0</span>
+<span class="font-title text-caption text-secondary">mL/hr</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-caption text-on-surface-variant uppercase block">Volume Infused</label>
+<div class="flex items-baseline gap-2">
+<span class="font-numeric-display text-numeric-display text-on-surface">538.2</span>
+<span class="font-title text-caption text-secondary">mL</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-caption text-on-surface-variant uppercase block">Volume Remaining</label>
+<div class="flex items-baseline gap-2">
+<span class="font-numeric-display text-numeric-display text-on-surface">461.8</span>
+<span class="font-title text-caption text-secondary">mL</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-caption text-on-surface-variant uppercase block">Time Remaining</label>
+<div class="flex items-baseline gap-2">
+<span class="font-numeric-display text-numeric-display text-primary">03:42</span>
+<span class="font-title text-caption text-secondary">hh:mm</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Progress Column -->
+<div class="space-y-gutter">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-internal_padding shadow-sm h-full flex flex-col justify-between">
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<h3 class="text-caption font-bold text-on-surface uppercase tracking-tight">VTBI Progress</h3>
+<span class="text-title text-primary font-numeric-display">54%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-4 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 54%"></div>
+</div>
+</div>
+<div class="mt-8 pt-4 border-t border-slate-100 flex flex-col gap-3">
+<div class="flex items-center justify-between text-caption">
+<span class="text-on-surface-variant">Drug:</span>
+<span class="font-bold text-on-surface">Sodium Chloride 0.9%</span>
+</div>
+<div class="flex items-center justify-between text-caption">
+<span class="text-on-surface-variant">Container:</span>
+<span class="font-bold text-on-surface">1000 mL Bag</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Control Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<button class="flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-surface-container-low text-outline opacity-50 cursor-not-allowed border border-outline-variant/30" disabled="">
+<span class="material-symbols-outlined text-3xl" data-icon="play_circle">play_circle</span>
+<span class="font-bold uppercase text-xs tracking-widest">Start</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-pause-amber/10 text-pause-amber border border-pause-amber hover:bg-pause-amber hover:text-white transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-3xl" data-icon="pause_circle" style="font-variation-settings: 'FILL' 1;">pause_circle</span>
+<span class="font-bold uppercase text-xs tracking-widest">Pause</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-surface-container-low text-outline opacity-50 cursor-not-allowed border border-outline-variant/30" disabled="">
+<span class="material-symbols-outlined text-3xl" data-icon="resume" style="font-variation-settings: 'FILL' 0;">resume</span>
+<span class="font-bold uppercase text-xs tracking-widest">Resume</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-stop-grey/10 text-stop-grey border border-stop-grey hover:bg-stop-grey hover:text-white transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-3xl" data-icon="stop_circle" style="font-variation-settings: 'FILL' 1;">stop_circle</span>
+<span class="font-bold uppercase text-xs tracking-widest">Stop</span>
+</button>
+</div>
+<!-- Emergency Stop -->
+<div class="pt-4">
+<button class="w-full bg-emergency-red text-white py-8 px-6 rounded-2xl flex flex-col items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-emergency-red/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl" data-icon="emergency_home" style="font-variation-settings: 'FILL' 1;">emergency_home</span>
+<span class="font-black text-2xl uppercase tracking-[0.2em]">Emergency Stop</span>
+</div>
+<span class="text-sm font-bold opacity-80 tracking-widest mt-2 bg-black/10 px-4 py-1 rounded-full uppercase">HOLD 2S TO ACTIVATE</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-white/80 backdrop-blur-md md:hidden border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl py-1 px-3" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-sans text-[10px] font-bold uppercase tracking-tighter">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="font-sans text-[10px] font-bold uppercase tracking-tighter">Pump</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors relative" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-sans text-[10px] font-bold uppercase tracking-tighter">Alarm</span>
+<!-- Alert dot example -->
+<span class="absolute top-0 right-2 w-2 h-2 bg-error rounded-full"></span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-sans text-[10px] font-bold uppercase tracking-tighter">Log</span>
+</a>
+</nav>
+</body></html>

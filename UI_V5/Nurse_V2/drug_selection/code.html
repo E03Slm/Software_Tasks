@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Drug Selection - Infusion Monitor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#181c22",
+                    "secondary": "#5e5e5e",
+                    "inverse-primary": "#a2c9ff",
+                    "inverse-on-surface": "#eef0f9",
+                    "surface-container": "#ebeef6",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6f3800",
+                    "surface-container-low": "#f1f3fc",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "inverse-surface": "#2d3137",
+                    "surface-container-high": "#e5e8f0",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#2f1400",
+                    "on-surface-variant": "#404752",
+                    "on-primary-container": "#fdfcff",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#ffdcc4",
+                    "on-secondary-container": "#646464",
+                    "background": "#f8f9ff",
+                    "surface-dim": "#d7dae2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#464747",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#b35e00",
+                    "surface-variant": "#e0e2ea",
+                    "primary": "#005ea4",
+                    "primary-fixed-dim": "#a2c9ff",
+                    "on-primary-fixed": "#001c38",
+                    "primary-container": "#0077ce",
+                    "surface-container-highest": "#e0e2ea",
+                    "primary-fixed": "#d3e4ff",
+                    "secondary-container": "#e3e2e2",
+                    "tertiary-fixed-dim": "#ffb780",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-surface": "#181c22",
+                    "surface-tint": "#0060a8",
+                    "on-primary-fixed-variant": "#004881",
+                    "outline": "#707783",
+                    "outline-variant": "#c0c7d4",
+                    "secondary-fixed": "#e3e2e2",
+                    "tertiary": "#8f4a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack_space": "12px",
+                    "base_unit": "8px",
+                    "margin_edge": "24px",
+                    "internal_padding": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "caption": ["Inter"],
+                    "body": ["Inter"],
+                    "numeric-display": ["Inter"],
+                    "title": ["Inter"]
+            },
+            "fontSize": {
+                    "caption": ["13pt", {"lineHeight": "18pt", "fontWeight": "500"}],
+                    "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}],
+                    "numeric-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                    "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #181c22;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body text-body">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 h-16 sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-blue-600 dark:text-blue-400 active:opacity-80 transition-opacity" data-icon="menu">menu</button>
+<h1 class="text-xl font-black text-blue-600 dark:text-blue-400 font-inter tracking-tight">Infusion Monitor</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-sm font-bold">Nurse</span>
+<button class="material-symbols-outlined text-slate-600" data-icon="account_circle">account_circle</button>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- NavigationDrawer (Sidebar) -->
+<aside class="fixed inset-y-0 left-0 z-[60] p-4 flex flex-col gap-2 h-full w-80 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 shadow-xl dark:shadow-none hidden md:flex mt-16">
+<div class="flex items-center gap-4 px-4 py-6 mb-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Nurse avatar" class="w-full h-full object-cover" data-alt="professional portrait of a healthcare worker in blue scrubs with a friendly expression in a bright clinical setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMqQ6QU1ZCdAeqIHMiUE7VMMReO8oaBtSgeemUXMxJ82iEtKYBOyiowSQ4hV0DLK27Jg1XIKOhLTjNXK9-HHbtVPdb3o90dSLpfRvoPLRDejCSNoBH9p7wZGQczJ8_vimZyZeMubt37Yd5Tv7FkDvvwPNwGwT-VFsxAugOGE1iybczaF6ceT9kd26opiKM5BT4f7oZ8dSPc0ZqWivXS6cQkWI0jbqgCQcI5Q4p8ldPv3xA1JNM5dnAC2Y_4vJ_9cpjpwnbkdpOY1k"/>
+</div>
+<div>
+<h2 class="text-lg font-bold text-blue-700 dark:text-blue-400">Nurse Station 4</h2>
+<p class="text-sm text-secondary">Ward B - Critical Care</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<!-- Active Item: Pump (Because we are in drug selection) -->
+<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 rounded-lg px-4 py-3 font-bold font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+                    Pump
+                </a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+                    Alarm
+                </a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+                    Session Log
+                </a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto md:ml-80 p-margin_edge">
+<div class="max-w-5xl mx-auto space-y-gutter">
+<!-- Page Header & Search -->
+<section class="space-y-4">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-title text-title text-on-surface">Select Medication</h2>
+<p class="text-secondary font-caption text-caption">Select a drug to begin infusion programming</p>
+</div>
+<div class="relative flex-1 md:max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Search drug library..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Quick Access Bento Grid -->
+<section>
+<h3 class="font-title text-body mb-4 text-primary font-semibold">Commonly Prescribed</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Drug Card 1 -->
+<button class="flex flex-col text-left p-internal_padding bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-primary hover:shadow-md transition-all group">
+<div class="flex justify-between items-start w-full mb-3">
+<span class="bg-blue-100 text-blue-800 text-[10pt] px-2 py-0.5 rounded font-bold">VASCULAR</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="font-title text-title mb-1">Norepinephrine</div>
+<div class="text-secondary text-caption mb-4">4 mg / 250 mL</div>
+<div class="mt-auto flex items-center text-primary font-bold text-sm">
+<span>Select Drug</span>
+<span class="material-symbols-outlined ml-1 text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</button>
+<!-- Drug Card 2 -->
+<button class="flex flex-col text-left p-internal_padding bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-primary hover:shadow-md transition-all group">
+<div class="flex justify-between items-start w-full mb-3">
+<span class="bg-purple-100 text-purple-800 text-[10pt] px-2 py-0.5 rounded font-bold">SEDATION</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="font-title text-title mb-1">Propofol</div>
+<div class="text-secondary text-caption mb-4">1000 mg / 100 mL</div>
+<div class="mt-auto flex items-center text-primary font-bold text-sm">
+<span>Select Drug</span>
+<span class="material-symbols-outlined ml-1 text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</button>
+<!-- Drug Card 3 -->
+<button class="flex flex-col text-left p-internal_padding bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-primary hover:shadow-md transition-all group">
+<div class="flex justify-between items-start w-full mb-3">
+<span class="bg-green-100 text-green-800 text-[10pt] px-2 py-0.5 rounded font-bold">ANALGESIC</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="star">star</span>
+</div>
+<div class="font-title text-title mb-1">Fentanyl</div>
+<div class="text-secondary text-caption mb-4">2500 mcg / 50 mL</div>
+<div class="mt-auto flex items-center text-primary font-bold text-sm">
+<span>Select Drug</span>
+<span class="material-symbols-outlined ml-1 text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Full List Section -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="p-internal_padding border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-title text-body font-semibold">Active Drug Library</h3>
+<div class="flex gap-2">
+<button class="p-1 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-1 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="sort_by_alpha">sort_by_alpha</span>
+</button>
+</div>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Drug Row -->
+<div class="flex items-center justify-between p-internal_padding hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="pill">pill</span>
+</div>
+<div>
+<div class="font-title text-body text-on-surface">Amiodarone</div>
+<div class="text-caption text-secondary">360 mg / 200 mL</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Drug Row -->
+<div class="flex items-center justify-between p-internal_padding hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="pill">pill</span>
+</div>
+<div>
+<div class="font-title text-body text-on-surface">Dobutamine</div>
+<div class="text-caption text-secondary">250 mg / 250 mL</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Drug Row -->
+<div class="flex items-center justify-between p-internal_padding hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="pill">pill</span>
+</div>
+<div>
+<div class="font-title text-body text-on-surface">Dopamine</div>
+<div class="text-caption text-secondary">400 mg / 250 mL</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Drug Row -->
+<div class="flex items-center justify-between p-internal_padding hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="pill">pill</span>
+</div>
+<div>
+<div class="font-title text-body text-on-surface">Heparin</div>
+<div class="text-caption text-secondary">25,000 units / 250 mL</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Drug Row -->
+<div class="flex items-center justify-between p-internal_padding hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="pill">pill</span>
+</div>
+<div>
+<div class="font-title text-body text-on-surface">Insulin Human Regular</div>
+<div class="text-caption text-secondary">100 units / 100 mL</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<div class="p-internal_padding bg-surface-container-low text-center">
+<button class="text-primary font-bold hover:underline">View All 142 Drugs</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Emergency & Contextual Bar -->
+<div class="fixed bottom-0 left-0 right-0 md:left-80 bg-white border-t border-outline-variant p-4 flex gap-4 items-center justify-between z-40">
+<div class="hidden sm:flex items-center gap-3 text-secondary text-sm">
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span>Confirm drug profile before infusion starts</span>
+</div>
+<div class="flex gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:px-8 py-3 border border-outline text-on-surface font-bold rounded-lg hover:bg-surface-container transition-colors">
+                    Back
+                </button>
+<button class="flex-1 sm:px-8 py-3 bg-secondary text-white font-bold rounded-lg opacity-50 cursor-not-allowed">
+                    Proceed
+                </button>
+</div>
+</div>
+</div>
+<!-- Mobile Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-outline-variant flex justify-around items-center z-[70]">
+<button class="flex flex-col items-center gap-1 text-slate-600">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10pt] font-medium">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-blue-700 font-bold">
+<span class="material-symbols-outlined" data-icon="medical_services" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<span class="text-[10pt]">Pump</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-600">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="text-[10pt] font-medium">Alarm</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-600">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="text-[10pt] font-medium">Log</span>
+</button>
+</nav>
+</body></html>

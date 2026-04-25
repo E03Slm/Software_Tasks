@@ -1,0 +1,31 @@
+@startuml
+skinparam style strictuml
+actor Admin
+participant "Admin UI" as UI
+participant "User Manager" as UserMgmt
+participant "Config Manager" as Config
+participant "Audit Logger" as Logger
+database "User DB" as DB
+
+Admin -> UI : Login (Admin Credentials)
+UI -> Auth : Authenticate
+Auth --> UI : Success (Role: Admin)
+
+Admin -> UI : Create New User (Role: Nurse)
+UI -> UserMgmt : Validate & Create
+UserMgmt -> DB : Store User Data
+UserMgmt -> Logger : Log: "Admin created new user: [NurseID]"
+UI --> Admin : User Created Successfully
+
+== Security & System Audit ==
+Admin -> UI : View Global Audit Trail [S-D-02]
+UI -> Logger : Request All Immutable Logs
+Logger -> Logger : Verify Integrity (No Deletions)
+Logger --> UI : Return Full System History
+UI --> Admin : Display Logs (Read-Only)
+
+Admin -> UI : Update System Config (Simulation Speed)
+UI -> Config : Set Simulation Parameters
+Config -> Logger : Log: "Global Config Updated"
+UI --> Admin : Settings Saved
+@enduml

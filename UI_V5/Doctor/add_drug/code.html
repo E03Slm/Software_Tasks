@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#00685d",
+                    "inverse-surface": "#2c3130",
+                    "surface-variant": "#dfe4e1",
+                    "on-secondary-container": "#476b65",
+                    "inverse-on-surface": "#edf2ef",
+                    "secondary": "#41655f",
+                    "secondary-fixed-dim": "#a8cec6",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#c3ebe2",
+                    "on-tertiary-fixed": "#390c00",
+                    "tertiary-fixed-dim": "#ffb59c",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#006b5f",
+                    "on-primary-fixed": "#00201c",
+                    "inverse-primary": "#70d8c8",
+                    "on-tertiary-fixed-variant": "#763219",
+                    "on-primary-container": "#f4fffb",
+                    "on-surface": "#171d1b",
+                    "outline-variant": "#bcc9c5",
+                    "tertiary-fixed": "#ffdbcf",
+                    "secondary-fixed": "#c3ebe2",
+                    "outline": "#6d7a77",
+                    "on-background": "#171d1b",
+                    "on-secondary-fixed-variant": "#294d47",
+                    "on-primary-fixed-variant": "#005048",
+                    "background": "#f6faf8",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#eaefec",
+                    "surface-dim": "#d6dbd9",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#91462c",
+                    "primary-container": "#008376",
+                    "surface-container-highest": "#dfe4e1",
+                    "surface": "#f6faf8",
+                    "on-secondary-fixed": "#00201c",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#3d4946",
+                    "tertiary-container": "#b05e41",
+                    "surface-bright": "#f6faf8",
+                    "surface-container-high": "#e4e9e7",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#70d8c8",
+                    "primary-fixed": "#8df5e4",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-container-low": "#f0f5f2",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "sm": "8px",
+                    "card_padding": "16px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "data-display": ["Inter"],
+                    "caption": ["Inter"],
+                    "title": ["Inter"],
+                    "body": ["Inter"]
+            },
+            "fontSize": {
+                    "data-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                    "caption": ["13pt", {"lineHeight": "18pt", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}],
+                    "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-50 bg-white dark:bg-slate-900 h-screen w-64 border-r border-slate-200 dark:border-slate-800 rounded-none flat no shadows duration-200 ease-in-out">
+<div class="p-6 flex flex-col items-start">
+<div class="flex items-center gap-3 mb-8">
+<img alt="Logo" class="w-8 h-8" data-alt="minimalist medical cross icon in teal color on a white background circular badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBck127_KuOV67g3ZXlT7lpUFFnNqIy8LsowUqRZ-3g8zgK8ASmW1HN_f2n8q6vw0WCY3IEcjmgzFeUkTnjQUt96940190jg5KIrzeE-h4K3Glfde-PMvz_2RxR4GF7MnaHXMpkT74GCWrTvf1ps59bEED9o_HD9biIq3R-rez8N3qtVOpSDdKP3B6ekBbNsNq_GHtHCac1y9YeM8Kq3GLllVhKxKnrQ-y82Cuov6zZYxVOmms5tpMzJKbpGZt8R0BwHlNwhxbBC0"/>
+<span class="text-teal-700 font-black text-xl tracking-tight">Infusion Monitor</span>
+</div>
+<div class="flex items-center gap-3 mb-8 w-full">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img alt="Doctor Avatar" class="w-full h-full object-cover" data-alt="professional portrait of a male doctor in clinical attire with a warm confident expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeiseYugHLFPYld7n8oPLC7dYXSmogPgRfhiRxFcyCKN-UTfj7oAFqPAdORGQR4IAr52nWL67fPnSipeXDFeDlZ_tNc8VRN556PW_5LgCd-vmbEOLsUe-ErM0oRivpDOz-l23ptJnh2ICeN79w2MzV8vRcf08l7CEQjTCT8QQgtBYtUrIzJQGYIhdC-KDtEgmKS68WnVHbrjviXGDK6Tu4sjG-DsqvX72Y8SdGae4sBj_ylYWi6waAixLyfuhUC0TIuTFflljEy94"/>
+</div>
+<div class="flex flex-col">
+<span class="font-sans text-[13px] font-medium text-on-surface">Dr. Sterling</span>
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full w-fit">Doctor Chip</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 border-r-4 border-teal-600 font-bold px-4 py-3 font-sans text-[13px]" href="#">
+<span class="material-symbols-outlined" data-icon="medication" style="font-variation-settings: 'FILL' 1;">medication</span>
+                Drug Library
+            </a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                Logs
+            </a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 font-sans text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+                Reports
+            </a>
+</nav>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 fixed top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-sans text-sm font-semibold tracking-tight text-teal-600 uppercase tracking-wider">Add Drug</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="font-sans text-sm font-semibold tracking-tight text-slate-500 hover:text-teal-600 transition-colors cursor-pointer">Logout</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="mt-16 p-8 flex justify-center">
+<div class="max-w-3xl w-full">
+<!-- Clinical Header Section -->
+<div class="mb-8 flex items-center justify-between">
+<div>
+<h2 class="font-title text-title text-on-surface mb-1">New Pharmaceutical Protocol</h2>
+<p class="font-caption text-caption text-on-surface-variant">Configure safety parameters for the drug library.</p>
+</div>
+<div class="bg-surface-container-high px-4 py-2 rounded-lg border border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+<span class="font-caption text-caption text-on-surface">Clinician Verified Mode</span>
+</div>
+</div>
+<!-- Bento Grid Layout for Form -->
+<form class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<!-- Primary Info Card -->
+<div class="md:col-span-4 bg-white border border-outline-variant rounded-lg p-card_padding shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="label">label</span>
+<span class="font-caption text-caption font-bold uppercase tracking-widest text-primary">Identification</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block font-caption text-caption text-on-surface-variant mb-2">Drug Name *</label>
+<input class="w-full h-12 px-4 rounded border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-body" placeholder="e.g., Dopamine, Heparin" required="" type="text"/>
+</div>
+</div>
+</div>
+<!-- Concentration Card -->
+<div class="md:col-span-2 bg-white border border-outline-variant rounded-lg p-card_padding shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="opacity">opacity</span>
+<span class="font-caption text-caption font-bold uppercase tracking-widest text-primary">Potency</span>
+</div>
+<div>
+<label class="block font-caption text-caption text-on-surface-variant mb-2">Concentration *</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-data-display text-2xl" placeholder="0.00" required="" step="0.01" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 font-caption text-on-surface-variant">mg/mL</span>
+</div>
+</div>
+</div>
+<!-- Flow Rate Card -->
+<div class="md:col-span-6 bg-white border border-outline-variant rounded-lg p-card_padding shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="speed">speed</span>
+<span class="font-caption text-caption font-bold uppercase tracking-widest text-primary">Flow Control</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div>
+<label class="block font-caption text-caption text-on-surface-variant mb-2">Default Rate *</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-body" placeholder="0.0" required="" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 font-caption text-on-surface-variant text-sm">mL/hr</span>
+</div>
+</div>
+<div>
+<label class="block font-caption text-caption text-on-surface-variant mb-2">Soft Limit *</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-body" placeholder="0.0" required="" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 font-caption text-on-surface-variant text-sm">mL/hr</span>
+</div>
+<p class="mt-2 text-[11px] text-on-surface-variant italic leading-tight">Overrideable alert threshold.</p>
+</div>
+<div>
+<label class="block font-caption text-caption text-on-surface-variant mb-2">Hard Limit *</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-body" placeholder="0.0" required="" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 font-caption text-on-surface-variant text-sm">mL/hr</span>
+</div>
+<p class="mt-2 text-[11px] text-error font-medium leading-tight">Absolute maximum. Cannot be overridden.</p>
+</div>
+</div>
+</div>
+<!-- Visual Progress/Validation Visualization -->
+<div class="md:col-span-6 bg-surface-container-lowest border border-dashed border-outline rounded-lg p-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="monitor_heart">monitor_heart</span>
+</div>
+<div>
+<h4 class="font-caption text-caption font-bold text-on-surface">Configuration Integrity</h4>
+<p class="text-xs text-on-surface-variant">Real-time safety guardrails are active.</p>
+</div>
+</div>
+<div class="w-1/3">
+<div class="w-full h-3 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[75%]"></div>
+</div>
+<div class="flex justify-between mt-2">
+<span class="text-[10px] text-on-surface-variant">Validation Progress</span>
+<span class="text-[10px] font-bold text-primary">75% Complete</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="md:col-span-6 flex justify-end items-center gap-4 pt-4">
+<button class="px-8 py-3 rounded-lg border-2 border-primary text-primary font-caption text-caption hover:bg-primary/5 transition-colors" type="button">
+                            Cancel
+                        </button>
+<button class="px-12 py-3 rounded-lg bg-primary text-white font-caption text-caption font-bold shadow-sm hover:bg-primary-container transition-all active:scale-[0.98]" type="submit">
+                            Save Drug Protocol
+                        </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Decorative Background Element -->
+<div class="fixed bottom-0 right-0 p-8 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" data-icon="medical_services">medical_services</span>
+</div>
+</main>
+</body></html>

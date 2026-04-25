@@ -1,0 +1,46 @@
+@startuml
+left to right direction
+
+package "Client" {
+  component "Nurse UI" as NurseUI
+  component "Doctor UI" as DoctorUI
+  component "Admin UI" as AdminUI
+}
+
+cloud "Web Server" {
+  component "Authentication Service" as Auth
+  component "Session Controller" as Controller
+  component "Simulation Engine" as Engine
+  component "Alarm Service" as AlarmService 
+  component "Drug Library" as DrugLib
+  component "Logging Service" as Logger
+  component "Reporting Engine" as Reporter
+  component "Configuration Manager" as Config
+}
+
+database "Database Server" {
+  component "User DB" as UserDB
+  component "Drug DB" as DrugDB
+  component "Log DB" as LogDB
+}
+
+NurseUI --> Auth : HTTPS
+DoctorUI --> Auth : HTTPS
+AdminUI --> Auth : HTTPS
+Auth --> Controller
+
+Controller --> Engine
+Controller --> DrugLib
+Controller --> Reporter
+
+Engine --> AlarmService : Trigger Events (Occlusion, Air, Battery)
+AlarmService --> Logger : Log Alarm States
+Engine --> Logger : Log Telemetry
+
+DrugLib --> DrugDB
+Logger --> LogDB
+Reporter --> LogDB
+Config --> DrugDB
+Config --> UserDB
+UserDB --> Auth
+@enduml

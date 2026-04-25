@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#181c22",
+                    "secondary": "#5e5e5e",
+                    "inverse-primary": "#a2c9ff",
+                    "inverse-on-surface": "#eef0f9",
+                    "surface-container": "#ebeef6",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6f3800",
+                    "surface-container-low": "#f1f3fc",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "inverse-surface": "#2d3137",
+                    "surface-container-high": "#e5e8f0",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#2f1400",
+                    "on-surface-variant": "#404752",
+                    "on-primary-container": "#fdfcff",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#ffdcc4",
+                    "on-secondary-container": "#646464",
+                    "background": "#f8f9ff",
+                    "surface-dim": "#d7dae2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#464747",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#b35e00",
+                    "surface-variant": "#e0e2ea",
+                    "primary": "#005ea4",
+                    "primary-fixed-dim": "#a2c9ff",
+                    "on-primary-fixed": "#001c38",
+                    "primary-container": "#0077ce",
+                    "surface-container-highest": "#e0e2ea",
+                    "primary-fixed": "#d3e4ff",
+                    "secondary-container": "#e3e2e2",
+                    "tertiary-fixed-dim": "#ffb780",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-surface": "#181c22",
+                    "surface-tint": "#0060a8",
+                    "on-primary-fixed-variant": "#004881",
+                    "outline": "#707783",
+                    "outline-variant": "#c0c7d4",
+                    "secondary-fixed": "#e3e2e2",
+                    "tertiary": "#8f4a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack_space": "12px",
+                    "base_unit": "8px",
+                    "margin_edge": "24px",
+                    "internal_padding": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "caption": ["Inter"],
+                    "body": ["Inter"],
+                    "numeric-display": ["Inter"],
+                    "title": ["Inter"]
+            },
+            "fontSize": {
+                    "caption": ["13pt", {"lineHeight": "18pt", "fontWeight": "500"}],
+                    "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}],
+                    "numeric-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                    "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 h-16 sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-inter text-base font-semibold tracking-tight text-blue-600 dark:text-blue-400">Infusion Monitor</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-sm font-bold">Nurse</span>
+</div>
+</header>
+<div class="flex">
+<!-- NavigationDrawer -->
+<aside class="fixed inset-y-0 left-0 z-[60] p-4 flex flex-col gap-2 h-full w-80 border-r bg-white dark:bg-slate-900 border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-none translate-y-16">
+<div class="mb-6 px-4 py-2 border-b border-surface-variant/30 pb-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-fixed border border-outline-variant">
+<img alt="Nurse avatar" class="w-full h-full object-cover" data-alt="professional portrait of a female nurse in clinical scrubs with a kind and confident expression in a bright medical environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI3YiQGtUGoDZEKmHX8Wp0dIbJV7nX_nggs8LRbT1SaiGtrTZqLJpBfx8-GjOyJtBqpM5ni-WNCRCv-QAdaQbEy3xzwLXFy0ufvng70JXfHOKofRmWc8oJHx6JnDIDwtrGWFrYgaDU5RcJku8KVFPR0c2H_iSEosATApD_Axjj6-QgD9Rov6JZp1WaUaMELFoqDdGT67YFvvvNsfWM8vdxlHxTEEOE2yJFFDOEZ62HhMbzeeRrbFP-v9ZXwLS2bJkjdilzvjYOtwk"/>
+</div>
+<div>
+<h2 class="text-lg font-bold text-blue-700 dark:text-blue-400">Nurse Station 4</h2>
+<p class="text-sm font-medium text-secondary">Ward B - Critical Care</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span>Pump</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span>Alarm</span>
+</a>
+<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 rounded-lg px-4 py-3 font-bold font-inter text-sm transition-colors Active: translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span>Session Log</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-80 flex-1 p-margin_edge pt-8">
+<header class="mb-8">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-primary font-bold uppercase tracking-wider text-xs mb-1 block">Audit &amp; Compliance</span>
+<h2 class="font-title text-title text-on-surface">Session Log</h2>
+<p class="font-body text-secondary max-w-2xl">A historical record of all infusion operations, dosage adjustments, and alarm resolutions for Pump #1024-B.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-internal_padding py-2 border border-outline rounded-lg font-caption text-caption text-on-surface flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+                            Filter
+                        </button>
+<button class="px-internal_padding py-2 bg-primary text-on-primary rounded-lg font-caption text-caption flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                            Export Report
+                        </button>
+</div>
+</div>
+</header>
+<!-- Bento Grid Log Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Quick Summary Stats -->
+<div class="col-span-12 lg:col-span-4 bg-white border border-surface-variant rounded-xl p-internal_padding shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600" data-icon="monitoring">monitoring</span>
+</div>
+<h3 class="font-title text-on-surface text-lg">Total Runtime</h3>
+</div>
+<div class="font-numeric-display text-numeric-display text-primary">12h 45m</div>
+<p class="font-caption text-secondary mt-2">Active session since 06:30 AM</p>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-white border border-surface-variant rounded-xl p-internal_padding shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+</div>
+<h3 class="font-title text-on-surface text-lg">Alarms Resolved</h3>
+</div>
+<div class="font-numeric-display text-numeric-display text-error">3</div>
+<p class="font-caption text-secondary mt-2">Critical air-in-line resolved by RN-4</p>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-white border border-surface-variant rounded-xl p-internal_padding shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="medication">medication</span>
+</div>
+<h3 class="font-title text-on-surface text-lg">Current Flow</h3>
+</div>
+<div class="font-numeric-display text-numeric-display text-on-surface">50.0 <span class="text-body font-normal text-secondary">mL/h</span></div>
+<p class="font-caption text-secondary mt-2">Sodium Chloride 0.9%</p>
+</div>
+<!-- Detailed History Log Table -->
+<div class="col-span-12 bg-white border border-surface-variant rounded-xl shadow-sm overflow-hidden">
+<div class="p-internal_padding border-b border-surface-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title text-on-surface text-base">Recent Events</h3>
+<span class="text-caption text-secondary">Last synchronized: 2 mins ago</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-surface-variant">
+<th class="p-internal_padding font-caption text-secondary uppercase text-[10pt] tracking-widest">Time</th>
+<th class="p-internal_padding font-caption text-secondary uppercase text-[10pt] tracking-widest">Event Type</th>
+<th class="p-internal_padding font-caption text-secondary uppercase text-[10pt] tracking-widest">Description</th>
+<th class="p-internal_padding font-caption text-secondary uppercase text-[10pt] tracking-widest">Action By</th>
+<th class="p-internal_padding font-caption text-secondary uppercase text-[10pt] tracking-widest">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-internal_padding font-body text-on-surface">14:22:15</td>
+<td class="p-internal_padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500 text-lg" data-icon="edit_note">edit_note</span>
+<span class="font-body text-on-surface">Rate Change</span>
+</div>
+</td>
+<td class="p-internal_padding font-body text-secondary">Increased rate from 45.0 mL/h to 50.0 mL/h</td>
+<td class="p-internal_padding font-body text-on-surface">Nurse Station 4</td>
+<td class="p-internal_padding">
+<span class="px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-bold">Verified</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-internal_padding font-body text-on-surface">13:05:42</td>
+<td class="p-internal_padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-lg" data-icon="error">error</span>
+<span class="font-body text-on-surface">Alarm Triggered</span>
+</div>
+</td>
+<td class="p-internal_padding font-body text-secondary">Air in line detected at lower sensor</td>
+<td class="p-internal_padding font-body text-on-surface">System Auto</td>
+<td class="p-internal_padding">
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full text-sm font-bold">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-internal_padding font-body text-on-surface">13:10:00</td>
+<td class="p-internal_padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-600 text-lg" data-icon="task_alt">task_alt</span>
+<span class="font-body text-on-surface">Alarm Cleared</span>
+</div>
+</td>
+<td class="p-internal_padding font-body text-secondary">Nurse cleared air and restarted infusion</td>
+<td class="p-internal_padding font-body text-on-surface">Nurse Station 4</td>
+<td class="p-internal_padding">
+<span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-bold">Resolved</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-internal_padding font-body text-on-surface">11:15:30</td>
+<td class="p-internal_padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="pause_circle">pause_circle</span>
+<span class="font-body text-on-surface">Manual Pause</span>
+</div>
+</td>
+<td class="p-internal_padding font-body text-secondary">Infusion paused for patient repositioning</td>
+<td class="p-internal_padding font-body text-on-surface">Nurse Station 4</td>
+<td class="p-internal_padding">
+<span class="px-3 py-1 bg-surface-variant text-secondary rounded-full text-sm font-bold">Logged</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-internal_padding font-body text-on-surface">06:30:00</td>
+<td class="p-internal_padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="play_circle">play_circle</span>
+<span class="font-body text-on-surface">Session Start</span>
+</div>
+</td>
+<td class="p-internal_padding font-body text-secondary">Initial setup: Sodium Chloride 0.9%, 1000mL bag</td>
+<td class="p-internal_padding font-body text-on-surface">Nurse Station 2</td>
+<td class="p-internal_padding">
+<span class="px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-bold">Verified</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-internal_padding flex justify-between items-center bg-surface-container-lowest">
+<div class="text-caption text-secondary">Showing 5 of 124 entries</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline hover:bg-surface-variant">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline hover:bg-surface-variant">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Emergency Stop Fixed -->
+<div class="fixed bottom-0 right-0 left-80 p-6 pointer-events-none">
+<button class="w-full pointer-events-auto bg-error text-on-error font-title text-title py-4 rounded-xl shadow-2xl flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all uppercase tracking-widest">
+<span class="material-symbols-outlined" data-icon="emergency" data-weight="fill">emergency</span>
+            EMERGENCY STOP
+        </button>
+</div>
+</body></html>

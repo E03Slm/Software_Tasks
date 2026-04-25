@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>InfusionAdmin - User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "severity-warning": "#FFA000",
+                      "surface-container": "#eaefec",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#91462c",
+                      "surface-variant": "#dfe4e1",
+                      "on-background": "#171d1b",
+                      "outline-variant": "#bcc9c5",
+                      "text-secondary": "#757575",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed": "#390c00",
+                      "tertiary-fixed": "#ffdbcf",
+                      "text-primary": "#212121",
+                      "doctor-primary": "#00897B",
+                      "on-tertiary-container": "#fffbff",
+                      "primary-fixed-dim": "#70d8c8",
+                      "primary-fixed": "#8df5e4",
+                      "primary": "#00685d",
+                      "secondary-fixed-dim": "#a2c9ff",
+                      "surface-container-high": "#e4e9e7",
+                      "on-secondary-fixed": "#001c38",
+                      "secondary": "#0060a8",
+                      "admin-light": "#9C4DCC",
+                      "on-primary-fixed": "#00201c",
+                      "severity-critical": "#E53935",
+                      "on-surface-variant": "#3d4946",
+                      "admin-primary": "#6A1B9A",
+                      "on-tertiary-fixed-variant": "#763219",
+                      "secondary-container": "#47a1ff",
+                      "severity-info": "#039BE5",
+                      "on-secondary-fixed-variant": "#004881",
+                      "tertiary-fixed-dim": "#ffb59c",
+                      "surface-dim": "#d6dbd9",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#005048",
+                      "primary-container": "#008376",
+                      "surface": "#FFFFFF",
+                      "doctor-light": "#4DB6AC",
+                      "surface-container-low": "#f0f5f2",
+                      "bg-main": "#F5F5F5",
+                      "on-secondary-container": "#003663",
+                      "inverse-surface": "#2c3130",
+                      "on-primary-container": "#f4fffb",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#edf2ef",
+                      "tertiary-container": "#b05e41",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#006b5f",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#171d1b",
+                      "nurse-primary": "#1E88E5",
+                      "surface-bright": "#f6faf8",
+                      "border-default": "#E0E0E0",
+                      "secondary-fixed": "#d3e4ff",
+                      "nurse-light": "#64B5F6",
+                      "background": "#f6faf8",
+                      "surface-container-highest": "#dfe4e1",
+                      "outline": "#6d7a77",
+                      "inverse-primary": "#70d8c8",
+                      "severity-success": "#43A047"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-padding": "16px",
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "touch-target-min": "44px"
+              },
+              "fontFamily": {
+                      "caption-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "data-display": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "caption-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-display": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-bg-main text-text-primary font-body-md h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- TopAppBar (Web & Mobile) -->
+<header class="fixed top-0 w-full z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center h-14 px-4 md:hidden">
+<div class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-purple-800 dark:text-purple-400" data-icon="settings_remote">settings_remote</span>
+<span class="font-sans text-sm font-semibold tracking-tight text-purple-800 dark:text-purple-400">InfusionAdmin</span>
+<span class="text-lg font-black text-purple-800 dark:text-purple-400 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 rounded-full ml-2">ADMIN</span>
+</div>
+<button aria-label="Logout" class="w-[44px] h-[44px] flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full active:opacity-70">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</header>
+<!-- Side Navigation Drawer (Web Only) -->
+<nav class="hidden md:flex flex-col h-full w-72 border-r bg-slate-50 dark:bg-slate-950 divide-y divide-slate-200 dark:divide-slate-800 shadow-xl py-4 flex-shrink-0 z-40">
+<!-- Header -->
+<div class="px-4 pb-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-admin-primary flex items-center justify-center text-white font-title-lg text-title-lg">A</div>
+<div class="flex flex-col">
+<span class="font-sans text-sm font-medium text-purple-900 dark:text-purple-100 font-bold">System Administrator</span>
+<span class="font-caption-sm text-caption-sm text-text-secondary">ID: ADMIN-0892</span>
+<span class="font-caption-sm text-caption-sm text-severity-warning">Session: 14:22 left</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-700 dark:text-slate-300 mx-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 ease-in-out rounded-lg font-sans text-sm font-medium" href="#">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+                Audit Log
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-700 dark:text-slate-300 mx-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 ease-in-out rounded-lg font-sans text-sm font-medium" href="#">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-purple-600 text-white rounded-lg mx-2 transition-all duration-200 ease-in-out font-sans text-sm font-medium" href="#">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="group">group</span>
+                User Management
+            </a>
+</div>
+<div class="mt-auto p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-lg font-sans text-sm font-medium">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="logout">logout</span>
+                Logout
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto pt-14 md:pt-0 pb-20 md:pb-0 bg-bg-main">
+<div class="max-w-5xl mx-auto p-container-padding">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-6 pt-4 md:pt-8">
+<div>
+<h1 class="font-data-display text-data-display text-text-primary tracking-tight">User Management</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-1">Manage personnel access and roles across the system.</p>
+</div>
+<button class="hidden md:flex items-center gap-2 bg-admin-primary text-white px-4 h-[44px] rounded-lg font-title-lg text-title-lg shadow-sm hover:bg-admin-light transition-colors active:opacity-90">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                    Add User
+                </button>
+</div>
+<!-- Bento Grid Layout for Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: User List (Takes up 2 cols on lg) -->
+<div class="lg:col-span-2 space-y-4">
+<!-- Search and Filter Bar -->
+<div class="bg-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-2 flex gap-2 items-center border border-border-default">
+<div class="flex-1 relative flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined absolute left-3 text-text-secondary" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 h-[44px] bg-transparent border-none focus:ring-0 text-text-primary placeholder:text-text-secondary font-body-md text-body-md" placeholder="Search by ID or Role..." type="text"/>
+</div>
+<div class="h-8 w-px bg-border-default mx-1"></div>
+<button class="w-[44px] h-[44px] flex items-center justify-center text-text-secondary hover:text-admin-primary transition-colors rounded-lg">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+<!-- User List Data (Active State) -->
+<div class="bg-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-border-default overflow-hidden">
+<!-- List Item 1: Doctor -->
+<div class="group relative flex items-center p-4 border-b border-border-default last:border-0 bg-white hover:bg-surface-container-low transition-colors min-h-[64px]">
+<!-- Swipe Actions Background (Hidden by default, shown on hover for demo purposes) -->
+<div class="absolute inset-y-0 right-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pr-2 gap-1 bg-gradient-to-l from-white via-white to-transparent pl-8 z-10">
+<button aria-label="Edit User" class="w-[44px] h-[44px] rounded-lg bg-surface-variant text-text-primary hover:bg-surface-dim flex items-center justify-center transition-colors shadow-sm">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button aria-label="Deactivate User" class="w-[44px] h-[44px] rounded-lg bg-error-container text-error hover:bg-error hover:text-white flex items-center justify-center transition-colors shadow-sm">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+<!-- Main Content -->
+<div class="flex items-center gap-4 flex-1">
+<div class="w-10 h-10 rounded-full bg-doctor-primary/10 text-doctor-primary flex items-center justify-center font-title-lg text-title-lg">D</div>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-text-primary">DOC-4921</span>
+<span class="font-caption-sm text-caption-sm text-text-secondary">Last login: Today, 08:30</span>
+</div>
+<div class="ml-auto pr-16 group-hover:pr-24 transition-all duration-200">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption-sm text-caption-sm bg-doctor-primary text-white shadow-sm">
+                                        Doctor
+                                    </span>
+</div>
+</div>
+</div>
+<!-- List Item 2: Nurse -->
+<div class="group relative flex items-center p-4 border-b border-border-default last:border-0 bg-white hover:bg-surface-container-low transition-colors min-h-[64px]">
+<div class="absolute inset-y-0 right-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pr-2 gap-1 bg-gradient-to-l from-white via-white to-transparent pl-8 z-10">
+<button aria-label="Edit User" class="w-[44px] h-[44px] rounded-lg bg-surface-variant text-text-primary hover:bg-surface-dim flex items-center justify-center transition-colors shadow-sm">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button aria-label="Deactivate User" class="w-[44px] h-[44px] rounded-lg bg-error-container text-error hover:bg-error hover:text-white flex items-center justify-center transition-colors shadow-sm">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+<div class="flex items-center gap-4 flex-1">
+<div class="w-10 h-10 rounded-full bg-nurse-primary/10 text-nurse-primary flex items-center justify-center font-title-lg text-title-lg">N</div>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-text-primary">NUR-8120</span>
+<span class="font-caption-sm text-caption-sm text-text-secondary">Last login: Yesterday, 14:15</span>
+</div>
+<div class="ml-auto pr-16 group-hover:pr-24 transition-all duration-200">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption-sm text-caption-sm bg-nurse-primary text-white shadow-sm">
+                                        Nurse
+                                    </span>
+</div>
+</div>
+</div>
+<!-- List Item 3: Admin -->
+<div class="group relative flex items-center p-4 border-b border-border-default last:border-0 bg-white hover:bg-surface-container-low transition-colors min-h-[64px]">
+<div class="absolute inset-y-0 right-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pr-2 gap-1 bg-gradient-to-l from-white via-white to-transparent pl-8 z-10">
+<button aria-label="Edit User" class="w-[44px] h-[44px] rounded-lg bg-surface-variant text-text-primary hover:bg-surface-dim flex items-center justify-center transition-colors shadow-sm">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<!-- Cannot delete last admin - visually distinct disabled state -->
+<button aria-label="Deactivate User (Disabled)" class="w-[44px] h-[44px] rounded-lg bg-surface-variant text-text-secondary opacity-50 cursor-not-allowed flex items-center justify-center transition-colors" disabled="">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+<div class="flex items-center gap-4 flex-1">
+<div class="w-10 h-10 rounded-full bg-admin-primary/10 text-admin-primary flex items-center justify-center font-title-lg text-title-lg">A</div>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-text-primary">ADMIN-0892</span>
+<span class="font-caption-sm text-caption-sm text-text-secondary">Last login: Currently Active</span>
+</div>
+<div class="ml-auto pr-16 group-hover:pr-24 transition-all duration-200">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-caption-sm text-caption-sm bg-admin-primary text-white shadow-sm">
+                                        Admin
+                                    </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Footer Info -->
+<div class="flex justify-between items-center px-2">
+<span class="font-caption-sm text-caption-sm text-text-secondary">Showing 3 of 3 users</span>
+</div>
+</div>
+<!-- Right Column: Contextual Forms & Alerts (Takes up 1 col on lg) -->
+<div class="space-y-6">
+<!-- Glassmorphism Stats Card -->
+<div class="bg-gradient-to-br from-admin-primary/90 to-admin-light/90 rounded-xl p-6 shadow-lg text-white backdrop-blur-md relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span aria-hidden="true" class="material-symbols-outlined text-6xl" data-icon="admin_panel_settings">admin_panel_settings</span>
+</div>
+<h3 class="font-title-lg text-title-lg mb-4 relative z-10">System Access</h3>
+<div class="grid grid-cols-2 gap-4 relative z-10">
+<div>
+<span class="block font-caption-sm text-caption-sm opacity-80">Total Users</span>
+<span class="block font-data-display text-data-display mt-1">124</span>
+</div>
+<div>
+<span class="block font-caption-sm text-caption-sm opacity-80">Active Sessions</span>
+<span class="block font-data-display text-data-display mt-1">18</span>
+</div>
+</div>
+</div>
+<!-- User Editor Form (Add/Edit) -->
+<div class="bg-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-border-default p-6">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-border-default">
+<span aria-hidden="true" class="material-symbols-outlined text-admin-primary" data-icon="person_add">person_add</span>
+<h2 class="font-title-lg text-title-lg text-text-primary">Add New User</h2>
+</div>
+<form class="space-y-5">
+<div>
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1" for="user_id">User ID</label>
+<input class="w-full h-[44px] px-3 rounded-lg border border-border-default focus:border-admin-primary focus:ring-1 focus:ring-admin-primary font-body-md text-body-md bg-surface transition-colors" id="user_id" placeholder="e.g. NUR-1024" type="text"/>
+</div>
+<div>
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1" for="role">Role Designation</label>
+<div class="relative">
+<select class="w-full h-[44px] px-3 appearance-none rounded-lg border border-border-default focus:border-admin-primary focus:ring-1 focus:ring-admin-primary font-body-md text-body-md bg-surface transition-colors" id="role">
+<option disabled="" selected="" value="">Select a role...</option>
+<option value="doctor">Doctor</option>
+<option value="nurse">Nurse</option>
+<option value="admin">Administrator</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-text-secondary">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1" for="password">Initial Password</label>
+<div class="relative">
+<input class="w-full h-[44px] px-3 pr-10 rounded-lg border border-border-default focus:border-admin-primary focus:ring-1 focus:ring-admin-primary font-body-md text-body-md bg-surface transition-colors" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 flex items-center px-3 text-text-secondary hover:text-admin-primary transition-colors h-[44px] w-[44px] justify-center" type="button">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</div>
+<!-- Password Strength Indicator -->
+<div class="mt-2 flex gap-1 h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="w-1/3 bg-severity-warning h-full rounded-full"></div>
+</div>
+<span class="block mt-1 font-caption-sm text-caption-sm text-text-secondary text-right">Fair</span>
+</div>
+<button class="w-full h-[44px] bg-admin-primary hover:bg-admin-light text-white font-title-lg text-title-lg rounded-lg shadow-sm transition-colors mt-6 active:opacity-90 flex justify-center items-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="save">save</span>
+                                Save User
+                            </button>
+</form>
+</div>
+<!-- Example: Safety Lock Error Alert (Inline for Context) -->
+<div class="bg-error-container border-l-4 border-error rounded-r-lg p-4 flex gap-3 items-start shadow-sm hidden">
+<span aria-hidden="true" class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-error-container mb-1">Action Blocked</h4>
+<p class="font-body-md text-body-md text-on-error-container opacity-90">Cannot delete the last Admin account. System requires at least one active administrator.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile FAB -->
+<button aria-label="Add User" class="md:hidden fixed bottom-20 right-4 w-14 h-14 bg-admin-primary text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40">
+<span aria-hidden="true" class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-white dark:bg-slate-900 fixed bottom-0 w-full z-50 border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe">
+<button class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-[64px] h-[44px] justify-center">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-bold tracking-wide uppercase mt-1">Status</span>
+</button>
+<button class="flex flex-col items-center text-purple-700 dark:text-purple-400 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-[64px] h-[44px] justify-center">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="text-[10px] font-bold tracking-wide uppercase mt-1">Users</span>
+</button>
+<button class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-[64px] h-[44px] justify-center">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-bold tracking-wide uppercase mt-1">Logs</span>
+</button>
+<button class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-[64px] h-[44px] justify-center">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="construction">construction</span>
+<span class="text-[10px] font-bold tracking-wide uppercase mt-1">Setup</span>
+</button>
+</nav>
+<!-- Modal Overlay (Safety Lock) - Hidden by default -->
+<div class="fixed inset-0 bg-on-background/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+<div class="bg-surface rounded-xl shadow-2xl max-w-sm w-full overflow-hidden transform scale-100 transition-transform">
+<div class="p-6 text-center">
+<div class="w-16 h-16 rounded-full bg-error-container text-error flex items-center justify-center mx-auto mb-4">
+<span aria-hidden="true" class="material-symbols-outlined text-[32px]" data-icon="gpp_bad">gpp_bad</span>
+</div>
+<h3 class="font-data-display text-data-display text-text-primary mb-2">Action Blocked</h3>
+<p class="font-body-md text-body-md text-text-secondary mb-6">Cannot delete the last Admin account. The system requires at least one active administrator at all times to prevent lockout.</p>
+<button class="w-full h-[44px] bg-surface-variant text-text-primary hover:bg-surface-dim font-title-lg text-title-lg rounded-lg transition-colors active:opacity-90">
+                    Acknowledge
+                </button>
+</div>
+</div>
+</div>
+</body></html>
