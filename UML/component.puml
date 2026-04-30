@@ -1,46 +1,78 @@
-@startuml
-left to right direction
+@startuml SmartInfusionPump_3Tier
 
-package "Client" {
-  component "Nurse UI" as NurseUI
-  component "Doctor UI" as DoctorUI
-  component "Admin UI" as AdminUI
+skinparam componentStyle rectangle
+skinparam backgroundColor transparent
+
+package "Presentation Tier" #E1F5EE {
+
+  package "Doctor UI (green)" {
+    [Drug Library Screen]
+    [Reports & Analytics]
+    [Logs Viewer]
+    [Audit Trail Screen]
+  }
+
+  package "Nurse UI (blue)" {
+    [Pump Dashboard]
+    [Parameter Entry]
+    [Alarm Panel]
+    [Emergency Stop Button]
+  }
+
+  package "Admin UI (purple)" {
+    [User Management Screen]
+    [System Health Screen]
+    [Config Panel]
+  }
+
+  [Login Screen] --> [Role Router] : authenticates
 }
 
-cloud "Web Server" {
-  component "Authentication Service" as Auth
-  component "Session Controller" as Controller
-  component "Simulation Engine" as Engine
-  component "Alarm Service" as AlarmService 
-  component "Drug Library" as DrugLib
-  component "Logging Service" as Logger
-  component "Reporting Engine" as Reporter
-  component "Configuration Manager" as Config
+package "Business Logic Tier" #FAEEDA {
+
+  [Role Router] --> [RBAC Controller] : routes by role
+  [RBAC Controller] --> [Doctor Service]
+  [RBAC Controller] --> [Nurse Service]
+  [RBAC Controller] --> [Admin Service]
+
+  package "Doctor Service" {
+    [Drug Library Manager]
+    [Report Generator]
+    [Analytics Engine]
+  }
+
+  package "Nurse Service" {
+    [Infusion State Machine]
+    [Limit Validator]
+    [Alarm Controller]
+    [KVO Mode Handler]
+  }
+
+  package "Admin Service" {
+    [Account Manager]
+    [Session Manager]
+    [Global Config Manager]
+  }
+
+  [Simulation Engine] --> [Infusion State Machine]
+  [Audit Logger] -up-> [Doctor Service]
+  [Audit Logger] -up-> [Nurse Service]
+  [Audit Logger] -up-> [Admin Service]
 }
 
-database "Database Server" {
-  component "User DB" as UserDB
-  component "Drug DB" as DrugDB
-  component "Log DB" as LogDB
+package "Data Tier" #EEEDFE {
+  database "Drug Library DB" as DrugDB
+  database "Audit Log Store" as AuditDB
+  database "User Account DB" as UserDB
+  database "Infusion Log DB" as LogDB
+
+  [Drug Library Manager] --> DrugDB
+  [Report Generator]     --> LogDB
+  [Analytics Engine]     --> LogDB
+  [Infusion State Machine] --> LogDB
+  [Limit Validator]      --> DrugDB
+  [Account Manager]      --> UserDB
+  [Audit Logger]         --> AuditDB
 }
 
-NurseUI --> Auth : HTTPS
-DoctorUI --> Auth : HTTPS
-AdminUI --> Auth : HTTPS
-Auth --> Controller
-
-Controller --> Engine
-Controller --> DrugLib
-Controller --> Reporter
-
-Engine --> AlarmService : Trigger Events (Occlusion, Air, Battery)
-AlarmService --> Logger : Log Alarm States
-Engine --> Logger : Log Telemetry
-
-DrugLib --> DrugDB
-Logger --> LogDB
-Reporter --> LogDB
-Config --> DrugDB
-Config --> UserDB
-UserDB --> Auth
 @enduml
