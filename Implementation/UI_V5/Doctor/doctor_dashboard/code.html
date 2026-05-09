@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Infusion Monitor - Doctor Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#00685d",
+                        "inverse-surface": "#2c3130",
+                        "surface-variant": "#dfe4e1",
+                        "on-secondary-container": "#476b65",
+                        "inverse-on-surface": "#edf2ef",
+                        "secondary": "#41655f",
+                        "secondary-fixed-dim": "#a8cec6",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#c3ebe2",
+                        "on-tertiary-fixed": "#390c00",
+                        "tertiary-fixed-dim": "#ffb59c",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#006b5f",
+                        "on-primary-fixed": "#00201c",
+                        "inverse-primary": "#70d8c8",
+                        "on-tertiary-fixed-variant": "#763219",
+                        "on-primary-container": "#f4fffb",
+                        "on-surface": "#171d1b",
+                        "outline-variant": "#bcc9c5",
+                        "tertiary-fixed": "#ffdbcf",
+                        "secondary-fixed": "#c3ebe2",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1b",
+                        "on-secondary-fixed-variant": "#294d47",
+                        "on-primary-fixed-variant": "#005048",
+                        "background": "#f6faf8",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eaefec",
+                        "surface-dim": "#d6dbd9",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#91462c",
+                        "primary-container": "#008376",
+                        "surface-container-highest": "#dfe4e1",
+                        "surface": "#f6faf8",
+                        "on-secondary-fixed": "#00201c",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#3d4946",
+                        "tertiary-container": "#b05e41",
+                        "surface-bright": "#f6faf8",
+                        "surface-container-high": "#e4e9e7",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#70d8c8",
+                        "primary-fixed": "#8df5e4",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "card_padding": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "data-display": ["Inter"],
+                        "caption": ["Inter"],
+                        "title": ["Inter"],
+                        "body": ["Inter"]
+                    },
+                    "fontSize": {
+                        "data-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                        "caption": ["13pt", {"lineHeight": "18pt", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}],
+                        "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f6faf8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .doctor-chip { background-color: #00897B; color: white; padding: 4px 12px; border-radius: 9999px; font-weight: 700; font-size: 13pt; line-height: 18pt; }
+        .clinical-card { background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 4px; padding: 16px; transition: all 0.2s ease; }
+        .clinical-card:hover { border-color: #00897B; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background">
+<!-- Navigation Drawer -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-50 bg-white dark:bg-slate-900 h-screen w-64 border-r border-slate-200 dark:border-slate-800 rounded-none flat no shadows">
+<div class="px-6 py-8 flex flex-col items-start gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+<img alt="Doctor Avatar" class="w-full h-full object-cover" data-alt="Professional portrait of a middle-aged male doctor wearing a white lab coat with a stethoscope around his neck in a clinical setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCITRgJ_4I1TuQq8tVDD_-SXSObRAwMzrvdiDzBfAs9s4JNRBhSd1yASdj8gDLEgZpU7K6K0A0rWd28lryUcRsy6Jjei-nXsi7QizyyFAIQkNO5Pd1lggcwlqf359e_Sch19ulCSuBzrucrhW5UvT4qSsIQQMqHTCzuX027DVxhfKf-CCKMjLOk2SFYz3AaRNT0vPgyhHQS2XrNf_fLeMoMT3I3ocgyQM1tYg9buIy9_MqT7war-YcUPF8qKKn89_XTLk-8uBHXo8U"/>
+</div>
+<div>
+<h2 class="text-teal-700 font-black font-title text-[15pt]">Dr. Sterling</h2>
+<span class="text-slate-500 font-sans text-[13px] font-medium">Doctor Chip</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 border-r-4 border-teal-600 font-bold duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-sans text-[13px] font-medium">Dashboard</span>
+</a>
+<!-- Drug Library -->
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="medication">medication</span>
+<span class="font-sans text-[13px] font-medium">Drug Library</span>
+</a>
+<!-- Logs -->
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-sans text-[13px] font-medium">Logs</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-teal-50/50 dark:hover:bg-teal-900/10 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-sans text-[13px] font-medium">Reports</span>
+</a>
+</nav>
+<div class="p-6 border-t border-slate-100 dark:border-slate-800">
+<div class="bg-primary-container p-4 rounded-xl text-on-primary-container flex flex-col gap-2">
+<span class="font-bold text-xs uppercase tracking-widest opacity-80">System Health</span>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+<span class="text-sm font-semibold">Active &amp; Encrypted</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 docked full-width top-0 z-40 flat no shadows">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer active:opacity-70" data-icon="menu">menu</span>
+<h1 class="text-lg font-bold text-teal-700 dark:text-teal-500 uppercase tracking-wider">Infusion Monitor</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="doctor-chip">Doctor</div>
+<button class="text-teal-600 dark:text-teal-400 font-sans text-sm font-semibold tracking-tight hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer active:opacity-70 px-3 py-2 rounded-lg">
+                    Logout
+                </button>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-lg flex flex-col gap-lg max-w-[1400px]">
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Total Drugs -->
+<div class="clinical-card flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-caption text-caption opacity-70 uppercase tracking-wider">Total Drugs</span>
+<span class="font-data-display text-data-display text-primary">124</span>
+</div>
+<span class="material-symbols-outlined text-primary bg-primary-container/20 p-2 rounded-full" data-icon="pill">pill</span>
+</div>
+<div class="mt-4 text-sm text-on-surface-variant">
+<span class="text-primary font-bold">↑ 4</span> added this week
+                    </div>
+</div>
+<!-- Critical Alarms -->
+<div class="clinical-card flex flex-col justify-between border-l-4 border-l-error">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-caption text-caption opacity-70 uppercase tracking-wider">Critical Alarms</span>
+<span class="font-data-display text-data-display text-error">3</span>
+</div>
+<span class="material-symbols-outlined text-error bg-error-container/20 p-2 rounded-full" data-icon="warning">warning</span>
+</div>
+<div class="mt-4 text-sm text-error font-medium">
+                        Immediate attention required in Ward B
+                    </div>
+</div>
+<!-- Pending Alerts -->
+<div class="clinical-card flex flex-col justify-between border-l-4 border-l-secondary">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-caption text-caption opacity-70 uppercase tracking-wider">Pending Alerts</span>
+<span class="font-data-display text-data-display text-on-secondary-container">8</span>
+</div>
+<span class="material-symbols-outlined text-on-secondary-container bg-secondary-container p-2 rounded-full" data-icon="notifications">notifications</span>
+</div>
+<div class="mt-4 text-sm text-on-surface-variant">
+                        Review medication dose limits
+                    </div>
+</div>
+</div>
+<!-- Quick Actions & Main Content Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Main Infusion Feed -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<div class="flex items-center justify-between">
+<h2 class="font-title text-title text-inverse-surface">Active Infusions</h2>
+<button class="text-sm font-semibold text-primary flex items-center gap-1">
+                            View All <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="clinical-card space-y-0 p-0 overflow-hidden">
+<!-- Infusion Row 1 -->
+<div class="p-card_padding border-b border-slate-100 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container rounded flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="syringe">syringe</span>
+</div>
+<div>
+<h3 class="font-bold text-inverse-surface">Dopamine 400mg</h3>
+<p class="text-sm text-on-surface-variant">Patient: John Doe • Room 402</p>
+</div>
+</div>
+<div class="text-right flex flex-col gap-2 w-48">
+<div class="flex justify-between text-xs font-bold text-on-surface-variant">
+<span>Progress</span>
+<span>65%</span>
+</div>
+<div class="w-full bg-surface-variant h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+<!-- Infusion Row 2 -->
+<div class="p-card_padding border-b border-slate-100 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container rounded flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="medication_liquid">medication_liquid</span>
+</div>
+<div>
+<h3 class="font-bold text-inverse-surface">Insulin Human 100 U/mL</h3>
+<p class="text-sm text-on-surface-variant">Patient: Sarah Smith • Room 105</p>
+</div>
+</div>
+<div class="text-right flex flex-col gap-2 w-48">
+<div class="flex justify-between text-xs font-bold text-on-surface-variant">
+<span>Progress</span>
+<span>22%</span>
+</div>
+<div class="w-full bg-surface-variant h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 22%;"></div>
+</div>
+</div>
+</div>
+<!-- Infusion Row 3 -->
+<div class="p-card_padding flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-error-container rounded flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="emergency_home">emergency_home</span>
+</div>
+<div>
+<h3 class="font-bold text-inverse-surface">Fentanyl 50mcg</h3>
+<p class="text-sm text-on-surface-variant">Patient: Michael Ross • Room 301</p>
+</div>
+</div>
+<div class="text-right flex flex-col gap-2 w-48">
+<div class="flex justify-between text-xs font-bold text-on-surface-variant">
+<span>Progress</span>
+<span>98%</span>
+</div>
+<div class="w-full bg-surface-variant h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 98%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Actions -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<h2 class="font-title text-title text-inverse-surface">Quick Actions</h2>
+<div class="flex flex-col gap-sm">
+<!-- Add New Drug -->
+<button class="w-full h-12 flex items-center justify-between px-6 bg-primary text-white font-bold rounded hover:opacity-90 transition-opacity">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                                Add New Drug
+                            </span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- View Logs -->
+<button class="w-full h-12 flex items-center justify-between px-6 border-2 border-primary text-primary font-bold rounded hover:bg-primary/5 transition-colors">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+                                View Logs
+                            </span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Generate Report -->
+<button class="w-full h-12 flex items-center justify-between px-6 border-2 border-primary text-primary font-bold rounded hover:bg-primary/5 transition-colors">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                                Generate Report
+                            </span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Upcoming Maintenance Card -->
+<div class="mt-lg clinical-card bg-surface-container">
+<h4 class="font-bold text-sm text-on-surface-variant mb-2 uppercase">Pump Maintenance</h4>
+<div class="flex items-center gap-4">
+<div class="p-3 bg-white rounded-full">
+<span class="material-symbols-outlined text-secondary" data-icon="build">build</span>
+</div>
+<div>
+<p class="font-bold text-inverse-surface">Unit #8821</p>
+<p class="text-xs text-on-surface-variant">Due in 4 days</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Dashboard relevant) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</body></html>

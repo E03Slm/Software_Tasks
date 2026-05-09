@@ -1,0 +1,114 @@
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Import Placeholder Screens
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/nurse/presentation/nurse_shell.dart';
+import '../../features/nurse/presentation/dashboard/pump_dashboard_screen.dart';
+import '../../features/nurse/presentation/drug_selection/drug_selection_screen.dart';
+import '../../features/nurse/presentation/parameter_entry/parameter_entry_screen.dart';
+import '../../features/nurse/presentation/alarm_panel/alarm_panel_screen.dart';
+import '../../features/nurse/presentation/session_log/session_log_screen.dart';
+
+// Doctor Screens
+import '../../features/doctor/presentation/doctor_shell.dart';
+import '../../features/doctor/presentation/drug_library/drug_library_screen.dart';
+import '../../features/doctor/presentation/drug_library/add_edit_drug_screen.dart';
+import '../../features/doctor/presentation/logs/doctor_logs_screen.dart';
+import '../../features/doctor/presentation/reports/doctor_reports_screen.dart';
+
+import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/auth/domain/enums/role_type.dart';
+import '../../shared/widgets/access_denied_screen.dart';
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authProvider);
+
+  return GoRouter(
+    initialLocation: '/login',
+    redirect: (context, state) {
+      final isLoggingIn = state.uri.path == '/login';
+      
+      if (authState == null) {
+        return isLoggingIn ? null : '/login';
+      }
+
+      if (isLoggingIn) {
+        if (authState.role == RoleType.doctor || authState.role == RoleType.admin) {
+          return '/doctor';
+        }
+        return '/nurse';
+      }
+
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      
+      // NURSE SHELL
+      ShellRoute(
+        builder: (context, state, child) => NurseShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/nurse',
+            builder: (context, state) => const PumpDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/nurse/drug-selection',
+            builder: (context, state) => const DrugSelectionScreen(),
+          ),
+          GoRoute(
+            path: '/nurse/parameters',
+            builder: (context, state) => const ParameterEntryScreen(),
+          ),
+          GoRoute(
+            path: '/nurse/alarms',
+            builder: (context, state) => const AlarmPanelScreen(),
+          ),
+          GoRoute(
+            path: '/nurse/log',
+            builder: (context, state) => const SessionLogScreen(),
+          ),
+        ],
+      ),
+
+      // DOCTOR SHELL
+      ShellRoute(
+        builder: (context, state, child) => DoctorShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/doctor',
+            builder: (context, state) => const DrugLibraryScreen(),
+          ),
+          GoRoute(
+            path: '/doctor/logs',
+            builder: (context, state) => const DoctorLogsScreen(),
+          ),
+          GoRoute(
+            path: '/doctor/reports',
+            builder: (context, state) => const DoctorReportsScreen(),
+          ),
+          GoRoute(
+            path: '/doctor/add-drug',
+            builder: (context, state) => const AddEditDrugScreen(),
+          ),
+          GoRoute(
+            path: '/doctor/edit-drug/:id',
+            builder: (context, state) {
+              final id = state.pathParameters['id']!;
+              return AddEditDrugScreen(drugId: id);
+            },
+          ),
+        ],
+      ),
+      
+      GoRoute(
+        path: '/access-denied',
+        builder: (context, state) => const AccessDeniedScreen(),
+      ),
+    ],
+  );
+});
