@@ -113,7 +113,7 @@ InfusionSession --> Drug : "takes data from"
 
 ' Logging Relations (S-D-02, S-N-03)
 InfusionSession --> AuditLog : records to
-User --> AuditLog : views (Full access)
+User --> AuditLog : views (infusion sessions access)
 User --> AuditLog : views (Full access)
 
 ' Admin manages Users (F-A-01)
