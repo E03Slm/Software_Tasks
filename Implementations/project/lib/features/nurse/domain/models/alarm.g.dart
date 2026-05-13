@@ -7,9 +7,9 @@ part of 'alarm.dart';
 // **************************************************************************
 
 _Alarm _$AlarmFromJson(Map<String, dynamic> json) => _Alarm(
-  id: json['alarm_id'] as String,
+  id: json['event_id'] as String,
   sessionId: json['session_id'] as String,
-  definitionId: json['event_id'] as String?,
+  definitionId: json['alarm_id'] as String?,
   type: json['type'] as String,
   severity: json['severity'] as String,
   timestamp: DateTime.parse(json['timestamp'] as String),
@@ -26,9 +26,9 @@ _Alarm _$AlarmFromJson(Map<String, dynamic> json) => _Alarm(
 );
 
 Map<String, dynamic> _$AlarmToJson(_Alarm instance) => <String, dynamic>{
-  'alarm_id': instance.id,
+  'event_id': instance.id,
   'session_id': instance.sessionId,
-  'event_id': instance.definitionId,
+  'alarm_id': instance.definitionId,
   'type': instance.type,
   'severity': instance.severity,
   'timestamp': instance.timestamp.toIso8601String(),

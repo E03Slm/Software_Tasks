@@ -1,48 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
-import '../providers/audit_provider.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../providers/admin_providers.dart';
 
-class DoctorLogsScreen extends ConsumerStatefulWidget {
-  const DoctorLogsScreen({super.key});
+class AdminLogsScreen extends ConsumerStatefulWidget {
+  const AdminLogsScreen({super.key});
 
   @override
-  ConsumerState<DoctorLogsScreen> createState() => _DoctorLogsScreenState();
+  ConsumerState<AdminLogsScreen> createState() => _AdminLogsScreenState();
 }
 
-class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
+class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
   String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
-    final logsAsync = ref.watch(auditLogListProvider);
+    final logsAsync = ref.watch(adminAuditLogsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AUDIT LOGS'),
-        actions: [
-          TextButton.icon(
-            icon: const Icon(Icons.admin_panel_settings_outlined, color: Colors.white, size: 18),
-            label: const Text('SYSTEM VIEW', style: TextStyle(color: Colors.white, fontSize: 12)),
-            onPressed: () => context.push('/doctor/logs/system'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(auditLogListProvider.notifier).refresh(),
-          ),
-        ],
-      ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(spaceMd),
+            padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Filter by action (e.g., CREATE_DRUG)',
+                hintText: 'Search by action, user, or entity...',
                 prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onChanged: (value) => setState(() => _searchQuery = value),
             ),
@@ -52,7 +36,8 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
               data: (logs) {
                 final filteredLogs = logs.where((log) => 
                   log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase())
+                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                  (log.userName?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false)
                 ).toList();
 
                 if (filteredLogs.isEmpty) {
@@ -60,9 +45,8 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                 }
 
                 return ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: spaceMd),
                   itemCount: filteredLogs.length,
-                  separatorBuilder: (_, __) => const Divider(),
+                  separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final log = filteredLogs[index];
                     return ExpansionTile(
@@ -73,22 +57,21 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                       ),
                       subtitle: Text(
                         '${log.entityType} • ${DateFormat('yyyy-MM-dd HH:mm:ss').format(log.timestamp)}',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: const TextStyle(fontSize: 12),
                       ),
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(spaceMd),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Clinician: ${log.userName ?? log.userId}', 
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                              Text('Target: ${log.entityType.replaceAll('_', ' ').toUpperCase()} ${log.entityName != null ? "(${log.entityName})" : ""}', 
-                                style: const TextStyle(fontSize: 12)),
+                              Text('User: ${log.userName ?? log.userId}', 
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                              Text('Entity ID: ${log.entityId}', style: const TextStyle(fontSize: 12)),
                               if (log.ipAddress != null) Text('IP Address: ${log.ipAddress}', style: const TextStyle(fontSize: 12)),
-                              const SizedBox(height: 8),
-                              if (log.oldValue != null) ...[
-                                const Text('OLD VALUE:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                              const SizedBox(height: 12),
+                              if (log.oldValue != '{}') ...[
+                                const Text('OLD DATA:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
                                 Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(8),
@@ -96,12 +79,12 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                                     color: Colors.grey.shade100,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
-                                  child: Text(log.oldValue!, style: const TextStyle(fontFamily: 'monospace', fontSize: 10)),
+                                  child: Text(log.oldValue ?? '{}', style: const TextStyle(fontFamily: 'monospace', fontSize: 11)),
                                 ),
                                 const SizedBox(height: 8),
                               ],
-                              if (log.newValue != null) ...[
-                                const Text('NEW VALUE:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                              if (log.newValue != '{}') ...[
+                                const Text('NEW DATA:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
                                 Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(8),
@@ -109,7 +92,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                                     color: Colors.grey.shade100,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
-                                  child: Text(log.newValue!, style: const TextStyle(fontFamily: 'monospace', fontSize: 10)),
+                                  child: Text(log.newValue ?? '{}', style: const TextStyle(fontFamily: 'monospace', fontSize: 11)),
                                 ),
                               ],
                             ],
@@ -121,7 +104,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error loading logs: $err')),
+              error: (err, stack) => Center(child: Text('Error: $err')),
             ),
           ),
         ],
@@ -130,10 +113,11 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
   }
 
   Widget _getIconForAction(String action) {
-    if (action.contains('CREATE')) return const Icon(Icons.add_circle_outline, color: Colors.green);
-    if (action.contains('UPDATE')) return const Icon(Icons.edit_note, color: Colors.blue);
-    if (action.contains('DELETE')) return const Icon(Icons.delete_forever, color: Colors.red);
+    if (action.contains('CREATE')) return const Icon(Icons.add_circle, color: Colors.green);
+    if (action.contains('UPDATE')) return const Icon(Icons.edit, color: Colors.blue);
+    if (action.contains('DELETE')) return const Icon(Icons.delete, color: Colors.red);
     if (action.contains('LOGIN')) return const Icon(Icons.login, color: Colors.orange);
+    if (action.contains('ALARM')) return const Icon(Icons.warning, color: Colors.amber);
     return const Icon(Icons.history);
   }
 }

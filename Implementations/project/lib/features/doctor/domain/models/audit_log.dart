@@ -17,7 +17,6 @@ abstract class AuditLog with _$AuditLog {
     @JsonKey(name: 'old_value') String? oldValue,
     @JsonKey(name: 'new_value') String? newValue,
     @JsonKey(name: 'ip_address') String? ipAddress,
-    @JsonKey(name: 'session_id') String? sessionId,
     @JsonKey(name: 'timestamp') required DateTime timestamp,
     @JsonKey(name: 'user') Map<String, dynamic>? userData,
   }) = _AuditLog;

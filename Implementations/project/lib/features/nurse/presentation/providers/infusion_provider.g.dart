@@ -41,7 +41,7 @@ final class AlarmNotifierProvider
   }
 }
 
-String _$alarmNotifierHash() => r'f446e75a2c6fe9e6704b532b379a285f1ec2b5a4';
+String _$alarmNotifierHash() => r'2471772623189e6c1d9af4881b7262dbc156da4c';
 
 abstract class _$AlarmNotifier extends $Notifier<List<Alarm>> {
   List<Alarm> build();
@@ -93,7 +93,7 @@ final class BatteryNotifierProvider
   }
 }
 
-String _$batteryNotifierHash() => r'20df321c6317ef4ac447b56e2c1e548e55b46199';
+String _$batteryNotifierHash() => r'95ab247f111297b13419a61c7d986d7d9f5b281e';
 
 abstract class _$BatteryNotifier extends $Notifier<double> {
   double build();
@@ -145,7 +145,7 @@ final class InfusionNotifierProvider
   }
 }
 
-String _$infusionNotifierHash() => r'bff3648262c08b81880ab4f3c4e5d46d7740f3e7';
+String _$infusionNotifierHash() => r'66abbdd3882199e3f0dd856d517f18fabc8f7767';
 
 abstract class _$InfusionNotifier extends $Notifier<InfusionSession> {
   InfusionSession build();
