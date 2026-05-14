@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#181c22",
+                    "secondary": "#5e5e5e",
+                    "inverse-primary": "#a2c9ff",
+                    "inverse-on-surface": "#eef0f9",
+                    "surface-container": "#ebeef6",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#6f3800",
+                    "surface-container-low": "#f1f3fc",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "inverse-surface": "#2d3137",
+                    "surface-container-high": "#e5e8f0",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#2f1400",
+                    "on-surface-variant": "#404752",
+                    "on-primary-container": "#fdfcff",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#ffdcc4",
+                    "on-secondary-container": "#646464",
+                    "background": "#f8f9ff",
+                    "surface-dim": "#d7dae2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#464747",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#b35e00",
+                    "surface-variant": "#e0e2ea",
+                    "primary": "#005ea4",
+                    "primary-fixed-dim": "#a2c9ff",
+                    "on-primary-fixed": "#001c38",
+                    "primary-container": "#0077ce",
+                    "surface-container-highest": "#e0e2ea",
+                    "primary-fixed": "#d3e4ff",
+                    "secondary-container": "#e3e2e2",
+                    "tertiary-fixed-dim": "#ffb780",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-surface": "#181c22",
+                    "surface-tint": "#0060a8",
+                    "on-primary-fixed-variant": "#004881",
+                    "outline": "#707783",
+                    "outline-variant": "#c0c7d4",
+                    "secondary-fixed": "#e3e2e2",
+                    "tertiary": "#8f4a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack_space": "12px",
+                    "base_unit": "8px",
+                    "margin_edge": "24px",
+                    "internal_padding": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "caption": ["Inter"],
+                    "body": ["Inter"],
+                    "numeric-display": ["Inter"],
+                    "title": ["Inter"]
+            },
+            "fontSize": {
+                    "caption": ["13pt", {"lineHeight": "18pt", "fontWeight": "500"}],
+                    "body": ["16pt", {"lineHeight": "24pt", "fontWeight": "400"}],
+                    "numeric-display": ["32pt", {"lineHeight": "40pt", "fontWeight": "700"}],
+                    "title": ["20pt", {"lineHeight": "28pt", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9ff;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body text-on-surface">
+<aside class="fixed inset-y-0 left-0 z-[60] p-4 flex flex-col gap-2 bg-white dark:bg-slate-900 h-full w-80 border-r border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-none">
+<div class="flex items-start flex-col gap-1 mb-6 px-4">
+<div class="w-12 h-12 bg-primary-fixed rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-primary text-2xl">account_circle</span>
+</div>
+<h2 class="font-inter text-lg font-bold text-blue-700 dark:text-blue-400">Nurse Station 4</h2>
+<p class="font-inter text-sm font-medium text-slate-600 dark:text-slate-400">Ward B - Critical Care</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 rounded-lg px-4 py-3 font-bold font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<span>Pump</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span>Alarm</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span>Session Log</span>
+</a>
+</nav>
+</aside>
+<div class="pl-80 min-h-screen flex flex-col">
+<header class="flex justify-between items-center w-full px-6 h-16 sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">menu</span>
+<h1 class="text-xl font-black text-blue-600 dark:text-blue-400">Infusion Monitor</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="bg-primary text-on-primary px-4 py-1.5 rounded-full font-inter text-base font-semibold tracking-tight">Nurse</span>
+</div>
+</header>
+<main class="p-margin_edge flex-1 flex flex-col gap-6">
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title text-title text-on-surface">Parameter Entry</h2>
+<p class="font-caption text-caption text-secondary">Channel A: Norepinephrine Bitartrate</p>
+</div>
+<div class="flex gap-stack_space">
+<span class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary text-lg">info</span>
+<span class="font-caption text-caption text-on-surface-variant">Standard Protocol</span>
+</span>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-12 gap-gutter">
+<div class="col-span-8 flex flex-col gap-gutter">
+<div class="grid grid-cols-2 gap-gutter">
+<div class="bg-white border border-outline-variant rounded-xl p-internal_padding flex flex-col gap-stack_space shadow-sm">
+<label class="font-caption text-caption text-secondary flex items-center justify-between">
+                                Concentration
+                                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+<div class="flex items-baseline gap-2">
+<input class="w-full font-numeric-display text-numeric-display border-none p-0 focus:ring-0 text-on-surface bg-transparent" type="text" value="4.0"/>
+<span class="font-body text-body text-secondary">mg/mL</span>
+</div>
+<div class="h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<p class="text-[11pt] font-medium text-primary">Range: 1.0 - 16.0 mg/mL</p>
+</div>
+<div class="bg-white border-2 border-primary rounded-xl p-internal_padding flex flex-col gap-stack_space shadow-sm">
+<label class="font-caption text-caption text-primary flex items-center justify-between font-bold">
+                                Rate
+                                <span class="material-symbols-outlined text-primary">edit</span>
+</label>
+<div class="flex items-baseline gap-2">
+<input class="w-full font-numeric-display text-numeric-display border-none p-0 focus:ring-0 text-on-surface bg-transparent" type="text" value="15.5"/>
+<span class="font-body text-body text-secondary">mL/hr</span>
+</div>
+<div class="h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[45%]"></div>
+</div>
+<p class="text-[11pt] font-medium text-primary">Soft Limit: 2.0 - 25.0 mL/hr</p>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-internal_padding flex flex-col gap-stack_space shadow-sm">
+<label class="font-caption text-caption text-secondary">Volume To Be Infused (VTBI)</label>
+<div class="flex items-center gap-6">
+<div class="flex-1 flex items-baseline gap-2">
+<input class="w-full font-numeric-display text-numeric-display border-none p-0 focus:ring-0 text-on-surface-variant placeholder:text-surface-variant bg-transparent" placeholder="0.0" type="text"/>
+<span class="font-body text-body text-secondary">mL</span>
+</div>
+<div class="flex-1 h-12 bg-surface-container flex items-center justify-center rounded-lg border border-dashed border-outline text-secondary font-body">
+                                Select Total Volume
+                            </div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-internal_padding border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title text-body font-semibold">Dosing Calculation Summary</h3>
+<span class="material-symbols-outlined text-secondary">calculate</span>
+</div>
+<div class="p-internal_padding grid grid-cols-3 divide-x divide-outline-variant">
+<div class="px-4 first:pl-0">
+<p class="font-caption text-secondary mb-1">Dose</p>
+<p class="font-body font-bold text-on-surface">5.2 mcg/kg/min</p>
+</div>
+<div class="px-4">
+<p class="font-caption text-secondary mb-1">Total Infused</p>
+<p class="font-body font-bold text-on-surface">142.8 mL</p>
+</div>
+<div class="px-4 last:pr-0">
+<p class="font-caption text-secondary mb-1">Time Remaining</p>
+<p class="font-body font-bold text-on-surface">06h 45m</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface-container-highest rounded-xl p-4 flex flex-col gap-2">
+<div class="grid grid-cols-3 gap-2">
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">1</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">2</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">3</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">4</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">5</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">6</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">7</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">8</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">9</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">.</button>
+<button class="aspect-square bg-white border border-outline-variant rounded-lg font-numeric-display text-2xl active:bg-primary-fixed hover:bg-surface-bright">0</button>
+<button class="aspect-square bg-surface-variant border border-outline-variant rounded-lg flex items-center justify-center active:bg-error-container hover:bg-surface-dim">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+</div>
+</div>
+<div class="flex-1 bg-primary-container/10 border border-primary/20 rounded-xl p-internal_padding flex flex-col justify-between">
+<div>
+<h4 class="font-title text-[14pt] text-primary-container font-bold mb-2">Clinical Protocol Check</h4>
+<p class="font-caption text-on-surface-variant">The current rate of 15.5 mL/hr matches the standard ICU protocol for patient weight 72kg.</p>
+</div>
+<div class="flex items-center gap-3 mt-4">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="text-[12pt] font-semibold text-primary">Locked by Ward B Station</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-0 right-0 left-80 p-6 bg-white/80 backdrop-blur-md border-t border-outline-variant z-40">
+<div class="flex gap-gutter">
+<button class="flex-1 h-14 border-2 border-outline text-on-surface font-title rounded-lg hover:bg-surface-container-low transition-colors">
+                    CANCEL
+                </button>
+<button class="flex-1 h-14 bg-primary text-on-primary font-title rounded-lg hover:bg-primary-container transition-all shadow-md">
+                    REVIEW PARAMETERS
+                </button>
+<button class="flex-[1.5] h-14 bg-[#43A047] text-white font-title rounded-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-[0.98] transition-all shadow-lg">
+<span class="material-symbols-outlined">play_arrow</span>
+                    START INFUSION
+                </button>
+</div>
+</footer>
+<button class="fixed bottom-28 right-8 h-16 bg-[#E53935] text-white px-8 rounded-full shadow-2xl flex items-center gap-3 font-title z-50 hover:bg-red-700 transition-colors uppercase tracking-widest border-4 border-white/20">
+<span class="material-symbols-outlined">emergency_home</span>
+            EMERGENCY STOP
+        </button>
+</div>
+</body></html>

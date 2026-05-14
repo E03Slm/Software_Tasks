@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Logs Viewer Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "severity-warning": "#FFA000",
+                    "surface-container": "#eaefec",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#91462c",
+                    "surface-variant": "#dfe4e1",
+                    "on-background": "#171d1b",
+                    "outline-variant": "#bcc9c5",
+                    "text-secondary": "#757575",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#390c00",
+                    "tertiary-fixed": "#ffdbcf",
+                    "text-primary": "#212121",
+                    "doctor-primary": "#00897B",
+                    "on-tertiary-container": "#fffbff",
+                    "primary-fixed-dim": "#70d8c8",
+                    "primary-fixed": "#8df5e4",
+                    "primary": "#00685d",
+                    "secondary-fixed-dim": "#a2c9ff",
+                    "surface-container-high": "#e4e9e7",
+                    "on-secondary-fixed": "#001c38",
+                    "secondary": "#0060a8",
+                    "admin-light": "#9C4DCC",
+                    "on-primary-fixed": "#00201c",
+                    "severity-critical": "#E53935",
+                    "on-surface-variant": "#3d4946",
+                    "admin-primary": "#6A1B9A",
+                    "on-tertiary-fixed-variant": "#763219",
+                    "secondary-container": "#47a1ff",
+                    "severity-info": "#039BE5",
+                    "on-secondary-fixed-variant": "#004881",
+                    "tertiary-fixed-dim": "#ffb59c",
+                    "surface-dim": "#d6dbd9",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#005048",
+                    "primary-container": "#008376",
+                    "surface": "#FFFFFF",
+                    "doctor-light": "#4DB6AC",
+                    "surface-container-low": "#f0f5f2",
+                    "bg-main": "#F5F5F5",
+                    "on-secondary-container": "#003663",
+                    "inverse-surface": "#2c3130",
+                    "on-primary-container": "#f4fffb",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#edf2ef",
+                    "tertiary-container": "#b05e41",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#006b5f",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#171d1b",
+                    "nurse-primary": "#1E88E5",
+                    "surface-bright": "#f6faf8",
+                    "border-default": "#E0E0E0",
+                    "secondary-fixed": "#d3e4ff",
+                    "nurse-light": "#64B5F6",
+                    "background": "#f6faf8",
+                    "surface-container-highest": "#dfe4e1",
+                    "outline": "#6d7a77",
+                    "inverse-primary": "#70d8c8",
+                    "severity-success": "#43A047"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "16px",
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "touch-target-min": "44px"
+            },
+            "fontFamily": {
+                    "caption-sm": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "title-lg": [
+                            "Inter"
+                    ],
+                    "data-display": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "caption-sm": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "data-display": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-bg-main text-text-primary font-body-md text-body-md antialiased min-h-screen flex flex-col md:flex-row">
+<!-- NavigationDrawer (Hidden on Mobile, Visible on md+) -->
+<nav class="hidden md:flex flex-col h-full py-4 bg-slate-50 dark:bg-slate-950 text-purple-700 dark:text-purple-400 font-sans text-sm font-medium h-full w-72 border-r divide-y divide-slate-200 dark:divide-slate-800 shadow-xl transition-all duration-200 ease-in-out">
+<div class="px-4 pb-4 flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-admin-primary flex items-center justify-center text-white font-title-lg text-title-lg">A</div>
+<div>
+<div class="font-title-lg text-title-lg text-purple-900 dark:text-purple-100">System Administrator</div>
+<div class="text-caption-sm font-caption-sm text-text-secondary">ID: ADMIN-0892</div>
+</div>
+</div>
+<div class="pt-4 flex flex-col space-y-1">
+<a class="flex items-center space-x-3 px-4 py-3 mx-2 bg-purple-600 text-white rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span>Audit Logs</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 mx-2 text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 mx-2 text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>User Management</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-14 px-4 bg-white dark:bg-slate-900 text-purple-800 dark:text-purple-400 font-sans text-sm font-semibold tracking-tight border-b border-slate-200 dark:border-slate-800 shadow-sm shrink-0 md:hidden">
+<button class="w-11 h-11 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors active:opacity-70 rounded-full">
+<span class="material-symbols-outlined">settings_remote</span>
+</button>
+<div class="text-lg font-black text-purple-800 dark:text-purple-400 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 rounded-full">InfusionAdmin</div>
+<button class="w-11 h-11 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors active:opacity-70 rounded-full">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</header>
+<!-- Page Header (Web) -->
+<div class="hidden md:flex justify-between items-center px-8 py-6 bg-surface border-b border-border-default shrink-0">
+<div>
+<h1 class="font-data-display text-data-display text-text-primary">Audit Logs</h1>
+<p class="font-caption-sm text-caption-sm text-text-secondary mt-1">System-wide event tracking and security monitoring</p>
+</div>
+<button class="h-11 px-4 flex items-center justify-center bg-admin-primary text-white rounded-DEFAULT font-caption-sm text-caption-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined mr-2 text-[18px]">download</span>
+                 Export Logs
+             </button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-bg-main p-4 md:p-8">
+<div class="max-w-6xl mx-auto space-y-6 pb-24 md:pb-0">
+<!-- Filters Section -->
+<div class="bg-surface rounded-xl p-4 shadow-sm border border-border-default flex flex-col md:flex-row gap-4 items-end">
+<div class="w-full md:w-auto flex-1">
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1">Date Range</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">calendar_today</span>
+<input class="w-full h-11 pl-10 pr-3 border border-border-default rounded-DEFAULT font-body-md text-body-md focus:border-admin-primary focus:ring-1 focus:ring-admin-primary outline-none bg-surface" placeholder="Last 7 Days" type="text"/>
+</div>
+</div>
+<div class="w-full md:w-auto flex-1">
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1">Drug Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">vaccines</span>
+<input class="w-full h-11 pl-10 pr-3 border border-border-default rounded-DEFAULT font-body-md text-body-md focus:border-admin-primary focus:ring-1 focus:ring-admin-primary outline-none bg-surface" placeholder="All Drugs" type="text"/>
+</div>
+</div>
+<div class="w-full md:w-auto flex-1">
+<label class="block font-caption-sm text-caption-sm text-text-secondary mb-1">Patient/User ID</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">badge</span>
+<input class="w-full h-11 pl-10 pr-3 border border-border-default rounded-DEFAULT font-body-md text-body-md focus:border-admin-primary focus:ring-1 focus:ring-admin-primary outline-none bg-surface" placeholder="Search ID..." type="text"/>
+</div>
+</div>
+<button class="w-full md:w-auto h-11 px-6 bg-surface border border-border-default text-text-primary rounded-DEFAULT hover:bg-surface-container-low transition-colors font-caption-sm text-caption-sm flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined mr-2 text-[18px]">filter_list</span>
+                        More Filters
+                    </button>
+</div>
+<!-- Logs List View -->
+<div class="bg-surface rounded-xl shadow-sm border border-border-default overflow-hidden">
+<div class="grid grid-cols-12 gap-4 px-4 py-3 bg-surface-container-low border-b border-border-default font-caption-sm text-caption-sm text-text-secondary">
+<div class="col-span-3">Timestamp</div>
+<div class="col-span-2">Event Type</div>
+<div class="col-span-4">Description</div>
+<div class="col-span-2">User ID</div>
+<div class="col-span-1 text-right">Action</div>
+</div>
+<div class="divide-y divide-border-default">
+<!-- Log Item 1 -->
+<div class="grid grid-cols-12 gap-4 px-4 py-4 items-center hover:bg-surface-container-low cursor-pointer transition-colors min-h-[64px]">
+<div class="col-span-3 font-caption-sm text-caption-sm text-text-primary">
+<div>Oct 24, 2023</div>
+<div class="text-text-secondary">14:32:01 UTC</div>
+</div>
+<div class="col-span-2">
+<span class="px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-DEFAULT font-caption-sm text-[11px] uppercase tracking-wider">Config Change</span>
+</div>
+<div class="col-span-4 font-body-md text-body-md text-text-primary truncate">
+                                Pump rate updated for Heparin protocol
+                            </div>
+<div class="col-span-2 font-caption-sm text-caption-sm text-text-secondary">
+                                RN-4920
+                            </div>
+<div class="col-span-1 flex justify-end">
+<span class="material-symbols-outlined text-text-secondary">chevron_right</span>
+</div>
+</div>
+<!-- Log Item 2 -->
+<div class="grid grid-cols-12 gap-4 px-4 py-4 items-center hover:bg-surface-container-low cursor-pointer transition-colors min-h-[64px]">
+<div class="col-span-3 font-caption-sm text-caption-sm text-text-primary">
+<div>Oct 24, 2023</div>
+<div class="text-text-secondary">13:15:44 UTC</div>
+</div>
+<div class="col-span-2">
+<span class="px-2 py-1 bg-red-50 text-severity-critical border border-red-200 rounded-DEFAULT font-caption-sm text-[11px] uppercase tracking-wider">Critical Alert</span>
+</div>
+<div class="col-span-4 font-body-md text-body-md text-text-primary truncate">
+                                Occlusion detected on line A
+                            </div>
+<div class="col-span-2 font-caption-sm text-caption-sm text-text-secondary">
+                                SYS-AUTO
+                            </div>
+<div class="col-span-1 flex justify-end">
+<span class="material-symbols-outlined text-text-secondary">chevron_right</span>
+</div>
+</div>
+<!-- Log Item 3 -->
+<div class="grid grid-cols-12 gap-4 px-4 py-4 items-center hover:bg-surface-container-low cursor-pointer transition-colors min-h-[64px]">
+<div class="col-span-3 font-caption-sm text-caption-sm text-text-primary">
+<div>Oct 24, 2023</div>
+<div class="text-text-secondary">11:02:19 UTC</div>
+</div>
+<div class="col-span-2">
+<span class="px-2 py-1 bg-green-50 text-severity-success border border-green-200 rounded-DEFAULT font-caption-sm text-[11px] uppercase tracking-wider">Auth Success</span>
+</div>
+<div class="col-span-4 font-body-md text-body-md text-text-primary truncate">
+                                User logged in successfully via SSO
+                            </div>
+<div class="col-span-2 font-caption-sm text-caption-sm text-text-secondary">
+                                DR-1102
+                            </div>
+<div class="col-span-1 flex justify-end">
+<span class="material-symbols-outlined text-text-secondary">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="px-4 py-3 bg-surface border-t border-border-default flex justify-between items-center">
+<span class="font-caption-sm text-caption-sm text-text-secondary">Showing 1-3 of 1,204 entries</span>
+<div class="flex space-x-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-border-default text-text-secondary disabled:opacity-50"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-border-default text-text-primary bg-surface-container-low">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-border-default text-text-secondary hover:bg-surface-container-low">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-border-default text-text-secondary hover:bg-surface-container-low">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-border-default text-text-secondary hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile, Hidden on md+) -->
+<nav class="md:hidden flex justify-around items-center h-16 pb-safe bg-white dark:bg-slate-900 text-[10px] font-bold tracking-wide uppercase fixed bottom-0 w-full z-50 border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-full h-full justify-center" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">analytics</span>
+            Status
+        </a>
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-full h-full justify-center" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">badge</span>
+            Users
+        </a>
+<a class="flex flex-col items-center text-purple-700 dark:text-purple-400 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-full h-full justify-center" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">list_alt</span>
+            Logs
+        </a>
+<a class="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-purple-500 scale-95 active:scale-90 transition-transform w-full h-full justify-center" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">construction</span>
+            Setup
+        </a>
+</nav>
+</body></html>
