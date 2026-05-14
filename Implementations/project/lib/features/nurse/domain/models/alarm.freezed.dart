@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Alarm {
 
-@JsonKey(name: 'alarm_id') String get id;@JsonKey(name: 'session_id') String get sessionId;@JsonKey(name: 'event_id') String? get definitionId; String get type; String get severity; DateTime get timestamp; bool get acknowledged;@JsonKey(name: 'acknowledged_by') String? get acknowledgedBy;@JsonKey(name: 'acknowledged_at') DateTime? get acknowledgedAt; bool get resolved;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt; String? get description;
+@JsonKey(name: 'event_id') String get id;@JsonKey(name: 'session_id') String get sessionId;@JsonKey(name: 'alarm_id') String? get definitionId; String get type; String get severity; DateTime get timestamp; bool get acknowledged;@JsonKey(name: 'acknowledged_by') String? get acknowledgedBy;@JsonKey(name: 'acknowledged_at') DateTime? get acknowledgedAt; bool get resolved;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt; String? get description;
 /// Create a copy of Alarm
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $AlarmCopyWith<$Res>  {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) _then) = _$AlarmCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'event_id') String? definitionId, String type, String severity, DateTime timestamp, bool acknowledged,@JsonKey(name: 'acknowledged_by') String? acknowledgedBy,@JsonKey(name: 'acknowledged_at') DateTime? acknowledgedAt, bool resolved,@JsonKey(name: 'resolved_at') DateTime? resolvedAt, String? description
+@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'alarm_id') String? definitionId, String type, String severity, DateTime timestamp, bool acknowledged,@JsonKey(name: 'acknowledged_by') String? acknowledgedBy,@JsonKey(name: 'acknowledged_at') DateTime? acknowledgedAt, bool resolved,@JsonKey(name: 'resolved_at') DateTime? resolvedAt, String? description
 });
 
 
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'event_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Alarm() when $default != null:
 return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.severity,_that.timestamp,_that.acknowledged,_that.acknowledgedBy,_that.acknowledgedAt,_that.resolved,_that.resolvedAt,_that.description);case _:
@@ -185,7 +185,7 @@ return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.sev
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'event_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)  $default,) {final _that = this;
 switch (_that) {
 case _Alarm():
 return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.severity,_that.timestamp,_that.acknowledged,_that.acknowledgedBy,_that.acknowledgedAt,_that.resolved,_that.resolvedAt,_that.description);case _:
@@ -205,7 +205,7 @@ return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.sev
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'event_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String? definitionId,  String type,  String severity,  DateTime timestamp,  bool acknowledged, @JsonKey(name: 'acknowledged_by')  String? acknowledgedBy, @JsonKey(name: 'acknowledged_at')  DateTime? acknowledgedAt,  bool resolved, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt,  String? description)?  $default,) {final _that = this;
 switch (_that) {
 case _Alarm() when $default != null:
 return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.severity,_that.timestamp,_that.acknowledged,_that.acknowledgedBy,_that.acknowledgedAt,_that.resolved,_that.resolvedAt,_that.description);case _:
@@ -220,12 +220,12 @@ return $default(_that.id,_that.sessionId,_that.definitionId,_that.type,_that.sev
 @JsonSerializable()
 
 class _Alarm extends Alarm {
-  const _Alarm({@JsonKey(name: 'alarm_id') required this.id, @JsonKey(name: 'session_id') required this.sessionId, @JsonKey(name: 'event_id') this.definitionId, required this.type, required this.severity, required this.timestamp, this.acknowledged = false, @JsonKey(name: 'acknowledged_by') this.acknowledgedBy, @JsonKey(name: 'acknowledged_at') this.acknowledgedAt, this.resolved = false, @JsonKey(name: 'resolved_at') this.resolvedAt, this.description}): super._();
+  const _Alarm({@JsonKey(name: 'event_id') required this.id, @JsonKey(name: 'session_id') required this.sessionId, @JsonKey(name: 'alarm_id') this.definitionId, required this.type, required this.severity, required this.timestamp, this.acknowledged = false, @JsonKey(name: 'acknowledged_by') this.acknowledgedBy, @JsonKey(name: 'acknowledged_at') this.acknowledgedAt, this.resolved = false, @JsonKey(name: 'resolved_at') this.resolvedAt, this.description}): super._();
   factory _Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
 
-@override@JsonKey(name: 'alarm_id') final  String id;
+@override@JsonKey(name: 'event_id') final  String id;
 @override@JsonKey(name: 'session_id') final  String sessionId;
-@override@JsonKey(name: 'event_id') final  String? definitionId;
+@override@JsonKey(name: 'alarm_id') final  String? definitionId;
 @override final  String type;
 @override final  String severity;
 @override final  DateTime timestamp;
@@ -269,7 +269,7 @@ abstract mixin class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
   factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) _then) = __$AlarmCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'event_id') String? definitionId, String type, String severity, DateTime timestamp, bool acknowledged,@JsonKey(name: 'acknowledged_by') String? acknowledgedBy,@JsonKey(name: 'acknowledged_at') DateTime? acknowledgedAt, bool resolved,@JsonKey(name: 'resolved_at') DateTime? resolvedAt, String? description
+@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'alarm_id') String? definitionId, String type, String severity, DateTime timestamp, bool acknowledged,@JsonKey(name: 'acknowledged_by') String? acknowledgedBy,@JsonKey(name: 'acknowledged_at') DateTime? acknowledgedAt, bool resolved,@JsonKey(name: 'resolved_at') DateTime? resolvedAt, String? description
 });
 
 

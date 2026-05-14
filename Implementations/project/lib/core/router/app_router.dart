@@ -15,7 +15,15 @@ import '../../features/doctor/presentation/doctor_shell.dart';
 import '../../features/doctor/presentation/drug_library/drug_library_screen.dart';
 import '../../features/doctor/presentation/drug_library/add_edit_drug_screen.dart';
 import '../../features/doctor/presentation/logs/doctor_logs_screen.dart';
+import '../../features/doctor/presentation/logs/doctor_system_logs_screen.dart';
 import '../../features/doctor/presentation/reports/doctor_reports_screen.dart';
+
+// Admin Screens
+import '../../features/admin/presentation/admin_shell.dart';
+import '../../features/admin/presentation/dashboard/admin_dashboard_screen.dart';
+import '../../features/admin/presentation/user_management/user_list_screen.dart';
+import '../../features/admin/presentation/user_management/user_editor_screen.dart';
+import '../../features/admin/presentation/logs/admin_logs_screen.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/domain/enums/role_type.dart';
@@ -34,11 +42,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (isLoggingIn) {
-        if (authState.role == RoleType.doctor || authState.role == RoleType.admin) {
-          return '/doctor';
-        }
+        if (authState.role == RoleType.admin) return '/admin';
+        if (authState.role == RoleType.doctor) return '/doctor';
         return '/nurse';
       }
+
+      // Role-based access control
+      final path = state.uri.path;
+      if (path.startsWith('/admin') && authState.role != RoleType.admin) return '/access-denied';
+      if (path.startsWith('/doctor') && authState.role != RoleType.doctor) return '/access-denied';
+      if (path.startsWith('/nurse') && authState.role != RoleType.nurse) return '/access-denied';
 
       return null;
     },
@@ -86,6 +99,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/doctor/logs',
             builder: (context, state) => const DoctorLogsScreen(),
+            routes: [
+              GoRoute(
+                path: 'system',
+                builder: (context, state) => const DoctorSystemLogsScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/doctor/reports',
@@ -101,6 +120,36 @@ final routerProvider = Provider<GoRouter>((ref) {
               final id = state.pathParameters['id']!;
               return AddEditDrugScreen(drugId: id);
             },
+          ),
+        ],
+      ),
+
+      // ADMIN SHELL
+      ShellRoute(
+        builder: (context, state, child) => AdminShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/admin',
+            builder: (context, state) => const AdminDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/admin/users',
+            builder: (context, state) => const UserListScreen(),
+          ),
+          GoRoute(
+            path: '/admin/users/add',
+            builder: (context, state) => const UserEditorScreen(),
+          ),
+          GoRoute(
+            path: '/admin/users/:id/edit',
+            builder: (context, state) {
+              final id = state.pathParameters['id']!;
+              return UserEditorScreen(userId: id);
+            },
+          ),
+          GoRoute(
+            path: '/admin/logs',
+            builder: (context, state) => const AdminLogsScreen(),
           ),
         ],
       ),

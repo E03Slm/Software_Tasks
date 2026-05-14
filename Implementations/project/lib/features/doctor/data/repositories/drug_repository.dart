@@ -14,7 +14,11 @@ class DrugRepository {
         .select()
         .order('name', ascending: true);
     
-    return (response as List).map((json) => Drug.fromJson(json)).toList();
+    final list = response as List;
+    return list
+        .where((json) => json['drug_id'] != null && json['name'] != null)
+        .map((json) => Drug.fromJson(json))
+        .toList();
   }
 
   Stream<List<Drug>> streamDrugs() {
@@ -22,7 +26,10 @@ class DrugRepository {
         .from('drug')
         .stream(primaryKey: ['drug_id'])
         .order('name', ascending: true)
-        .map((data) => data.map((json) => Drug.fromJson(json)).toList());
+        .map((data) => data
+            .where((json) => json['drug_id'] != null && json['name'] != null)
+            .map((json) => Drug.fromJson(json))
+            .toList());
   }
 
   Future<void> addDrug(Drug drug, String userId) async {

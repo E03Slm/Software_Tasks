@@ -8,7 +8,11 @@ class AlarmRepository {
   Future<List<AlarmDefinition>> fetchDefinitions() async {
     try {
       final response = await _client.from('alarms').select();
-      return (response as List).map((json) => AlarmDefinition.fromJson(json)).toList();
+      final list = response as List;
+      return list
+          .where((json) => json['alarm_id'] != null && json['alarm_name'] != null)
+          .map((json) => AlarmDefinition.fromJson(json))
+          .toList();
     } catch (e) {
       // Fallback if the 'alarms' master table hasn't been created yet
       print('Warning: alarms table not found, using direct alarm records.');
@@ -49,7 +53,10 @@ class AlarmRepository {
         .eq('session_id', sessionId)
         .order('timestamp', ascending: false);
     
-    return (response as List).map((json) {
+    final list = response as List;
+    return list
+        .where((json) => json['event_id'] != null)
+        .map((json) {
       final definition = json['definition'];
       return Alarm.fromJson({
         ...json,

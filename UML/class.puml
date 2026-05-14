@@ -9,6 +9,25 @@ abstract class User {
   -role: RoleType
   +login()
   +logout()
+    --
+  ' Doctor-specific functions
+  +manageDrugLibrary()
+  +setSafetyLimits()
+  +generateReports()
+  +viewAuditTrail()
+  +exportReports(format: String) 
+  ==
+  ' Nurse-specific functions
+  +selectDrug()
+  +programParameters()
+  +manageInfusion()
+  +acknowledgeAlarm()
+  +viewSessionAuditLogs() 
+  ==
+  ' Admin-specific functions
+  +manageUserAccounts()
+  +configureSystem()
+  +viewSystemHealth()
 }
 
 enum RoleType {
@@ -17,30 +36,6 @@ enum RoleType {
   ADMIN
 }
 
-class Doctor {
-  ' Clinical Governance (1.2, 2.1)
-  +manageDrugLibrary()
-  +setSafetyLimits()
-  +generateReports()
-  +viewAuditTrail()
-  +exportReports(format: String) 
-}
-
-class Nurse {
-  ' Pump Operator (1.2, 2.2)
-  +selectDrug()
-  +programParameters()
-  +manageInfusion()
-  +acknowledgeAlarm()
-  +viewSessionAuditLogs() 
-}
-
-class Admin {
-  ' Technical Operator (1.2, 45)
-  +manageUserAccounts()
-  +configureSystem()
-  +viewSystemHealth()
-}
 
 ' --- Drug Library & Safety (F-D-01, F-D-02, SF-D-01) ---
 class Drug {
@@ -51,14 +46,11 @@ class Drug {
   -hardLimitCeiling: float
   -softLimitThreshold: float
   -isArchived: boolean
-}
-
-class DrugLibrary {
-  -activeDrugs: List<Drug>
   +addDrug(Drug)
   +editDrug(Drug)
   +archiveDrug(Drug)
   +findDrugByName(String): Drug
+
 }
 
 ' --- Infusion & Simulation (F-N-04, F-N-06, SF-N-05) ---
@@ -70,20 +62,16 @@ class InfusionSession {
   -volumeRemaining: float
   -status: InfusionState
   -selectedDrug: Drug 
+  -batteryLevel: float
+  -isCharging: boolean
   +initializeFromDrug(Drug) 
   +start()
   +pause()
   +stop()
   +emergencyStop()
-  +switchToKVO()
-}
-
-class BatterySimulator {
-  ' Requirement SF-N-05
-  -batteryLevel: float
-  -isCharging: boolean
   +drain(duration: int)
   +checkStatus(): BatteryState
+  +switchToKVO()
 }
 
 ' --- Alarms & Safety Logic (F-N-07, SF-N-03) ---
@@ -99,12 +87,6 @@ class Alarm {
 class AuditLog {
   ' Immutable Audit Trail (S-D-02, F-D-05)
   -entries: List<AuditEntry>
-  +appendImmutable(AuditEntry)
-  +queryByDateRange()
-  +queryBySession(sessionId: UUID) 
-}
-
-class AuditEntry {
   -timestamp: DateTime
   -performingUser: UUID
   -actionType: String
@@ -112,35 +94,29 @@ class AuditEntry {
   -newValue: String
   -traceabilityID: UUID
   +addEntry()
-  +previewLastTen()
+  +previewActiveSession()
+  +queryByDateRange() 
 }
 
-' --- Relations based on SRS constraints ---
-User <|-- Doctor
-User <|-- Nurse
-User <|-- Admin
 
-' Doctor governs DrugLibrary (F-D-01)
-Doctor --> DrugLibrary : manages
-DrugLibrary "1" *-- "*" Drug
+' Doctor governs Drug (F-D-01)
+User --> Drug : manages
 
 ' Nurse operates InfusionSession (F-N-04)
-Nurse --> InfusionSession : operates
+User --> InfusionSession : operates
 
-Nurse --> AuditLog : views (Session only)
+User --> AuditLog : views (Session only)
 
-InfusionSession "1" *-- "1" BatterySimulator : monitors
 InfusionSession "1" o-- "*" Alarm : triggers
 
 InfusionSession --> Drug : "takes data from"
 
 ' Logging Relations (S-D-02, S-N-03)
-InfusionSession --> AuditEntry : records to
-AuditLog "1" *-- "*" AuditEntry
-Doctor --> AuditLog : views (Full access)
-Admin --> AuditLog : views (Full access)
+InfusionSession --> AuditLog : records to
+User --> AuditLog : views (infusion sessions access)
+User --> AuditLog : views (Full access)
 
 ' Admin manages Users (F-A-01)
-Admin --> User : manages
+User --> User : manages
 
 @enduml

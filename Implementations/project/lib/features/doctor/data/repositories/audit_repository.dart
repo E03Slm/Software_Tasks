@@ -14,7 +14,11 @@ class AuditRepository {
         .select('*, user:users(username)')
         .order('timestamp', ascending: false);
     
-    return (response as List).map((json) => AuditLog.fromJson(json)).toList();
+    final list = response as List;
+    return list
+        .where((json) => json['log_id'] != null && json['action'] != null)
+        .map((json) => AuditLog.fromJson(json))
+        .toList();
   }
 
   Future<List<AuditLog>> fetchLogsForEntity(String entityId) async {
@@ -24,7 +28,11 @@ class AuditRepository {
         .eq('entity_id', entityId)
         .order('timestamp', ascending: false);
     
-    return (response as List).map((json) => AuditLog.fromJson(json)).toList();
+    final list = response as List;
+    return list
+        .where((json) => json['log_id'] != null && json['action'] != null)
+        .map((json) => AuditLog.fromJson(json))
+        .toList();
   }
 
   String _getIpAddress() {
@@ -41,8 +49,7 @@ class AuditRepository {
     String? sessionId,
     String? performerId,
   }) async {
-    const systemUuid = '00000000-0000-0000-0000-000000000000';
-    final finalUserId = performerId ?? _client.auth.currentUser?.id ?? systemUuid;
+    final finalUserId = performerId ?? _client.auth.currentUser?.id;
     
     final ipAddress = _getIpAddress();
     final now = DateTime.now().toIso8601String();
@@ -56,7 +63,6 @@ class AuditRepository {
       'entity_id': entityId ?? logId, // Fallback to logId if entityId is null
       'old_value': oldValue != null ? jsonEncode(oldValue) : '{}',
       'new_value': newValue != null ? jsonEncode(newValue) : '{}',
-      'session_id': sessionId ?? systemUuid, // Avoid NULL in session_id
       'timestamp': now,
       'ip_address': ipAddress,
     });

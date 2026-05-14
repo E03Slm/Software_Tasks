@@ -14,7 +14,11 @@ class ReportRepository {
         .lte('start_time', end.toIso8601String())
         .order('start_time', ascending: false);
     
-    return (response as List).map((json) => InfusionSession.fromJson(json)).toList();
+    final list = response as List;
+    return list
+        .where((json) => json['session_id'] != null)
+        .map((json) => InfusionSession.fromJson(json))
+        .toList();
   }
 
   Future<List<Alarm>> fetchAlarmsInRange(DateTime start, DateTime end) async {
@@ -24,7 +28,10 @@ class ReportRepository {
         .gte('timestamp', start.toIso8601String())
         .lte('timestamp', end.toIso8601String());
     
-    return (response as List).map((json) {
+    final list = response as List;
+    return list
+        .where((json) => json['alarm_id'] != null)
+        .map((json) {
       final definition = json['definition'];
       return Alarm.fromJson({
         ...json,
@@ -43,6 +50,10 @@ class ReportRepository {
         .lte('timestamp', end.toIso8601String())
         .or('action.eq.RATE_CHANGED,action.ilike.%WiFi%'); // Titrations and Connectivity
     
-    return (response as List).map((json) => AuditLog.fromJson(json)).toList();
+    final list = response as List;
+    return list
+        .where((json) => json['log_id'] != null)
+        .map((json) => AuditLog.fromJson(json))
+        .toList();
   }
 }
