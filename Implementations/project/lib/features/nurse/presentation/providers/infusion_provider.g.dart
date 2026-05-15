@@ -41,7 +41,7 @@ final class AlarmNotifierProvider
   }
 }
 
-String _$alarmNotifierHash() => r'2471772623189e6c1d9af4881b7262dbc156da4c';
+String _$alarmNotifierHash() => r'fcdf0558ac20a2b1706571bee3cc3edb49901883';
 
 abstract class _$AlarmNotifier extends $Notifier<List<Alarm>> {
   List<Alarm> build();
@@ -145,7 +145,7 @@ final class InfusionNotifierProvider
   }
 }
 
-String _$infusionNotifierHash() => r'fdedd9a31589a73bdbb2ff9e076926fb2f2cce63';
+String _$infusionNotifierHash() => r'afa99f39830dcfa0f9100fb637bd3ecedbacd62a';
 
 abstract class _$InfusionNotifier extends $Notifier<InfusionSession> {
   InfusionSession build();

@@ -98,7 +98,7 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
         await ref.read(drugRepositoryProvider).addDrug(drug, userId);
       }
 
-      ref.read(drugListProvider.notifier).refresh();
+      ref.invalidate(drugListProvider);
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) {
@@ -113,7 +113,8 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final doctorColors = Theme.of(context).extension<DoctorColors>()!;
+    final doctorColors = Theme.of(context).extension<DoctorColors>() ?? 
+                         doctorTheme.extension<DoctorColors>()!;
 
     return Scaffold(
       appBar: AppBar(

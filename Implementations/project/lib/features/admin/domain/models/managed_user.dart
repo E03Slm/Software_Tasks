@@ -9,12 +9,15 @@ abstract class ManagedUser with _$ManagedUser {
   const ManagedUser._();
 
   const factory ManagedUser({
-    required String id,
+    @JsonKey(name: 'user_id') required String id,
+    @JsonKey(name: 'national_id') String? nationalId,
+    @JsonKey(name: 'Fname') String? fname,
+    @JsonKey(name: 'Mname') String? mname,
+    @JsonKey(name: 'Lname') String? lname,
     @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required RoleType role,
     @JsonKey(name: 'Is_Deleted') @Default(false) bool isDeleted,
-    @Default(true) bool isActive,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ManagedUser;
 
   factory ManagedUser.fromJson(Map<String, dynamic> json) => _$ManagedUserFromJson(json);

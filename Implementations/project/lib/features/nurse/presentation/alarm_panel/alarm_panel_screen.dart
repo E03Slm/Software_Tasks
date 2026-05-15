@@ -35,38 +35,38 @@ class AlarmPanelScreen extends ConsumerWidget {
                   final alarm = alarms[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    color: _getSeverityColor(alarm.severity, nurseColors).withValues(alpha: 0.1),
+                    color: _getSeverityColor(alarm.definition?.severity ?? 'low', nurseColors).withValues(alpha: 0.1),
                     child: ListTile(
                       leading: Icon(
                         Icons.warning_amber_rounded,
-                        color: _getSeverityColor(alarm.severity, nurseColors),
+                        color: _getSeverityColor(alarm.definition?.severity ?? 'low', nurseColors),
                       ),
-                      title: Text(alarm.type.replaceAll('_', ' ')),
-                      subtitle: Text('Time: ${DateFormat('HH:mm:ss').format(alarm.timestamp)}\n${alarm.description ?? 'System-generated alert'}'),
+                      title: Text(alarm.definition?.name.replaceAll('_', ' ') ?? 'ALARM'),
+                      subtitle: Text('Time: ${DateFormat('HH:mm:ss').format(alarm.alarmTime)}\n${alarm.definition?.description ?? 'System-generated alert'}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (!alarm.acknowledged && 
-                              alarm.severity.toLowerCase() != 'high' && 
-                              alarm.severity.toLowerCase() != 'critical')
+                          if (!alarm.ackRes && 
+                              (alarm.definition?.severity.toLowerCase() ?? 'low') != 'high' && 
+                              (alarm.definition?.severity.toLowerCase() ?? 'low') != 'critical')
                             ElevatedButton(
                               onPressed: () async {
                                 await ref.read(alarmProvider.notifier).acknowledge(alarm.id);
                                 ref.invalidate(alarmHistoryProvider);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _getSeverityColor(alarm.severity, nurseColors),
+                                backgroundColor: _getSeverityColor(alarm.definition?.severity ?? 'low', nurseColors),
                                 foregroundColor: Colors.white,
                               ),
                               child: const Text('ACKNOWLEDGE'),
                             )
-                          else if (alarm.acknowledged)
+                          else if (alarm.ackRes)
                             const Icon(Icons.check_circle, color: Colors.green),
                           
                           const SizedBox(width: 8),
                           
-                          if ((alarm.severity.toLowerCase() == 'high' || alarm.severity.toLowerCase() == 'critical'))
-                            if (!alarm.resolved)
+                          if (((alarm.definition?.severity.toLowerCase() ?? 'low') == 'high' || (alarm.definition?.severity.toLowerCase() ?? 'low') == 'critical'))
+                            if (!alarm.ackRes)
                               ElevatedButton(
                                 onPressed: () async {
                                   await ref.read(alarmProvider.notifier).resolve(alarm.id);

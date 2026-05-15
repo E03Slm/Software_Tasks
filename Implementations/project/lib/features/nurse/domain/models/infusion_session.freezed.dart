@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InfusionSession {
 
-@JsonKey(name: 'session_id') String get id;@JsonKey(name: 'user_id') String? get userId;@JsonKey(name: 'patient_id') String? get patientId;@JsonKey(name: 'drug_id') String? get drugId;@JsonKey(name: 'drug') Drug? get drug;@JsonKey(name: 'rate') double get infusionRate;@JsonKey(name: 'total_volume') double get totalVolume;@JsonKey(name: 'volume_infused') double get volumeInfused;@JsonKey(name: 'status') String get status;@JsonKey(name: 'start_time') DateTime? get startTime;@JsonKey(name: 'end_time') DateTime? get endTime;@JsonKey(name: 'bolus_enabled') bool get bolusEnabled;@JsonKey(name: 'kvo_enabled') bool get kvoEnabled;@JsonKey(name: 'kvo_rate') double? get kvoRate;@JsonKey(name: 'patient_weight') double get patientWeight;@JsonKey(name: 'target_dose') double? get targetDose;@JsonKey(name: 'dose_unit') String get doseUnit;@JsonKey(name: 'battery_level') int? get batteryLevel;@JsonKey(name: 'clinician') Map<String, dynamic>? get clinicianData;
+@JsonKey(name: 'session_id') String get id;@JsonKey(name: 'user_id') String? get userId;@JsonKey(name: 'Patient_id') String? get patientId;@JsonKey(name: 'drug_id') String? get drugId;@JsonKey(name: 'drug') Drug? get drug;@JsonKey(name: 'rate') double get infusionRate;@JsonKey(name: 'total_volume') double get totalVolume;@JsonKey(name: 'volume_infused') double get volumeInfused;@JsonKey(name: 'status') String get status;@JsonKey(name: 'start_time') DateTime? get startTime;@JsonKey(name: 'end_time') DateTime? get endTime;@JsonKey(name: 'bolus_enabled') bool get bolusEnabled;@JsonKey(name: 'kvo_enabled') bool get kvoEnabled;@JsonKey(name: 'kvo_rate') double? get kvoRate;@JsonKey(name: 'patient_weight') double get patientWeight;@JsonKey(name: 'target_dose') double? get targetDose;@JsonKey(name: 'dose_unit') String get doseUnit;@JsonKey(name: 'battery_level') int? get batteryLevel;
 /// Create a copy of InfusionSession
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $InfusionSessionCopyWith<InfusionSession> get copyWith => _$InfusionSessionCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InfusionSession&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.patientId, patientId) || other.patientId == patientId)&&(identical(other.drugId, drugId) || other.drugId == drugId)&&(identical(other.drug, drug) || other.drug == drug)&&(identical(other.infusionRate, infusionRate) || other.infusionRate == infusionRate)&&(identical(other.totalVolume, totalVolume) || other.totalVolume == totalVolume)&&(identical(other.volumeInfused, volumeInfused) || other.volumeInfused == volumeInfused)&&(identical(other.status, status) || other.status == status)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.bolusEnabled, bolusEnabled) || other.bolusEnabled == bolusEnabled)&&(identical(other.kvoEnabled, kvoEnabled) || other.kvoEnabled == kvoEnabled)&&(identical(other.kvoRate, kvoRate) || other.kvoRate == kvoRate)&&(identical(other.patientWeight, patientWeight) || other.patientWeight == patientWeight)&&(identical(other.targetDose, targetDose) || other.targetDose == targetDose)&&(identical(other.doseUnit, doseUnit) || other.doseUnit == doseUnit)&&(identical(other.batteryLevel, batteryLevel) || other.batteryLevel == batteryLevel)&&const DeepCollectionEquality().equals(other.clinicianData, clinicianData));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InfusionSession&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.patientId, patientId) || other.patientId == patientId)&&(identical(other.drugId, drugId) || other.drugId == drugId)&&(identical(other.drug, drug) || other.drug == drug)&&(identical(other.infusionRate, infusionRate) || other.infusionRate == infusionRate)&&(identical(other.totalVolume, totalVolume) || other.totalVolume == totalVolume)&&(identical(other.volumeInfused, volumeInfused) || other.volumeInfused == volumeInfused)&&(identical(other.status, status) || other.status == status)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.bolusEnabled, bolusEnabled) || other.bolusEnabled == bolusEnabled)&&(identical(other.kvoEnabled, kvoEnabled) || other.kvoEnabled == kvoEnabled)&&(identical(other.kvoRate, kvoRate) || other.kvoRate == kvoRate)&&(identical(other.patientWeight, patientWeight) || other.patientWeight == patientWeight)&&(identical(other.targetDose, targetDose) || other.targetDose == targetDose)&&(identical(other.doseUnit, doseUnit) || other.doseUnit == doseUnit)&&(identical(other.batteryLevel, batteryLevel) || other.batteryLevel == batteryLevel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,userId,patientId,drugId,drug,infusionRate,totalVolume,volumeInfused,status,startTime,endTime,bolusEnabled,kvoEnabled,kvoRate,patientWeight,targetDose,doseUnit,batteryLevel,const DeepCollectionEquality().hash(clinicianData)]);
+int get hashCode => Object.hash(runtimeType,id,userId,patientId,drugId,drug,infusionRate,totalVolume,volumeInfused,status,startTime,endTime,bolusEnabled,kvoEnabled,kvoRate,patientWeight,targetDose,doseUnit,batteryLevel);
 
 @override
 String toString() {
-  return 'InfusionSession(id: $id, userId: $userId, patientId: $patientId, drugId: $drugId, drug: $drug, infusionRate: $infusionRate, totalVolume: $totalVolume, volumeInfused: $volumeInfused, status: $status, startTime: $startTime, endTime: $endTime, bolusEnabled: $bolusEnabled, kvoEnabled: $kvoEnabled, kvoRate: $kvoRate, patientWeight: $patientWeight, targetDose: $targetDose, doseUnit: $doseUnit, batteryLevel: $batteryLevel, clinicianData: $clinicianData)';
+  return 'InfusionSession(id: $id, userId: $userId, patientId: $patientId, drugId: $drugId, drug: $drug, infusionRate: $infusionRate, totalVolume: $totalVolume, volumeInfused: $volumeInfused, status: $status, startTime: $startTime, endTime: $endTime, bolusEnabled: $bolusEnabled, kvoEnabled: $kvoEnabled, kvoRate: $kvoRate, patientWeight: $patientWeight, targetDose: $targetDose, doseUnit: $doseUnit, batteryLevel: $batteryLevel)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $InfusionSessionCopyWith<$Res>  {
   factory $InfusionSessionCopyWith(InfusionSession value, $Res Function(InfusionSession) _then) = _$InfusionSessionCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'session_id') String id,@JsonKey(name: 'user_id') String? userId,@JsonKey(name: 'patient_id') String? patientId,@JsonKey(name: 'drug_id') String? drugId,@JsonKey(name: 'drug') Drug? drug,@JsonKey(name: 'rate') double infusionRate,@JsonKey(name: 'total_volume') double totalVolume,@JsonKey(name: 'volume_infused') double volumeInfused,@JsonKey(name: 'status') String status,@JsonKey(name: 'start_time') DateTime? startTime,@JsonKey(name: 'end_time') DateTime? endTime,@JsonKey(name: 'bolus_enabled') bool bolusEnabled,@JsonKey(name: 'kvo_enabled') bool kvoEnabled,@JsonKey(name: 'kvo_rate') double? kvoRate,@JsonKey(name: 'patient_weight') double patientWeight,@JsonKey(name: 'target_dose') double? targetDose,@JsonKey(name: 'dose_unit') String doseUnit,@JsonKey(name: 'battery_level') int? batteryLevel,@JsonKey(name: 'clinician') Map<String, dynamic>? clinicianData
+@JsonKey(name: 'session_id') String id,@JsonKey(name: 'user_id') String? userId,@JsonKey(name: 'Patient_id') String? patientId,@JsonKey(name: 'drug_id') String? drugId,@JsonKey(name: 'drug') Drug? drug,@JsonKey(name: 'rate') double infusionRate,@JsonKey(name: 'total_volume') double totalVolume,@JsonKey(name: 'volume_infused') double volumeInfused,@JsonKey(name: 'status') String status,@JsonKey(name: 'start_time') DateTime? startTime,@JsonKey(name: 'end_time') DateTime? endTime,@JsonKey(name: 'bolus_enabled') bool bolusEnabled,@JsonKey(name: 'kvo_enabled') bool kvoEnabled,@JsonKey(name: 'kvo_rate') double? kvoRate,@JsonKey(name: 'patient_weight') double patientWeight,@JsonKey(name: 'target_dose') double? targetDose,@JsonKey(name: 'dose_unit') String doseUnit,@JsonKey(name: 'battery_level') int? batteryLevel
 });
 
 
@@ -65,7 +65,7 @@ class _$InfusionSessionCopyWithImpl<$Res>
 
 /// Create a copy of InfusionSession
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = freezed,Object? patientId = freezed,Object? drugId = freezed,Object? drug = freezed,Object? infusionRate = null,Object? totalVolume = null,Object? volumeInfused = null,Object? status = null,Object? startTime = freezed,Object? endTime = freezed,Object? bolusEnabled = null,Object? kvoEnabled = null,Object? kvoRate = freezed,Object? patientWeight = null,Object? targetDose = freezed,Object? doseUnit = null,Object? batteryLevel = freezed,Object? clinicianData = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = freezed,Object? patientId = freezed,Object? drugId = freezed,Object? drug = freezed,Object? infusionRate = null,Object? totalVolume = null,Object? volumeInfused = null,Object? status = null,Object? startTime = freezed,Object? endTime = freezed,Object? bolusEnabled = null,Object? kvoEnabled = null,Object? kvoRate = freezed,Object? patientWeight = null,Object? targetDose = freezed,Object? doseUnit = null,Object? batteryLevel = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -85,8 +85,7 @@ as double?,patientWeight: null == patientWeight ? _self.patientWeight : patientW
 as double,targetDose: freezed == targetDose ? _self.targetDose : targetDose // ignore: cast_nullable_to_non_nullable
 as double?,doseUnit: null == doseUnit ? _self.doseUnit : doseUnit // ignore: cast_nullable_to_non_nullable
 as String,batteryLevel: freezed == batteryLevel ? _self.batteryLevel : batteryLevel // ignore: cast_nullable_to_non_nullable
-as int?,clinicianData: freezed == clinicianData ? _self.clinicianData : clinicianData // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,
+as int?,
   ));
 }
 /// Create a copy of InfusionSession
@@ -183,10 +182,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel, @JsonKey(name: 'clinician')  Map<String, dynamic>? clinicianData)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'Patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InfusionSession() when $default != null:
-return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel,_that.clinicianData);case _:
+return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel);case _:
   return orElse();
 
 }
@@ -204,10 +203,10 @@ return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel, @JsonKey(name: 'clinician')  Map<String, dynamic>? clinicianData)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'Patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel)  $default,) {final _that = this;
 switch (_that) {
 case _InfusionSession():
-return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel,_that.clinicianData);case _:
+return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -224,10 +223,10 @@ return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel, @JsonKey(name: 'clinician')  Map<String, dynamic>? clinicianData)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'session_id')  String id, @JsonKey(name: 'user_id')  String? userId, @JsonKey(name: 'Patient_id')  String? patientId, @JsonKey(name: 'drug_id')  String? drugId, @JsonKey(name: 'drug')  Drug? drug, @JsonKey(name: 'rate')  double infusionRate, @JsonKey(name: 'total_volume')  double totalVolume, @JsonKey(name: 'volume_infused')  double volumeInfused, @JsonKey(name: 'status')  String status, @JsonKey(name: 'start_time')  DateTime? startTime, @JsonKey(name: 'end_time')  DateTime? endTime, @JsonKey(name: 'bolus_enabled')  bool bolusEnabled, @JsonKey(name: 'kvo_enabled')  bool kvoEnabled, @JsonKey(name: 'kvo_rate')  double? kvoRate, @JsonKey(name: 'patient_weight')  double patientWeight, @JsonKey(name: 'target_dose')  double? targetDose, @JsonKey(name: 'dose_unit')  String doseUnit, @JsonKey(name: 'battery_level')  int? batteryLevel)?  $default,) {final _that = this;
 switch (_that) {
 case _InfusionSession() when $default != null:
-return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel,_that.clinicianData);case _:
+return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_that.infusionRate,_that.totalVolume,_that.volumeInfused,_that.status,_that.startTime,_that.endTime,_that.bolusEnabled,_that.kvoEnabled,_that.kvoRate,_that.patientWeight,_that.targetDose,_that.doseUnit,_that.batteryLevel);case _:
   return null;
 
 }
@@ -239,12 +238,12 @@ return $default(_that.id,_that.userId,_that.patientId,_that.drugId,_that.drug,_t
 @JsonSerializable()
 
 class _InfusionSession extends InfusionSession {
-  const _InfusionSession({@JsonKey(name: 'session_id') required this.id, @JsonKey(name: 'user_id') this.userId, @JsonKey(name: 'patient_id') this.patientId, @JsonKey(name: 'drug_id') this.drugId, @JsonKey(name: 'drug') this.drug, @JsonKey(name: 'rate') required this.infusionRate, @JsonKey(name: 'total_volume') required this.totalVolume, @JsonKey(name: 'volume_infused') this.volumeInfused = 0.0, @JsonKey(name: 'status') this.status = 'Idle', @JsonKey(name: 'start_time') this.startTime, @JsonKey(name: 'end_time') this.endTime, @JsonKey(name: 'bolus_enabled') this.bolusEnabled = false, @JsonKey(name: 'kvo_enabled') this.kvoEnabled = false, @JsonKey(name: 'kvo_rate') this.kvoRate, @JsonKey(name: 'patient_weight') this.patientWeight = 70.0, @JsonKey(name: 'target_dose') this.targetDose, @JsonKey(name: 'dose_unit') this.doseUnit = 'mcg/kg/min', @JsonKey(name: 'battery_level') this.batteryLevel = 100, @JsonKey(name: 'clinician') final  Map<String, dynamic>? clinicianData}): _clinicianData = clinicianData,super._();
+  const _InfusionSession({@JsonKey(name: 'session_id') required this.id, @JsonKey(name: 'user_id') this.userId, @JsonKey(name: 'Patient_id') this.patientId, @JsonKey(name: 'drug_id') this.drugId, @JsonKey(name: 'drug') this.drug, @JsonKey(name: 'rate') required this.infusionRate, @JsonKey(name: 'total_volume') required this.totalVolume, @JsonKey(name: 'volume_infused') this.volumeInfused = 0.0, @JsonKey(name: 'status') this.status = 'Idle', @JsonKey(name: 'start_time') this.startTime, @JsonKey(name: 'end_time') this.endTime, @JsonKey(name: 'bolus_enabled') this.bolusEnabled = false, @JsonKey(name: 'kvo_enabled') this.kvoEnabled = false, @JsonKey(name: 'kvo_rate') this.kvoRate, @JsonKey(name: 'patient_weight') this.patientWeight = 70.0, @JsonKey(name: 'target_dose') this.targetDose, @JsonKey(name: 'dose_unit') this.doseUnit = 'mcg/kg/min', @JsonKey(name: 'battery_level') this.batteryLevel = 100}): super._();
   factory _InfusionSession.fromJson(Map<String, dynamic> json) => _$InfusionSessionFromJson(json);
 
 @override@JsonKey(name: 'session_id') final  String id;
 @override@JsonKey(name: 'user_id') final  String? userId;
-@override@JsonKey(name: 'patient_id') final  String? patientId;
+@override@JsonKey(name: 'Patient_id') final  String? patientId;
 @override@JsonKey(name: 'drug_id') final  String? drugId;
 @override@JsonKey(name: 'drug') final  Drug? drug;
 @override@JsonKey(name: 'rate') final  double infusionRate;
@@ -260,15 +259,6 @@ class _InfusionSession extends InfusionSession {
 @override@JsonKey(name: 'target_dose') final  double? targetDose;
 @override@JsonKey(name: 'dose_unit') final  String doseUnit;
 @override@JsonKey(name: 'battery_level') final  int? batteryLevel;
- final  Map<String, dynamic>? _clinicianData;
-@override@JsonKey(name: 'clinician') Map<String, dynamic>? get clinicianData {
-  final value = _clinicianData;
-  if (value == null) return null;
-  if (_clinicianData is EqualUnmodifiableMapView) return _clinicianData;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(value);
-}
-
 
 /// Create a copy of InfusionSession
 /// with the given fields replaced by the non-null parameter values.
@@ -283,16 +273,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InfusionSession&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.patientId, patientId) || other.patientId == patientId)&&(identical(other.drugId, drugId) || other.drugId == drugId)&&(identical(other.drug, drug) || other.drug == drug)&&(identical(other.infusionRate, infusionRate) || other.infusionRate == infusionRate)&&(identical(other.totalVolume, totalVolume) || other.totalVolume == totalVolume)&&(identical(other.volumeInfused, volumeInfused) || other.volumeInfused == volumeInfused)&&(identical(other.status, status) || other.status == status)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.bolusEnabled, bolusEnabled) || other.bolusEnabled == bolusEnabled)&&(identical(other.kvoEnabled, kvoEnabled) || other.kvoEnabled == kvoEnabled)&&(identical(other.kvoRate, kvoRate) || other.kvoRate == kvoRate)&&(identical(other.patientWeight, patientWeight) || other.patientWeight == patientWeight)&&(identical(other.targetDose, targetDose) || other.targetDose == targetDose)&&(identical(other.doseUnit, doseUnit) || other.doseUnit == doseUnit)&&(identical(other.batteryLevel, batteryLevel) || other.batteryLevel == batteryLevel)&&const DeepCollectionEquality().equals(other._clinicianData, _clinicianData));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InfusionSession&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.patientId, patientId) || other.patientId == patientId)&&(identical(other.drugId, drugId) || other.drugId == drugId)&&(identical(other.drug, drug) || other.drug == drug)&&(identical(other.infusionRate, infusionRate) || other.infusionRate == infusionRate)&&(identical(other.totalVolume, totalVolume) || other.totalVolume == totalVolume)&&(identical(other.volumeInfused, volumeInfused) || other.volumeInfused == volumeInfused)&&(identical(other.status, status) || other.status == status)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.bolusEnabled, bolusEnabled) || other.bolusEnabled == bolusEnabled)&&(identical(other.kvoEnabled, kvoEnabled) || other.kvoEnabled == kvoEnabled)&&(identical(other.kvoRate, kvoRate) || other.kvoRate == kvoRate)&&(identical(other.patientWeight, patientWeight) || other.patientWeight == patientWeight)&&(identical(other.targetDose, targetDose) || other.targetDose == targetDose)&&(identical(other.doseUnit, doseUnit) || other.doseUnit == doseUnit)&&(identical(other.batteryLevel, batteryLevel) || other.batteryLevel == batteryLevel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,userId,patientId,drugId,drug,infusionRate,totalVolume,volumeInfused,status,startTime,endTime,bolusEnabled,kvoEnabled,kvoRate,patientWeight,targetDose,doseUnit,batteryLevel,const DeepCollectionEquality().hash(_clinicianData)]);
+int get hashCode => Object.hash(runtimeType,id,userId,patientId,drugId,drug,infusionRate,totalVolume,volumeInfused,status,startTime,endTime,bolusEnabled,kvoEnabled,kvoRate,patientWeight,targetDose,doseUnit,batteryLevel);
 
 @override
 String toString() {
-  return 'InfusionSession(id: $id, userId: $userId, patientId: $patientId, drugId: $drugId, drug: $drug, infusionRate: $infusionRate, totalVolume: $totalVolume, volumeInfused: $volumeInfused, status: $status, startTime: $startTime, endTime: $endTime, bolusEnabled: $bolusEnabled, kvoEnabled: $kvoEnabled, kvoRate: $kvoRate, patientWeight: $patientWeight, targetDose: $targetDose, doseUnit: $doseUnit, batteryLevel: $batteryLevel, clinicianData: $clinicianData)';
+  return 'InfusionSession(id: $id, userId: $userId, patientId: $patientId, drugId: $drugId, drug: $drug, infusionRate: $infusionRate, totalVolume: $totalVolume, volumeInfused: $volumeInfused, status: $status, startTime: $startTime, endTime: $endTime, bolusEnabled: $bolusEnabled, kvoEnabled: $kvoEnabled, kvoRate: $kvoRate, patientWeight: $patientWeight, targetDose: $targetDose, doseUnit: $doseUnit, batteryLevel: $batteryLevel)';
 }
 
 
@@ -303,7 +293,7 @@ abstract mixin class _$InfusionSessionCopyWith<$Res> implements $InfusionSession
   factory _$InfusionSessionCopyWith(_InfusionSession value, $Res Function(_InfusionSession) _then) = __$InfusionSessionCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'session_id') String id,@JsonKey(name: 'user_id') String? userId,@JsonKey(name: 'patient_id') String? patientId,@JsonKey(name: 'drug_id') String? drugId,@JsonKey(name: 'drug') Drug? drug,@JsonKey(name: 'rate') double infusionRate,@JsonKey(name: 'total_volume') double totalVolume,@JsonKey(name: 'volume_infused') double volumeInfused,@JsonKey(name: 'status') String status,@JsonKey(name: 'start_time') DateTime? startTime,@JsonKey(name: 'end_time') DateTime? endTime,@JsonKey(name: 'bolus_enabled') bool bolusEnabled,@JsonKey(name: 'kvo_enabled') bool kvoEnabled,@JsonKey(name: 'kvo_rate') double? kvoRate,@JsonKey(name: 'patient_weight') double patientWeight,@JsonKey(name: 'target_dose') double? targetDose,@JsonKey(name: 'dose_unit') String doseUnit,@JsonKey(name: 'battery_level') int? batteryLevel,@JsonKey(name: 'clinician') Map<String, dynamic>? clinicianData
+@JsonKey(name: 'session_id') String id,@JsonKey(name: 'user_id') String? userId,@JsonKey(name: 'Patient_id') String? patientId,@JsonKey(name: 'drug_id') String? drugId,@JsonKey(name: 'drug') Drug? drug,@JsonKey(name: 'rate') double infusionRate,@JsonKey(name: 'total_volume') double totalVolume,@JsonKey(name: 'volume_infused') double volumeInfused,@JsonKey(name: 'status') String status,@JsonKey(name: 'start_time') DateTime? startTime,@JsonKey(name: 'end_time') DateTime? endTime,@JsonKey(name: 'bolus_enabled') bool bolusEnabled,@JsonKey(name: 'kvo_enabled') bool kvoEnabled,@JsonKey(name: 'kvo_rate') double? kvoRate,@JsonKey(name: 'patient_weight') double patientWeight,@JsonKey(name: 'target_dose') double? targetDose,@JsonKey(name: 'dose_unit') String doseUnit,@JsonKey(name: 'battery_level') int? batteryLevel
 });
 
 
@@ -320,7 +310,7 @@ class __$InfusionSessionCopyWithImpl<$Res>
 
 /// Create a copy of InfusionSession
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = freezed,Object? patientId = freezed,Object? drugId = freezed,Object? drug = freezed,Object? infusionRate = null,Object? totalVolume = null,Object? volumeInfused = null,Object? status = null,Object? startTime = freezed,Object? endTime = freezed,Object? bolusEnabled = null,Object? kvoEnabled = null,Object? kvoRate = freezed,Object? patientWeight = null,Object? targetDose = freezed,Object? doseUnit = null,Object? batteryLevel = freezed,Object? clinicianData = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = freezed,Object? patientId = freezed,Object? drugId = freezed,Object? drug = freezed,Object? infusionRate = null,Object? totalVolume = null,Object? volumeInfused = null,Object? status = null,Object? startTime = freezed,Object? endTime = freezed,Object? bolusEnabled = null,Object? kvoEnabled = null,Object? kvoRate = freezed,Object? patientWeight = null,Object? targetDose = freezed,Object? doseUnit = null,Object? batteryLevel = freezed,}) {
   return _then(_InfusionSession(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -340,8 +330,7 @@ as double?,patientWeight: null == patientWeight ? _self.patientWeight : patientW
 as double,targetDose: freezed == targetDose ? _self.targetDose : targetDose // ignore: cast_nullable_to_non_nullable
 as double?,doseUnit: null == doseUnit ? _self.doseUnit : doseUnit // ignore: cast_nullable_to_non_nullable
 as String,batteryLevel: freezed == batteryLevel ? _self.batteryLevel : batteryLevel // ignore: cast_nullable_to_non_nullable
-as int?,clinicianData: freezed == clinicianData ? _self._clinicianData : clinicianData // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,
+as int?,
   ));
 }
 

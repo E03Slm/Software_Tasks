@@ -41,10 +41,10 @@ class AlarmActivationPanel extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final def = definitions[index];
                   return _AlarmTriggerRow(
-                    label: '${def.type} (${def.severity})',
+                    label: '${def.name} (${def.severity})',
                     color: _getColorForSeverity(def.severity),
                     onTap: () => notifier.triggerAlarm(
-                      _mapType(def.type), 
+                      _mapType(def.name), 
                       _mapSeverity(def.severity),
                       definition: def,
                     ),

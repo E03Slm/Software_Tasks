@@ -9,7 +9,7 @@ class ReportRepository {
   Future<List<InfusionSession>> fetchSessionsInRange(DateTime start, DateTime end) async {
     final response = await _client
         .from('infusion_session')
-        .select('*, drug:drug(*), clinician:users(user_id)') // Join with drug and users
+        .select('*, drug:drug(*)') 
         .gte('start_time', start.toIso8601String())
         .lte('start_time', end.toIso8601String())
         .order('start_time', ascending: false);
@@ -48,5 +48,16 @@ class ReportRepository {
         .where((json) => json['log_id'] != null)
         .map((json) => AuditLog.fromJson(json))
         .toList();
+  }
+  Future<List<AuditLog>> fetchDrugManagementLogs(DateTime start, DateTime end) async {
+    final response = await _client
+        .from('audit_log')
+        .select('*, user:users!audit_log_user_id_fkey("Fname", "Mname", "Lname")')
+        .gte('timestamp', start.toIso8601String())
+        .lte('timestamp', end.toIso8601String())
+        .or('action.eq.CREATE_DRUG,action.eq.UPDATE_DRUG,action.eq.DELETE_DRUG');
+    
+    final list = response as List;
+    return list.map((json) => AuditLog.fromJson(json)).toList();
   }
 }

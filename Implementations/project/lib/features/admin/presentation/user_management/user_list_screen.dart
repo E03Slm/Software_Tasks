@@ -52,9 +52,11 @@ class UserListScreen extends ConsumerWidget {
                             backgroundColor: _getRoleColor(user.role).withOpacity(0.1),
                             child: Icon(_getRoleIcon(user.role), color: _getRoleColor(user.role)),
                           ),
-                          title: Text('ID: ${user.id.length > 10 ? user.id.substring(0, 10) : user.id}...', 
+                          title: Text('${user.fname ?? ''} ${user.lname ?? ''}'.trim().isNotEmpty 
+                                     ? '${user.fname} ${user.lname}' 
+                                     : 'ID: ${user.id.length > 8 ? user.id.substring(0, 8) : user.id}', 
                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                          subtitle: Text('Role: ${user.role.toString().split('.').last.toUpperCase()}'),
+                          subtitle: Text('Role: ${user.role.toString().split('.').last.toUpperCase()} • ${user.nationalId ?? "No National ID"}'),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -119,9 +121,9 @@ class UserListScreen extends ConsumerWidget {
             child: const Text('CANCEL'),
           ),
           TextButton(
-            onPressed: () {
-              ref.read(adminUserListProvider.notifier).deleteUser(user.id);
-              Navigator.pop(context);
+            onPressed: () async {
+              await ref.read(adminRepositoryProvider).deleteUser(user.id);
+              if (context.mounted) Navigator.pop(context);
             },
             child: const Text('DELETE', style: TextStyle(color: Colors.red)),
           ),

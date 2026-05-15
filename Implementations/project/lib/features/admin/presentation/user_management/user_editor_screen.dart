@@ -17,6 +17,9 @@ class UserEditorScreen extends ConsumerStatefulWidget {
 class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nationalIdController;
+  late TextEditingController _fnameController;
+  late TextEditingController _mnameController;
+  late TextEditingController _lnameController;
   late TextEditingController _passwordController;
   RoleType _selectedRole = RoleType.nurse;
   bool _isEditing = false;
@@ -26,6 +29,9 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
     super.initState();
     _isEditing = widget.userId != null;
     _nationalIdController = TextEditingController();
+    _fnameController = TextEditingController();
+    _mnameController = TextEditingController();
+    _lnameController = TextEditingController();
     _passwordController = TextEditingController();
 
     if (_isEditing) {
@@ -35,7 +41,10 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
         final user = users?.firstWhere((u) => u.id == widget.userId);
         if (user != null) {
           setState(() {
-            _nationalIdController.text = user.id;
+            _nationalIdController.text = user.nationalId ?? '';
+            _fnameController.text = user.fname ?? '';
+            _mnameController.text = user.mname ?? '';
+            _lnameController.text = user.lname ?? '';
             _selectedRole = user.role;
           });
         }
@@ -46,6 +55,9 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   @override
   void dispose() {
     _nationalIdController.dispose();
+    _fnameController.dispose();
+    _mnameController.dispose();
+    _lnameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -70,7 +82,36 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
                   prefixIcon: Icon(Icons.badge),
                   border: OutlineInputBorder(),
                 ),
-                enabled: !_isEditing, // National ID (user_id) shouldn't change after creation
+                enabled: !_isEditing,
+                validator: (value) => (value == null || value.isEmpty) ? 'Required' : null,
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _fnameController,
+                decoration: const InputDecoration(
+                  labelText: 'First Name',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => (value == null || value.isEmpty) ? 'Required' : null,
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _mnameController,
+                decoration: const InputDecoration(
+                  labelText: 'Middle Name',
+                  prefixIcon: Icon(Icons.person_outline),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _lnameController,
+                decoration: const InputDecoration(
+                  labelText: 'Last Name',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) => (value == null || value.isEmpty) ? 'Required' : null,
               ),
               const SizedBox(height: 24),
@@ -126,15 +167,19 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final user = ManagedUser(
-      id: _nationalIdController.text,
+      id: widget.userId ?? '',
+      nationalId: _nationalIdController.text,
+      fname: _fnameController.text,
+      mname: _mnameController.text,
+      lname: _lnameController.text,
       role: _selectedRole,
     );
 
     try {
       if (_isEditing) {
-        await ref.read(adminUserListProvider.notifier).updateUser(user);
+        await ref.read(adminRepositoryProvider).updateUser(user);
       } else {
-        await ref.read(adminUserListProvider.notifier).addUser(user, _passwordController.text);
+        await ref.read(adminRepositoryProvider).createUser(user, _passwordController.text);
       }
       if (mounted) context.pop();
     } catch (e) {

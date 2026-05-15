@@ -12,7 +12,8 @@ class DrugLibraryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final drugListAsync = ref.watch(filteredDrugsProvider);
-    final doctorColors = Theme.of(context).extension<DoctorColors>()!;
+    final doctorColors = Theme.of(context).extension<DoctorColors>() ?? 
+                         doctorTheme.extension<DoctorColors>()!;
 
     return Scaffold(
       body: drugListAsync.when(
@@ -29,7 +30,7 @@ class DrugLibraryScreen extends ConsumerWidget {
                     icon: const Icon(Icons.refresh),
                     onPressed: () {
                       ref.read(drugSearchProvider.notifier).setQuery('');
-                      ref.read(drugListProvider.notifier).refresh();
+                      ref.invalidate(drugListProvider);
                     },
                   ),
                 ),

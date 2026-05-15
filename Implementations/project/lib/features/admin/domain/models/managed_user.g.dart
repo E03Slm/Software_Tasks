@@ -7,24 +7,30 @@ part of 'managed_user.dart';
 // **************************************************************************
 
 _ManagedUser _$ManagedUserFromJson(Map<String, dynamic> json) => _ManagedUser(
-  id: json['id'] as String,
+  id: json['user_id'] as String,
+  nationalId: json['national_id'] as String?,
+  fname: json['Fname'] as String?,
+  mname: json['Mname'] as String?,
+  lname: json['Lname'] as String?,
   role: _roleFromJson(json['role'] as String),
   isDeleted: json['Is_Deleted'] as bool? ?? false,
-  isActive: json['isActive'] as bool? ?? true,
-  createdAt: json['createdAt'] == null
+  createdAt: json['created_at'] == null
       ? null
-      : DateTime.parse(json['createdAt'] as String),
-  updatedAt: json['updatedAt'] == null
+      : DateTime.parse(json['created_at'] as String),
+  updatedAt: json['updated_at'] == null
       ? null
-      : DateTime.parse(json['updatedAt'] as String),
+      : DateTime.parse(json['updated_at'] as String),
 );
 
 Map<String, dynamic> _$ManagedUserToJson(_ManagedUser instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'user_id': instance.id,
+      'national_id': instance.nationalId,
+      'Fname': instance.fname,
+      'Mname': instance.mname,
+      'Lname': instance.lname,
       'role': _roleToJson(instance.role),
       'Is_Deleted': instance.isDeleted,
-      'isActive': instance.isActive,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };

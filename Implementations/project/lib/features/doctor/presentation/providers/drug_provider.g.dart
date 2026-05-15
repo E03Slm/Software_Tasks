@@ -50,12 +50,18 @@ final class DrugRepositoryProvider
 
 String _$drugRepositoryHash() => r'61abb625d633c1b2b6309cef2bf91da15356b436';
 
-@ProviderFor(DrugListNotifier)
-final drugListProvider = DrugListNotifierProvider._();
+@ProviderFor(drugList)
+final drugListProvider = DrugListProvider._();
 
-final class DrugListNotifierProvider
-    extends $AsyncNotifierProvider<DrugListNotifier, List<Drug>> {
-  DrugListNotifierProvider._()
+final class DrugListProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Drug>>,
+          List<Drug>,
+          Stream<List<Drug>>
+        >
+    with $FutureModifier<List<Drug>>, $StreamProvider<List<Drug>> {
+  DrugListProvider._()
     : super(
         from: null,
         argument: null,
@@ -67,32 +73,20 @@ final class DrugListNotifierProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$drugListNotifierHash();
+  String debugGetCreateSourceHash() => _$drugListHash();
 
   @$internal
   @override
-  DrugListNotifier create() => DrugListNotifier();
-}
+  $StreamProviderElement<List<Drug>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
-String _$drugListNotifierHash() => r'56f06e00d1b46da9481c9f0c3fce41c906b1c902';
-
-abstract class _$DrugListNotifier extends $AsyncNotifier<List<Drug>> {
-  FutureOr<List<Drug>> build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<Drug>>, List<Drug>>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<Drug>>, List<Drug>>,
-              AsyncValue<List<Drug>>,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
+  Stream<List<Drug>> create(Ref ref) {
+    return drugList(ref);
   }
 }
+
+String _$drugListHash() => r'33fa91abe4e98c6ecfe10bcd7e17d4eeb251d5f0';
 
 @ProviderFor(DrugSearch)
 final drugSearchProvider = DrugSearchProvider._();

@@ -69,6 +69,11 @@ class DrugRepository {
         .single();
 
     final json = drug.toJson();
+    // Prevent overwriting fixed metadata with null or original values
+    json.remove('created_at');
+    json.remove('created_by');
+    json.remove('drug_id');
+
     // Inject update audit fields from the provided active user ID
     json['updated_by'] = userId;
     json['updated_at'] = now.toIso8601String();

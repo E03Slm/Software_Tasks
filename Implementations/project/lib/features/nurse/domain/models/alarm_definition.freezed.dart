@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AlarmDefinition {
 
-@JsonKey(name: 'alarm_id') String get id;@JsonKey(name: 'alarm_name') String get type; String get severity; String get description;
+@JsonKey(name: 'alarm_id') String get id;@JsonKey(name: 'alarm_name') String get name; String get severity; String get description;
 /// Create a copy of AlarmDefinition
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AlarmDefinitionCopyWith<AlarmDefinition> get copyWith => _$AlarmDefinitionCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlarmDefinition&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlarmDefinition&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,severity,description);
+int get hashCode => Object.hash(runtimeType,id,name,severity,description);
 
 @override
 String toString() {
-  return 'AlarmDefinition(id: $id, type: $type, severity: $severity, description: $description)';
+  return 'AlarmDefinition(id: $id, name: $name, severity: $severity, description: $description)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AlarmDefinitionCopyWith<$Res>  {
   factory $AlarmDefinitionCopyWith(AlarmDefinition value, $Res Function(AlarmDefinition) _then) = _$AlarmDefinitionCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'alarm_name') String type, String severity, String description
+@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'alarm_name') String name, String severity, String description
 });
 
 
@@ -65,10 +65,10 @@ class _$AlarmDefinitionCopyWithImpl<$Res>
 
 /// Create a copy of AlarmDefinition
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? severity = null,Object? description = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? severity = null,Object? description = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,
@@ -156,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String type,  String severity,  String description)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String name,  String severity,  String description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AlarmDefinition() when $default != null:
-return $default(_that.id,_that.type,_that.severity,_that.description);case _:
+return $default(_that.id,_that.name,_that.severity,_that.description);case _:
   return orElse();
 
 }
@@ -177,10 +177,10 @@ return $default(_that.id,_that.type,_that.severity,_that.description);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String type,  String severity,  String description)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String name,  String severity,  String description)  $default,) {final _that = this;
 switch (_that) {
 case _AlarmDefinition():
-return $default(_that.id,_that.type,_that.severity,_that.description);case _:
+return $default(_that.id,_that.name,_that.severity,_that.description);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +197,10 @@ return $default(_that.id,_that.type,_that.severity,_that.description);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String type,  String severity,  String description)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'alarm_id')  String id, @JsonKey(name: 'alarm_name')  String name,  String severity,  String description)?  $default,) {final _that = this;
 switch (_that) {
 case _AlarmDefinition() when $default != null:
-return $default(_that.id,_that.type,_that.severity,_that.description);case _:
+return $default(_that.id,_that.name,_that.severity,_that.description);case _:
   return null;
 
 }
@@ -212,11 +212,11 @@ return $default(_that.id,_that.type,_that.severity,_that.description);case _:
 @JsonSerializable()
 
 class _AlarmDefinition implements AlarmDefinition {
-  const _AlarmDefinition({@JsonKey(name: 'alarm_id') required this.id, @JsonKey(name: 'alarm_name') required this.type, required this.severity, required this.description});
+  const _AlarmDefinition({@JsonKey(name: 'alarm_id') required this.id, @JsonKey(name: 'alarm_name') required this.name, required this.severity, required this.description});
   factory _AlarmDefinition.fromJson(Map<String, dynamic> json) => _$AlarmDefinitionFromJson(json);
 
 @override@JsonKey(name: 'alarm_id') final  String id;
-@override@JsonKey(name: 'alarm_name') final  String type;
+@override@JsonKey(name: 'alarm_name') final  String name;
 @override final  String severity;
 @override final  String description;
 
@@ -233,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlarmDefinition&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlarmDefinition&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,severity,description);
+int get hashCode => Object.hash(runtimeType,id,name,severity,description);
 
 @override
 String toString() {
-  return 'AlarmDefinition(id: $id, type: $type, severity: $severity, description: $description)';
+  return 'AlarmDefinition(id: $id, name: $name, severity: $severity, description: $description)';
 }
 
 
@@ -253,7 +253,7 @@ abstract mixin class _$AlarmDefinitionCopyWith<$Res> implements $AlarmDefinition
   factory _$AlarmDefinitionCopyWith(_AlarmDefinition value, $Res Function(_AlarmDefinition) _then) = __$AlarmDefinitionCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'alarm_name') String type, String severity, String description
+@JsonKey(name: 'alarm_id') String id,@JsonKey(name: 'alarm_name') String name, String severity, String description
 });
 
 
@@ -270,10 +270,10 @@ class __$AlarmDefinitionCopyWithImpl<$Res>
 
 /// Create a copy of AlarmDefinition
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? severity = null,Object? description = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? severity = null,Object? description = null,}) {
   return _then(_AlarmDefinition(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,

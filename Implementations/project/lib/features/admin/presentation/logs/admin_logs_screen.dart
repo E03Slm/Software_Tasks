@@ -68,7 +68,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                               Text('User: ${log.userName ?? log.userId}', 
                                 style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                               Text('Entity ID: ${log.entityId}', style: const TextStyle(fontSize: 12)),
-                              if (log.ipAddress != null) Text('IP Address: ${log.ipAddress}', style: const TextStyle(fontSize: 12)),
+
                               const SizedBox(height: 12),
                               if (log.oldValue != '{}') ...[
                                 const Text('OLD DATA:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),

@@ -31,17 +31,33 @@ class SupabaseAdminRepository implements AdminRepository {
   }
 
   @override
+  Stream<List<ManagedUser>> streamUsers() {
+    return _client
+        .from('users')
+        .stream(primaryKey: ['user_id'])
+        .eq('Is_Deleted', false)
+        .map((data) => data.map((json) {
+              final d = Map<String, dynamic>.from(json);
+              d['id'] = d['user_id'];
+              return ManagedUser.fromJson(d);
+            }).toList());
+  }
+
+  @override
   Future<void> createUser(ManagedUser user, String password) async {
-    final String plainNationalId = user.id; 
     final String userId = const Uuid().v4();
     
-    // Hash both National ID and Password using Bcrypt
-    final nationalIdHash = BCrypt.hashpw(plainNationalId, BCrypt.gensalt());
+    // Hash both National ID and Password using Bcrypt if they are intended to be secure
+    // Note: DESIGN.md says 'national_id' is text, but AuthRepository expects a hash.
+    final nationalIdHash = user.nationalId != null ? BCrypt.hashpw(user.nationalId!, BCrypt.gensalt()) : null;
     final passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
     
     final userData = {
       'user_id': userId,
       'national_id': nationalIdHash,
+      'Fname': user.fname,
+      'Mname': user.mname,
+      'Lname': user.lname,
       'password_hash': passwordHash,
       'role': user.role.name.toUpperCase(),
       'created_at': DateTime.now().toIso8601String(),
@@ -54,7 +70,11 @@ class SupabaseAdminRepository implements AdminRepository {
       actionType: 'CREATE_USER',
       entityType: 'USER',
       entityId: userId,
-      newValue: {'role': user.role.name},
+      newValue: {
+        'role': user.role.name,
+        'Fname': user.fname,
+        'Lname': user.lname,
+      },
     );
   }
 
@@ -62,7 +82,9 @@ class SupabaseAdminRepository implements AdminRepository {
   Future<void> updateUser(ManagedUser user) async {
     final updateData = {
       'role': user.role.name.toUpperCase(),
-      'is_active': user.isActive,
+      'Fname': user.fname,
+      'Mname': user.mname,
+      'Lname': user.lname,
     };
 
     await _client

@@ -51,11 +51,19 @@ final class AdminRepositoryProvider
 
 String _$adminRepositoryHash() => r'a2ece64091677da3a5ac7fdee8fa4defa150a051';
 
-@ProviderFor(AdminUserList)
+@ProviderFor(adminUserList)
 final adminUserListProvider = AdminUserListProvider._();
 
 final class AdminUserListProvider
-    extends $AsyncNotifierProvider<AdminUserList, List<ManagedUser>> {
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ManagedUser>>,
+          List<ManagedUser>,
+          Stream<List<ManagedUser>>
+        >
+    with
+        $FutureModifier<List<ManagedUser>>,
+        $StreamProvider<List<ManagedUser>> {
   AdminUserListProvider._()
     : super(
         from: null,
@@ -72,29 +80,17 @@ final class AdminUserListProvider
 
   @$internal
   @override
-  AdminUserList create() => AdminUserList();
-}
+  $StreamProviderElement<List<ManagedUser>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
 
-String _$adminUserListHash() => r'cf32f160d9d3a267679d97964cb833e2123295ac';
-
-abstract class _$AdminUserList extends $AsyncNotifier<List<ManagedUser>> {
-  FutureOr<List<ManagedUser>> build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final ref =
-        this.ref as $Ref<AsyncValue<List<ManagedUser>>, List<ManagedUser>>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<ManagedUser>>, List<ManagedUser>>,
-              AsyncValue<List<ManagedUser>>,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
+  Stream<List<ManagedUser>> create(Ref ref) {
+    return adminUserList(ref);
   }
 }
+
+String _$adminUserListHash() => r'9714b11c92fb923557ea65bf354a0afabcc9657d';
 
 @ProviderFor(adminAuditLogs)
 final adminAuditLogsProvider = AdminAuditLogsProvider._();

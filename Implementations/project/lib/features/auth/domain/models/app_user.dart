@@ -10,9 +10,14 @@ abstract class AppUser with _$AppUser {
 
   const factory AppUser({
     @JsonKey(name: 'user_id') required String id,
+    @JsonKey(name: 'national_id') String? nationalId,
+    @JsonKey(name: 'Fname') String? fname,
+    @JsonKey(name: 'Mname') String? mname,
+    @JsonKey(name: 'Lname') String? lname,
     @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required RoleType role,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'last_login') DateTime? lastLogin,
+    @JsonKey(name: 'Is_Deleted') @Default(false) bool isDeleted,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);

@@ -11,6 +11,7 @@ class ReportGenerator {
     required List<InfusionSession> sessions,
     required List<Alarm> alarms,
     required List<AuditLog> technicalLogs,
+    required List<AuditLog> drugManagementLogs,
     required DateTimeRange range,
     bool isDetailed = true,
   }) async {
@@ -40,19 +41,24 @@ class ReportGenerator {
           _buildMedicationCompliance(sessions, technicalLogs),
           pw.SizedBox(height: 20),
 
-          // 3. Safety & Alarm Analytics
-          _sectionTitle('3. SAFETY & ALARM ANALYTICS'),
+          // 3. Drug Library Management (NEW)
+          _sectionTitle('3. DRUG LIBRARY INVENTORY CHANGES'),
+          _buildDrugManagementSection(drugManagementLogs, dateFormat),
+          pw.SizedBox(height: 20),
+
+          // 4. Safety & Alarm Analytics
+          _sectionTitle('4. SAFETY & ALARM ANALYTICS'),
           _buildSafetyAnalytics(alarms, sessions),
           pw.SizedBox(height: 20),
 
-          // 4. Technical & System Status
-          _sectionTitle('4. TECHNICAL & SYSTEM STATUS'),
+          // 5. Technical & System Status
+          _sectionTitle('5. TECHNICAL & SYSTEM STATUS'),
           _buildTechnicalStatus(technicalLogs, sessions),
           
           if (isDetailed) ...[
             pw.SizedBox(height: 20),
-            // 5. Detailed Session Logs
-            _sectionTitle('5. DETAILED SESSION LOGS'),
+            // 6. Detailed Session Logs
+            _sectionTitle('6. DETAILED SESSION LOGS'),
             _buildSessionTable(sessions, dateFormat),
           ],
         ],
@@ -150,8 +156,8 @@ class ReportGenerator {
   }
 
   pw.Widget _buildSafetyAnalytics(List<Alarm> alarms, List<InfusionSession> sessions) {
-    final occlusions = alarms.where((a) => a.type.toLowerCase().contains('occlusion')).length;
-    final airInLine = alarms.where((a) => a.type.toLowerCase().contains('air')).length;
+    final occlusions = alarms.where((a) => (a.definition?.name.toLowerCase() ?? '').contains('occlusion')).length;
+    final airInLine = alarms.where((a) => (a.definition?.name.toLowerCase() ?? '').contains('air')).length;
     final criticalBattery = sessions.where((s) => (s.batteryLevel ?? 100) < 10).length;
 
     return pw.Row(
@@ -203,10 +209,29 @@ class ReportGenerator {
       data: sessions.map((s) => [
         s.startTime != null ? dateFormat.format(s.startTime!) : 'N/A',
         s.endTime != null ? dateFormat.format(s.endTime!) : 'Active',
-        (s.status ?? 'Idle').toUpperCase(),
-        '${s.infusionRate?.toStringAsFixed(1)}',
-        '${s.volumeInfused?.toStringAsFixed(1)}',
-        s.clinicianName ?? s.userId?.substring(0, 8) ?? 'N/A',
+        (s.status).toUpperCase(),
+        '${s.infusionRate.toStringAsFixed(1)}',
+        '${s.volumeInfused.toStringAsFixed(1)}',
+        s.userId?.substring(0, 8) ?? 'N/A',
+      ]).toList(),
+    );
+  }
+
+  pw.Widget _buildDrugManagementSection(List<AuditLog> logs, DateFormat dateFormat) {
+    if (logs.isEmpty) {
+      return pw.Text('No changes made to the drug library during this period.', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey));
+    }
+
+    return pw.TableHelper.fromTextArray(
+      headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9, color: PdfColors.white),
+      headerDecoration: const pw.BoxDecoration(color: PdfColors.blueGrey700),
+      cellStyle: const pw.TextStyle(fontSize: 8),
+      headers: ['Date/Time', 'Action', 'Drug Name', 'Performer'],
+      data: logs.map((log) => [
+        dateFormat.format(log.timestamp),
+        log.action.replaceAll('_', ' '),
+        log.entityName ?? 'N/A',
+        log.fullName,
       ]).toList(),
     );
   }
@@ -224,9 +249,9 @@ class ReportGenerator {
   }
 
   String _calculateAvgResponse(List<Alarm> alarms) {
-    final acked = alarms.where((a) => a.acknowledged && a.acknowledgedAt != null).toList();
+    final acked = alarms.where((a) => a.ackRes && a.ackResAt != null).toList();
     if (acked.isEmpty) return 'N/A';
-    final totalSeconds = acked.fold(0, (sum, a) => sum + a.acknowledgedAt!.difference(a.timestamp).inSeconds);
+    final totalSeconds = acked.fold(0.0, (sum, a) => sum + a.ackResAt!.difference(a.alarmTime).inSeconds);
     final avg = totalSeconds / acked.length;
     return '${(avg / 60).toStringAsFixed(1)} min';
   }

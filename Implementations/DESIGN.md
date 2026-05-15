@@ -22,7 +22,6 @@ An educational mobile simulator replicating a real infusion pump. Three strictly
 | Routing | GoRouter 14.x |
 | Backend | Supabase (Auth, Database, Realtime, Storage) |
 | Database | PostgreSQL (via Supabase) |
-| Local DB | Drift (SQLite) — offline simulation engine |
 | PDF Export | pdf package + printing |
 | Encryption | flutter_secure_storage + AES-256 (at rest) |
 | Realtime | Supabase Realtime (pump state broadcast) |
@@ -32,306 +31,110 @@ An educational mobile simulator replicating a real infusion pump. Three strictly
 
 ## 3. Folder Structure
 
-```
 lib/
 ├── main.dart
-├── app.dart                        # MaterialApp + ProviderScope
-│
+├── app.dart                    # MaterialApp + ProviderScope + GoRouter
+
 ├── core/
-│   ├── router/
-│   │   ├── app_router.dart         # GoRouter root — role-based routing
-│   │   └── route_guards.dart       # Auth + RBAC guards
-│   ├── theme/
-│   │   ├── app_theme.dart          # ThemeData for all 3 role themes
-│   │   ├── doctor_theme.dart       # Green-teal palette
-│   │   ├── nurse_theme.dart        # Blue palette
-│   │   └── admin_theme.dart        # Purple-grey palette
-│   ├── constants/
-│   │   └── app_constants.dart      # Timeouts, limits, magic numbers
-│   ├── error/
-│   │   ├── app_exception.dart      # Sealed class for all errors
-│   │   └── failure.dart
-│   └── utils/
-│       ├── validators.dart
-│       └── formatters.dart
-│
+│   ├── router.dart             # GoRouter + auth/RBAC guards
+│   ├── theme.dart              # ThemeData for all 3 roles
+│   ├── constants.dart
+│   └── utils.dart              # validators + formatters + errors/failures
+
 ├── features/
 │   ├── auth/
-│   │   ├── data/
-│   │   │   ├── auth_repository.dart
-│   │   │   └── supabase_auth_datasource.dart
-│   │   ├── domain/
-│   │   │   ├── models/
-│   │   │   │   └── app_user.dart           # freezed
-│   │   │   └── enums/
-│   │   │       └── role_type.dart          # DOCTOR | NURSE | ADMIN
-│   │   └── presentation/
-│   │       ├── login_screen.dart
-│   │       └── providers/
-│   │           └── auth_provider.dart
-│   │
-│   ├── doctor/
-│   │   ├── data/
-│   │   │   ├── drug_repository.dart
-│   │   │   ├── report_repository.dart
-│   │   │   └── supabase_drug_datasource.dart
-│   │   ├── domain/
-│   │   │   ├── models/
-│   │   │   │   ├── drug.dart               # freezed
-│   │   │   │   └── report.dart             # freezed
-│   │   │   └── use_cases/
-│   │   │       ├── add_drug_usecase.dart
-│   │   │       ├── edit_drug_usecase.dart
-│   │   │       ├── delete_drug_usecase.dart
-│   │   │       └── generate_report_usecase.dart
-│   │   └── presentation/
-│   │       ├── doctor_shell.dart           # Bottom nav scaffold
-│   │       ├── dashboard/
-│   │       │   └── doctor_dashboard_screen.dart
-│   │       ├── drug_library/
-│   │       │   ├── drug_library_screen.dart
-│   │       │   └── drug_editor_screen.dart
-│   │       ├── logs/
-│   │       │   └── logs_viewer_screen.dart
-│   │       ├── reports/
-│   │       │   └── reports_screen.dart
-│   │       └── providers/
-│   │           ├── drug_provider.dart
-│   │           └── report_provider.dart
-│   │
-│   ├── nurse/
-│   │   ├── data/
-│   │   │   ├── infusion_repository.dart
-│   │   │   └── alarm_repository.dart
-│   │   ├── domain/
-│   │   │   ├── models/
-│   │   │   │   ├── infusion_session.dart   # freezed
-│   │   │   │   ├── alarm.dart              # freezed
-│   │   │   │   └── infusion_parameters.dart # freezed
-│   │   │   ├── enums/
-│   │   │   │   ├── infusion_state.dart     # Idle|Programming|Running|Paused|...
-│   │   │   │   ├── alarm_type.dart
-│   │   │   │   └── severity_level.dart
-│   │   │   └── use_cases/
-│   │   │       ├── start_infusion_usecase.dart
-│   │   │       ├── pause_infusion_usecase.dart
-│   │   │       ├── stop_infusion_usecase.dart
-│   │   │       ├── emergency_stop_usecase.dart
-│   │   │       ├── validate_parameters_usecase.dart
-│   │   │       └── acknowledge_alarm_usecase.dart
-│   │   ├── simulation/
-│   │   │   ├── infusion_state_machine.dart  # Core FSM logic
-│   │   │   ├── battery_simulator.dart
-│   │   │   ├── limit_validator.dart
-│   │   │   └── kvo_handler.dart
-│   │   └── presentation/
-│   │       ├── nurse_shell.dart            # 3-tab bottom nav + Emergency FAB
-│   │       ├── dashboard/
-│   │       │   └── pump_dashboard_screen.dart
-│   │       ├── drug_selection/
-│   │       │   └── drug_selection_screen.dart
-│   │       ├── parameter_entry/
-│   │       │   └── parameter_entry_screen.dart
-│   │       ├── alarm_panel/
-│   │       │   └── alarm_panel_screen.dart
-│   │       ├── session_log/
-│   │       │   └── session_log_screen.dart
-│   │       └── providers/
-│   │           ├── infusion_provider.dart
-│   │           ├── alarm_provider.dart
-│   │           └── battery_provider.dart
-│   │
-│   └── admin/
-│       ├── data/
-│       │   ├── user_repository.dart
-│       │   └── system_health_repository.dart
-│       ├── domain/
-│       │   ├── models/
-│       │   │   └── managed_user.dart       # freezed
-│       │   └── use_cases/
-│       │       ├── create_user_usecase.dart
-│       │       ├── deactivate_user_usecase.dart
-│       │       └── delete_user_usecase.dart
-│       └── presentation/
-│           ├── admin_shell.dart            # Drawer navigation
-│           ├── dashboard/
-│           │   └── admin_dashboard_screen.dart
-│           ├── user_management/
-│           │   ├── user_list_screen.dart
-│           │   └── user_editor_screen.dart
-│           ├── logs/
-│           │   └── admin_logs_screen.dart
-│           └── providers/
-│               ├── user_provider.dart
-│               └── system_health_provider.dart
-│
-└── shared/
-    ├── widgets/
-    │   ├── role_badge.dart             # Coloured chip always visible in AppBar
-    │   ├── confirmation_dialog.dart    # Destructive action dialogs
-    │   ├── session_timeout_banner.dart # 60s countdown banner
-    │   └── access_denied_screen.dart
-    └── providers/
-        └── session_provider.dart      # Session timeout logic
-```
+│   │   ├── auth_repository.dart    # datasource مدمج + AppUser model + RoleType enum
+│   │   └── auth_screen.dart        # LoginScreen + AuthProvider
 
+│   ├── doctor/
+│   │   ├── doctor_repository.dart  # Drug + Report repos + models + use cases
+│   │   ├── doctor_providers.dart   # DrugProvider + ReportProvider
+│   │   ├── doctor_shell.dart       # Bottom nav scaffold
+│   │   └── doctor_screens.dart     # Dashboard + DrugLibrary + DrugEditor + Logs + Reports
+
+│   ├── nurse/
+│   │   ├── nurse_repository.dart   # Infusion + Alarm repos + models + enums
+│   │   ├── simulation.dart         # FSM + BatterySimulator + LimitValidator + KvoHandler
+│   │   ├── nurse_providers.dart    # InfusionProvider + AlarmProvider + BatteryProvider
+│   │   ├── nurse_shell.dart        # 3-tab bottom nav + Emergency FAB
+│   │   └── nurse_screens.dart      # Dashboard + DrugSelection + ParameterEntry + Alarm + SessionLog
+
+│   └── admin/
+│       ├── admin_repository.dart   # User + SystemHealth repos + ManagedUser model + use cases
+│       ├── admin_providers.dart    # UserProvider + SystemHealthProvider
+│       ├── admin_shell.dart        # Drawer navigation
+│       └── admin_screens.dart      # Dashboard + UserList + UserEditor + Logs
+
+└── shared/
+    ├── shared_widgets.dart         # RoleBadge + ConfirmationDialog + TimeoutBanner + AccessDenied
+    └── session_provider.dart
 ---
 
 ## 4. Database Schema (Supabase / PostgreSQL)
 
-```sql
--- ENUMS
-CREATE TYPE role_type AS ENUM ('DOCTOR', 'NURSE', 'ADMIN');
-CREATE TYPE infusion_state AS ENUM (
-  'IDLE', 'PROGRAMMING', 'RUNNING', 'PAUSED',
-  'ALARM', 'KVO', 'COMPLETE', 'EMERGENCY_STOP',
-  'BATTERY_LOW', 'CRITICAL_BATTERY'
-);
-CREATE TYPE alarm_severity AS ENUM ('INFO', 'WARNING', 'CRITICAL');
-CREATE TYPE alarm_type AS ENUM (
-  'OCCLUSION', 'AIR_IN_LINE', 'EMPTY_RESERVOIR',
-  'BATTERY_LOW', 'BATTERY_CRITICAL', 'HARD_LIMIT_EXCEEDED',
-  'SOFT_LIMIT_WARNING', 'MANUAL_TRAINING', 'EMERGENCY_STOP'
-);
 
--- USERS (extends Supabase auth.users)
-CREATE TABLE public.profiles (
-  id              UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  username        TEXT UNIQUE NOT NULL,
-  role            role_type NOT NULL,
-  is_active       BOOLEAN DEFAULT TRUE,
-  created_at      TIMESTAMPTZ DEFAULT NOW(),
-  updated_at      TIMESTAMPTZ DEFAULT NOW()
-);
 
--- DRUGS
-CREATE TABLE public.drugs (
-  id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name                  TEXT NOT NULL,
-  concentration         NUMERIC(10,4) NOT NULL CHECK (concentration > 0),
-  concentration_unit    TEXT NOT NULL DEFAULT 'mg/mL',
-  default_rate          NUMERIC(10,4) NOT NULL CHECK (default_rate > 0),
-  hard_limit_ceiling    NUMERIC(10,4) NOT NULL CHECK (hard_limit_ceiling > 0),
-  soft_limit_threshold  NUMERIC(10,4) NOT NULL CHECK (soft_limit_threshold > 0),
-  is_archived           BOOLEAN DEFAULT FALSE,
-  kvo_enabled           BOOLEAN DEFAULT FALSE,
-  kvo_rate              NUMERIC(10,4),
-  created_by            UUID REFERENCES public.profiles(id),
-  created_at            TIMESTAMPTZ DEFAULT NOW(),
-  updated_at            TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT soft_below_hard CHECK (soft_limit_threshold < hard_limit_ceiling)
-);
-
--- INFUSION SESSIONS
-CREATE TABLE public.infusion_sessions (
-  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  nurse_id          UUID NOT NULL REFERENCES public.profiles(id),
-  drug_id           UUID NOT NULL REFERENCES public.drugs(id),
-  concentration     NUMERIC(10,4) NOT NULL,
-  infusion_rate     NUMERIC(10,4) NOT NULL,
-  total_volume      NUMERIC(10,4) NOT NULL,
-  bolus_dose        NUMERIC(10,4),
-  volume_infused    NUMERIC(10,4) DEFAULT 0,
-  volume_remaining  NUMERIC(10,4),
-  current_state     infusion_state DEFAULT 'IDLE',
-  battery_level     NUMERIC(5,2) DEFAULT 100,
-  started_at        TIMESTAMPTZ,
-  completed_at      TIMESTAMPTZ,
-  created_at        TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ALARMS
-CREATE TABLE public.alarms (
-  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id      UUID NOT NULL REFERENCES public.infusion_sessions(id),
-  alarm_type      alarm_type NOT NULL,
-  severity        alarm_severity NOT NULL,
-  is_acknowledged BOOLEAN DEFAULT FALSE,
-  acknowledged_by UUID REFERENCES public.profiles(id),
-  acknowledged_at TIMESTAMPTZ,
-  triggered_at    TIMESTAMPTZ DEFAULT NOW()
-);
-
--- AUDIT LOG (IMMUTABLE — no UPDATE/DELETE via RLS)
-CREATE TABLE public.audit_logs (
-  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  performing_user   UUID NOT NULL REFERENCES public.profiles(id),
-  action_type       TEXT NOT NULL,
-  entity_type       TEXT NOT NULL,   -- 'DRUG' | 'USER' | 'SESSION' | 'ALARM' | 'CONFIG'
-  entity_id         UUID,
-  old_value         JSONB,
-  new_value         JSONB,
-  traceability_id   UUID DEFAULT gen_random_uuid(),
-  session_id        UUID REFERENCES public.infusion_sessions(id),
-  created_at        TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Prevent modification of audit logs
-CREATE RULE no_update_audit AS ON UPDATE TO public.audit_logs DO INSTEAD NOTHING;
-CREATE RULE no_delete_audit AS ON DELETE TO public.audit_logs DO INSTEAD NOTHING;
-
--- SYSTEM CONFIG
-CREATE TABLE public.system_config (
-  key         TEXT PRIMARY KEY,
-  value       TEXT NOT NULL,
-  updated_by  UUID REFERENCES public.profiles(id),
-  updated_at  TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### Row Level Security (RLS)
-
-```sql
--- Enable RLS on all tables
-ALTER TABLE public.profiles        ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.drugs           ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.infusion_sessions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.alarms          ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.audit_logs      ENABLE ROW LEVEL SECURITY;
-
--- Helper function to get current user role
-CREATE OR REPLACE FUNCTION get_my_role()
-RETURNS role_type AS $$
-  SELECT role FROM public.profiles WHERE id = auth.uid();
-$$ LANGUAGE sql SECURITY DEFINER;
-
--- DRUGS: Doctor can CRUD, Nurse can SELECT (non-archived only), Admin no access
-CREATE POLICY drugs_doctor ON public.drugs
-  USING (get_my_role() = 'DOCTOR');
-
-CREATE POLICY drugs_nurse_read ON public.drugs
-  FOR SELECT USING (get_my_role() = 'NURSE' AND is_archived = FALSE);
-
--- INFUSION SESSIONS: Nurse owns their sessions, Doctor/Admin can read all
-CREATE POLICY sessions_nurse ON public.infusion_sessions
-  USING (get_my_role() = 'NURSE' AND nurse_id = auth.uid());
-
-CREATE POLICY sessions_read_all ON public.infusion_sessions
-  FOR SELECT USING (get_my_role() IN ('DOCTOR', 'ADMIN'));
-
--- AUDIT LOGS: Doctor + Admin read all, Nurse reads own sessions only, INSERT only
-CREATE POLICY audit_insert ON public.audit_logs
-  FOR INSERT WITH CHECK (performing_user = auth.uid());
-
-CREATE POLICY audit_doctor_admin_read ON public.audit_logs
-  FOR SELECT USING (get_my_role() IN ('DOCTOR', 'ADMIN'));
-
-CREATE POLICY audit_nurse_read ON public.audit_logs
-  FOR SELECT USING (
-    get_my_role() = 'NURSE' AND
-    session_id IN (
-      SELECT id FROM public.infusion_sessions WHERE nurse_id = auth.uid()
-    )
-  );
-
--- PROFILES: Admin manages all, others read own
-CREATE POLICY profiles_admin ON public.profiles
-  USING (get_my_role() = 'ADMIN');
-
-CREATE POLICY profiles_self_read ON public.profiles
-  FOR SELECT USING (id = auth.uid());
-```
-
+| table_name       | column_name        | data_type                   | is_nullable | key_type    |
+| ---------------- | ------------------ | --------------------------- | ----------- | ----------- |
+| alarm            | event_id           | uuid                        | NO          | PRIMARY KEY |
+| alarm            | session_id         | uuid                        | NO          | FOREIGN KEY |
+| alarm            | alarm_time         | timestamp without time zone | NO          | null        |
+| alarm            | ack/res            | boolean                     | NO          | null        |
+| alarm            | ack/res_by         | uuid                        | NO          | FOREIGN KEY |
+| alarm            | ack/res_at         | timestamp without time zone | NO          | null        |
+| alarm            | alarm_id           | uuid                        | NO          | FOREIGN KEY |
+| alarms           | alarm_id           | uuid                        | NO          | PRIMARY KEY |
+| alarms           | alarm_name         | text                        | NO          | UNIQUE      |
+| alarms           | severity           | text                        | NO          | null        |
+| alarms           | description        | text                        | NO          | null        |
+| audit_log        | log_id             | uuid                        | NO          | PRIMARY KEY |
+| audit_log        | user_id            | uuid                        | NO          | FOREIGN KEY |
+| audit_log        | action             | text                        | NO          | null        |
+| audit_log        | entity_type        | text                        | NO          | null        |
+| audit_log        | entity_id          | uuid                        | NO          | FOREIGN KEY |
+| audit_log        | entity_id          | uuid                        | NO          | FOREIGN KEY |
+| audit_log        | entity_id          | uuid                        | NO          | FOREIGN KEY |
+| audit_log        | entity_id          | uuid                        | NO          | FOREIGN KEY |
+| audit_log        | old_value          | text                        | NO          | null        |
+| audit_log        | new_value          | text                        | NO          | null        |
+| audit_log        | timestamp          | timestamp without time zone | NO          | null        |
+| drug             | drug_id            | uuid                        | NO          | PRIMARY KEY |
+| drug             | name               | character varying           | NO          | UNIQUE      |
+| drug             | concentration      | numeric                     | NO          | null        |
+| drug             | concentration_unit | text                        | NO          | null        |
+| drug             | default_rate       | numeric                     | NO          | null        |
+| drug             | rate_unit          | character varying           | NO          | null        |
+| drug             | hard_limit_high    | numeric                     | NO          | null        |
+| drug             | soft_limit_high    | numeric                     | NO          | null        |
+| drug             | created_by         | uuid                        | NO          | FOREIGN KEY |
+| drug             | created_at         | timestamp without time zone | NO          | null        |
+| drug             | updated_by         | uuid                        | NO          | FOREIGN KEY |
+| drug             | updated_at         | timestamp without time zone | NO          | null        |
+| drug             | Is_Deleted         | boolean                     | NO          | null        |
+| infusion_session | session_id         | uuid                        | NO          | PRIMARY KEY |
+| infusion_session | user_id            | uuid                        | NO          | FOREIGN KEY |
+| infusion_session | drug_id            | uuid                        | NO          | FOREIGN KEY |
+| infusion_session | rate               | numeric                     | NO          | null        |
+| infusion_session | total_volume       | numeric                     | NO          | null        |
+| infusion_session | volume_infused     | numeric                     | NO          | null        |
+| infusion_session | status             | character varying           | NO          | null        |
+| infusion_session | start_time         | timestamp without time zone | NO          | null        |
+| infusion_session | end_time           | timestamp without time zone | NO          | null        |
+| infusion_session | bolus_enabled      | boolean                     | NO          | null        |
+| infusion_session | kvo_enabled        | boolean                     | No          | null        |
+| infusion_session | kvo_rate           | numeric                     | No          | null        |
+| infusion_session | battery_level      | integer                     | No          | null        |
+| infusion_session | Patient_id         | uuid                        | NO          | FOREIGN KEY |
+| users            | national_id        | text                        | NO          | null        |
+| users            | Fname              | text                        | NO          | UNIQUE      |
+| users            | password_hash      | text                        | NO          | null        |
+| users            | role               | text                        | NO          | null        |
+| users            | created_at         | timestamp without time zone | NO          | null        |
+| users            | last_login         | timestamp without time zone | NO          | null        |
+| users            | Is_Deleted         | boolean                     | NO          | null        |
+| users            | Mname              | text                        | NO          | null        |
+| users            | Lname              | text                        | NO          | null        |
+| users            | user_id            | uuid                        | NO          | PRIMARY KEY |
 ---
 
 ## 5. State Management (Riverpod)
@@ -350,13 +153,10 @@ authProvider                        # StreamProvider<AppUser?>
       │
       ├── [Nurse]
       │   ├── infusionProvider      # StateNotifierProvider<InfusionState>  ← FSM
-      │   ├── alarmListProvider     # StreamProvider<List<Alarm>>           ← Realtime
-      │   ├── batteryProvider       # StateNotifierProvider<BatteryState>
       │   └── selectedDrugProvider  # StateProvider<Drug?>
       │
       └── [Admin]
           ├── userListProvider      # AsyncNotifierProvider<List<ManagedUser>>
-          └── systemHealthProvider  # StreamProvider<SystemHealth>
 ```
 
 ### Key Notifiers
@@ -477,7 +277,7 @@ enum RoleType { doctor, nurse, admin }
 class AppUser with _$AppUser {
   const factory AppUser({
     required String id,
-    required String username,
+    required String nationalId,
     required RoleType role,
     required bool isActive,
   }) = _AppUser;
@@ -537,10 +337,9 @@ class Alarm with _$Alarm {
     required String sessionId,
     required AlarmType alarmType,
     required AlarmSeverity severity,
-    required bool isAcknowledged,
-    required DateTime triggeredAt,
-    String? acknowledgedBy,
-    DateTime? acknowledgedAt,
+    required bool isAcknowledgedortriggered,
+    required DateTime AcknowledgedortriggeredAt,
+    required String AcknowledgedortriggeredBy,
   }) = _Alarm;
 }
 
@@ -634,54 +433,40 @@ Stream<List<Alarm>> alarmList(AlarmListRef ref) {
 }
 ```
 
----
 
+---
 ## 10. Theme System
 
-> ⚠️ **Extracted directly from Stitch design files — use these exact values.**
 
-### Typography (all roles use Inter)
-```dart
-// Single font family across all roles
+Typography (all roles use Inter):
 const String kFontFamily = 'Inter';
 
-// Text styles
 const dataDisplay = TextStyle(fontSize: 32, height: 1.25, fontWeight: FontWeight.w700);
 const titleStyle  = TextStyle(fontSize: 20, height: 1.4,  fontWeight: FontWeight.w600, letterSpacing: -0.2);
 const bodyStyle   = TextStyle(fontSize: 16, height: 1.5,  fontWeight: FontWeight.w400);
 const captionStyle= TextStyle(fontSize: 13, height: 1.38, fontWeight: FontWeight.w500, letterSpacing: 0.26);
 const labelCaps   = TextStyle(fontSize: 11, height: 1.27, fontWeight: FontWeight.w700, letterSpacing: 0.55);
-```
 
-### Border Radius (Doctor / Admin)
-```dart
-const radiusDefault = Radius.circular(2);   // 0.125rem
-const radiusLg      = Radius.circular(4);   // 0.25rem
-const radiusXl      = Radius.circular(8);   // 0.5rem
-const radiusFull    = Radius.circular(12);  // 0.75rem — chips, badges
-```
+Border Radius (Doctor / Admin):
+const radiusDefault = Radius.circular(2);
+const radiusLg      = Radius.circular(4);
+const radiusXl      = Radius.circular(8);
+const radiusFull    = Radius.circular(12);  // chips, badges
 
-### Border Radius (Nurse — more rounded, clinical focus)
-```dart
+Border Radius (Nurse — more rounded, clinical focus):
 const nurseRadiusDefault = Radius.circular(4);
 const nurseRadiusLg      = Radius.circular(8);
 const nurseRadiusXl      = Radius.circular(12);
 const nurseRadiusFull    = Radius.circular(9999); // pill buttons
-```
 
-### Spacing Tokens
-```dart
-const spaceXs          = 4.0;
-const spaceSm          = 8.0;
-const spaceMd          = 16.0;   // card_padding
-const spaceLg          = 24.0;
-const spaceXl          = 32.0;
-```
+Spacing Tokens:
+const spaceXs = 4.0;
+const spaceSm = 8.0;
+const spaceMd = 16.0;  // card padding
+const spaceLg = 24.0;
+const spaceXl = 32.0;
 
----
-
-### Doctor Theme — Green-Teal `#00685d`
-```dart
+Doctor Theme — Green-Teal #00685D:
 const doctorColorScheme = ColorScheme.light(
   primary:            Color(0xFF00685D),
   primaryContainer:   Color(0xFF008376),
@@ -706,13 +491,8 @@ const doctorColorScheme = ColorScheme.light(
   inversePrimary:     Color(0xFF70D8C8),
   inverseSurface:     Color(0xFF2C3130),
 );
-// Doctor navigation: Sidebar drawer (web) / Bottom nav 4 tabs (mobile)
-// Active nav item: bg teal-50, border-right 4px teal-600, text teal-700, icon FILL=1
-// Inactive nav item: text slate-600, hover bg teal-50/50
-```
 
-### Nurse Theme — Blue `#005EA4`
-```dart
+Nurse Theme — Blue #005EA4:
 const nurseColorScheme = ColorScheme.light(
   primary:            Color(0xFF005EA4),
   onPrimary:          Color(0xFFFFFFFF),
@@ -728,22 +508,37 @@ const nurseColorScheme = ColorScheme.light(
   onError:            Color(0xFFFFFFFF),
 );
 
-// Nurse-specific semantic colors (add to ThemeExtension)
-const nurseEmergencyRed  = Color(0xFFE53935);  // Emergency Stop button ONLY
-const nurseStopGrey      = Color(0xFF757575);  // Normal Stop button
-const nurseStartGreen    = Color(0xFF2E7D32);  // Start button
-const nursePauseAmber    = Color(0xFFF57F17);  // Pause button
-const nurseWarningYellow = Color(0xFFFFA000);  // Soft limit warning banner
+// Nurse-specific semantic colors (ThemeExtension)
+const nurseEmergencyRed  = Color(0xFFE53935);
+const nurseStopGrey      = Color(0xFF757575);
+const nurseStartGreen    = Color(0xFF2E7D32);
+const nursePauseAmber    = Color(0xFFF57F17);
+const nurseWarningYellow = Color(0xFFFFA000);
 const nurseSeverityCritical = Color(0xFFE53935);
 const nurseSeverityWarning  = Color(0xFFFFA000);
 const nurseSeverityInfo     = Color(0xFF005EA4);
 
-// Emergency Stop button: full-width, py-8, rounded-2xl, shadow-xl with red/20 shadow
-// Must NEVER be covered by modals — rendered outside main scroll area
-```
+dmin Theme — Purple #6200EA (≠ Doctor teal):
+// ⚠️ Admin uses PURPLE, not doctor's teal — confirmed from UI screenshots
+const adminPrimary = Color(0xFF6200EA);   // deep purple — AppBar title, active nav, FAB
+const adminColorScheme = ColorScheme.light(
+  primary:          Color(0xFF6200EA),
+  onPrimary:        Color(0xFFFFFFFF),
+  surface:          Color(0xFFF5F5F5),
+  onSurface:        Color(0xFF1C1B1F),
+  onSurfaceVariant: Color(0xFF49454F),
+  outline:          Color(0xFF79747E),
+  error:            Color(0xFFBA1A1A),
+  errorContainer:   Color(0xFFFFDAD6),
+  onErrorContainer: Color(0xFF93000A),
+);
 
-### Login Theme — Neutral `#2C2C2C`
-```dart
+// Admin semantic additions
+const adminSeverityWarning = Color(0xFFFFA000);  // alert border-left + icon
+const adminSeverityCritical = Color(0xFFE53935); // alert border-left + icon
+const adminTextSecondary   = Color(0xFF757575);
+
+Login Theme — Neutral #2C2C2C:
 const loginColorScheme = ColorScheme.light(
   primary:          Color(0xFF2C2C2C),
   primaryContainer: Color(0xFF424242),
@@ -759,107 +554,240 @@ const loginColorScheme = ColorScheme.light(
   errorContainer:   Color(0xFFFFDAD6),
   onErrorContainer: Color(0xFF93000A),
 );
-// Login screen: centered card max-w-[420px], rounded-xl, shadow subtle
-// Input height: 44px (min touch target)
-// Login button: h-56px, rounded-xl, bg primaryContainer
-// Biometric button: outlined, h-44px, rounded-xl, fingerprint icon
-```
 
-### Admin Theme — Same teal as Doctor `#00685D`
-```dart
-// Admin reuses Doctor's teal color scheme (confirmed from Stitch files)
-// Admin navigation: Sidebar drawer with 2 sections
-// Differentiator: layout is dashboard-focused with system health cards
-const adminColorScheme = doctorColorScheme; // same palette
-// Semantic additions for admin:
-const adminSeverityWarning = Color(0xFFFFA000);
-const adminTextSecondary   = Color(0xFF757575);
-```
-
-### Role Badge Colors (always visible in AppBar)
-```dart
-Color roleBadgeColor(RoleType role) => switch (role) {
-  RoleType.doctor => const Color(0xFF00685D),
-  RoleType.nurse  => const Color(0xFF005EA4),
-  RoleType.admin  => const Color(0xFF00685D),
-};
-
-String roleBadgeLabel(RoleType role) => switch (role) {
-  RoleType.doctor => 'Doctor',
-  RoleType.nurse  => 'Nurse',
-  RoleType.admin  => 'Admin',
-};
-// Badge style: bg-primary, text-white, text-[10px] font-bold, px-2 py-0.5, rounded-full
-```
-
----
 
 ## 11. UI Component Specs (from Stitch)
 
-### Navigation Patterns
-```
-Doctor/Admin → Sidebar Drawer (desktop web) / Bottom Nav 4 tabs (mobile)
-Nurse        → Bottom Nav 3 tabs + Emergency Stop FAB above nav bar
-Login        → Standalone centered card, no navigation
-```
+Navigation Patterns:
+Doctor  → Sidebar Drawer (tablet/web), 4 items: Dashboard · Drug Library · Logs · Reports
+          Bottom Nav 4 tabs (mobile): same 4 items
+Admin   → Bottom Nav 4 tabs only (mobile-first): STATUS · USERS · LOGS · SETUP
+Nurse   → Bottom Nav 4 tabs: Dashboard · Pump · Alarm · Log
+          (no standalone FAB — Emergency Stop is a full-width card INSIDE the screen body)
+Login   → Standalone centered card, no navigation
 
-### Doctor — Drug Editor Layout (Bento Grid)
-```
-Row 1: [Drug Name — col-span-4] [Concentration — col-span-2]
-Row 2: [Flow Control (Default Rate | Soft Limit | Hard Limit) — col-span-6]
-Row 3: [Cancel (outlined)] [Save Drug Protocol (filled)] — right-aligned
-```
-- Section headers: icon + `UPPERCASE TRACKED` caption label in primary color
-- Hard limit note: `text-error font-medium` — "Absolute maximum. Cannot be overridden."
-- Soft limit note: italic muted — "Overrideable alert threshold."
 
-### Nurse — Pump Controls Button States
-```dart
-Start   → bg nurseStartGreen (#2E7D32),   text-white, icon: play_arrow
-Pause   → bg nursePauseAmber (#F57F17),   text-white, icon: pause
-Resume  → bg nurseStartGreen,             text-white
-Stop    → bg nurseStopGrey/10 (#757575),  text-grey, border (state-aware)
-EmStop  → bg nurseEmergencyRed (#E53935), text-white, full-width, py-8,
-          rounded-2xl, shadow-xl, requires 2s hold
-```
 
-### Nurse — Dashboard Real-time Display
-```
-┌─────────────────────────────┐
-│  ACTIVE PARAMETERS (caps)   │
-│  [Rate mL/hr]  [Vol Infused]│  ← 32pt bold data-display
-│  [Vol Remain]  [Time Left]  │
-│  Battery ██████░░ 72%       │
-│  Progress bar               │
-└─────────────────────────────┘
+Doctor — Drug Editor Layout:
+Header: "New Pharmaceutical Protocol" (h1) + "Clinician Verified Mode" chip (top-right, outlined)
+
+Sections (each is a rounded outlined card, rx-xl):
+  ┌─ IDENTIFICATION ──────────────────────────────┐
+  │  Drug Name *                                  │
+  │  [text field — full width, placeholder shown] │
+  └───────────────────────────────────────────────┘
+
+  ┌─ POTENCY ─────────────────────────────────────┐
+  │  Concentration *                              │
+  │  [number field]              [unit: mg/mL]   │
+  └───────────────────────────────────────────────┘
+
+  ┌─ FLOW CONTROL ────────────────────────────────┐
+  │  Default Rate *                               │
+  │  [number field]              [unit: mL/hr]   │
+  │                                               │
+  │  Soft Limit *                                 │
+  │  [number field]              [unit: mL/hr]   │
+  │  italic muted: "Overrideable alert threshold."│
+  │                                               │
+  │  Hard Limit *                                 │
+  │  [number field]              [unit: mL/hr]   │
+  │  text-error: "Absolute maximum. Cannot be overridden." │
+  └───────────────────────────────────────────────┘
+
+Actions (bottom, side by side):
+  [Cancel — outlined, rx-lg] [Save Drug Protocol — filled bg-primary, rx-lg]
+
+Nurse — Parameter Entry Screen:
+Header: "Parameter Entry" (h1)
+Sub-header: drug name (e.g. "Channel A: Norepinephrine Bitartrate")
+Top-right chip: "ⓘ Standard Protocol" (outlined, info color)
+
+Input area (2-column card row):
+  ┌─ Concentration ─┬─ Rate ✏ ─┐    ┌──────────┐
+  │    [value]      │  [value]  │    │  1  2  3 │
+  │    mg/mL        │  mL/hr    │    │  4  5  6 │
+  │  ─────────      │  ─────    │    │  7  8  9 │
+  │  Range:         │  Soft     │    │  .  0  ⌫ │
+  │  1.0–16.0 mg/mL │  Limit:   │    └──────────┘
+  │                 │  2.0–25.0 │
+  └─────────────────┴───────────┘
+  Active field (Rate): outlined blue border
+
+  ┌─ Volume To Be Infused (VTBI) ──────────────────┐
+  │  [0]  mL          [Select Total Volume dashed] │
+  └────────────────────────────────────────────────┘
+
+  ┌─ Dosing Calculation Summary ⊞ ─────────────────┐
+  │  Dose          │ Total Infused │ Time Remaining │
+  │  5.2 mcg/kg/m  │  2.8          │  06h           │
+  └────────────────────────────────────────────────┘
+
+Clinical Protocol Check panel (right side, tablet only):
+  bg blue-50, blue text, contextual validation message
+
+Emergency Stop bar (floating, above bottom actions):
+  bg #E53935, full-width, icon ◆ + "EMERGENCY STOP" white bold
+
+Bottom actions (3 buttons):
+  [CANCEL — outlined] [REVIEW PARAMETERS — filled blue] [▶ START INFUSION — filled green]
+
+Nurse — Pump Controls Button States:
+// Running state — 2×2 grid layout:
+Start   → disabled (greyed icon ▶, label "START"),   not tappable when running
+Pause   → bg white, amber border + amber icon ⏸,     label "PAUSE" in amber  ← outlined, NOT filled
+Resume  → disabled (greyed icon ▶|, label "RESUME"), not tappable when running
+Stop    → bg white, grey border + grey icon ⏹,       label "STOP" in grey    ← outlined
+
+// Emergency Stop — separate full-width section below 2×2 grid:
+EmStop  → bg #E53935, text-white, rounded-xl
+          icon ◆ left + "EMERGENCY STOP" (labelCaps, bold, center)
+          sub-label: "HOLD 2S TO ACTIVATE" (smaller, white 70%)
+          py-20, mx-16, shadow-lg
+          requires 2s press-and-hold (GestureDetector onLongPress)
+
+Nurse — Dashboard Real-time Display:
+┌─ status pill ──────────────────────────────────────┐
+│  ● RUNNING  (green pill)                           │
+│  Infusion Active — Channel A   (body, muted)       │
+└────────────────────────────────────────────────────┘
+
+┌─ ACTIVE PARAMETERS  [ID: 884920-A chip] ───────────┐
+│  INFUSION RATE        VOLUME INFUSED               │
+│  125.0  mL/hr         538.2  mL        ← 32pt w700 │
+│                                                    │
+│  VOLUME REMAINING     TIME REMAINING               │
+│  461.8  mL            03:42  hh:mm     ← blue bold │
+└────────────────────────────────────────────────────┘
+
+┌─ VTBI PROGRESS  54% ───────────────────────────────┐
+│  ████████████████░░░░░░░  (blue progress bar)      │
+│  Drug:      Sodium Chloride 0.9%                   │
+│  Container: 1000 mL Bag                            │
+└────────────────────────────────────────────────────┘
+
+Battery row (above parameters card):
+  🔋 85%  ⚡ AC POWER   (inline row, muted text)
+
 Refresh: 1Hz (Timer.periodic 1s)
-```
 
-### Alarm Severity Badges
-```dart
-Critical → bg-red-100,    text-red-700
-Warning  → bg-amber-100,  text-amber-700   (#FFA000)
-Info     → bg-blue-100,   text-blue-700
-```
 
-### AppBar Structure (all roles)
-```
-[Menu icon] [Screen Title — uppercase 13px tracked] ... [Notifications] [Logout]
-```
-- Role badge: bg-primary, text-white, 10px bold, rounded-full pill, in sidebar header
-- TopAppBar: fixed, z-40, bg-white, border-b, h-16
 
-### Login Screen Key Measurements
-```
-Container:  max-w-[420px], rounded-xl, shadow, p-xl(32pt)
-Logo:       64x64px circle, bg-primary, rounded-full
-Input:      h-44px, rounded-lg
-Login btn:  h-56px, rounded-xl, bg-primaryContainer
-Biometric:  h-44px, rounded-xl, outlined
-Error:      bg-error-container, border #ffb4ab
-```
 
----
+
+Admin — Dashboard Layout:
+AppBar: [pump icon] [InfusionAdmin — in lavender pill #EDE7F6, text #6200EA] ... [→ logout]
+Session banner (conditional): bg amber-50, amber icon ⏱ + "Session expiring in 60s" + [Renew] button
+
+Stat cards (2×2 grid, white, rx-xl, shadow-sm):
+  ┌─ System Uptime ──────┐  ┌─ Active Sessions ─────┐
+  │  ✅ (green icon)     │  │  👥 (purple icon)      │
+  │  99.9%  (dataDisplay)│  │  42    (dataDisplay)   │
+  │  Last restart: 14d   │  │  3 Admins, 39 Nurses   │
+  └──────────────────────┘  └───────────────────────┘
+  ┌─ Engine Status ──────┐  ┌─ Memory Usage ────────┐
+  │  ⚙ (blue icon)      │  │  ≡ (amber icon)        │
+  │  Stable (titleStyle) │  │  82%   (dataDisplay)   │
+  │  ████████░ (blue bar)│  │  ██████░░ (amber bar)  │
+  └──────────────────────┘  └───────────────────────┘
+
+Active Alerts card (full-width, white, rx-xl):
+  Title "Active Alerts" + red count badge (circle, bg #E53935, text white)
+  Each alert row: left-border 3px colored + icon + title bold + body muted
+    Warning  → border #FFA000, icon ⚠ amber
+    Critical → border #E53935, icon 🔴 red
+
+Safety Limits banner (full-width, bg #6200EA, rx-xl):
+  [shield+ icon in rounded square] [Safety Limits bold white] [View global guardrails muted white] [›]
+
+Bottom nav active: icon + label in #6200EA
+
+Admin — Logs Screen:
+Filter card (white, rx-xl, stacked fields):
+  [📅 Date Range     | "Last 7 Days"        ] ← full-width outlined field
+  [💊 Drug Name      | "All Drugs"          ]
+  [👤 Patient/User ID| "Search ID..."       ]
+  [≡ More Filters                           ] ← outlined full-width button
+
+Log table (white card):
+  Header row: Timestamp | Event Type | Description | User ID | Action (bg surface)
+  Each row:
+    - Timestamp: date bold + time + UTC (stacked, bodyStyle)
+    - Event Type: 2-line badge stack (type chip on top, subtype chip below)
+        CONFIG CHANGE  → bg blue-50,  text blue-700,  border blue-200
+        CRITICAL ALERT → bg red-50,   text red-700,   border red-200
+        AUTH SUCCESS   → bg green-50, text green-700, border green-200
+    - Description: truncated with "..."
+    - User ID: muted
+    - Action: › chevron
+
+  Pagination: "Showing 1–3 of 1,204 entries" + [‹] [1] [2] [3] [›]
+
+Admin — Users Screen:
+Header: "User Management" (h1, w700, large) + subtitle body muted
+Search bar: full-width, rx-xl, [🔍 "Search by ID or Role..."] [≡ filter icon right]
+
+User list (white card, rx-xl):
+  Each row (divider-separated):
+    [Avatar circle — initial letter, bg role-color-light] [ID bold + "Last login: ..." muted] [Role pill right-aligned]
+      Doctor  → avatar bg teal-100,   initial teal-700,  pill bg #00685D text white
+      Nurse   → avatar bg blue-100,   initial blue-700,  pill bg #005EA4 text white
+      Admin   → avatar bg purple-100, initial purple-700, pill bg #6200EA text white
+  Footer: "Showing 3 of 3 users" (caption muted)
+
+System Access card (full-width, bg #6200EA, rx-xl):
+  [shield icon watermark — ghost, right side]
+  "System Access" bold white
+  Total Users: 124  |  Active Sessions: 18  (dataDisplay white)
+  FAB [+] bottom-right of card, bg darker purple (#4A00B4 approx), rx-xl
+
+
+Alarm Severity Badges (log table chips):
+// 2-line stacked chips per event (type on top, subtype below), both rx-sm
+Critical → bg Color(0xFFFFEBEE), text Color(0xFFB71C1C), border Color(0xFFEF9A9A)
+Warning  → bg Color(0xFFFFF8E1), text Color(0xFFE65100), border Color(0xFFFFCC02)  // amber
+Success  → bg Color(0xFFE8F5E9), text Color(0xFF1B5E20), border Color(0xFFA5D6A7)  // green (AUTH)
+Info     → bg Color(0xFFE3F2FD), text Color(0xFF0D47A1), border Color(0xFF90CAF9)  // blue (CONFIG)
+
+AppBar Structure:
+Doctor  (mobile): [≡ hamburger] [Screen title — labelCaps] ... (no role badge in AppBar)
+Doctor  (tablet): no hamburger (sidebar always open) ... [🔔] [Logout]
+Nurse   (mobile): [≡] [Infusion Monitor — wordmark] ... [Nurse pill — blue] [avatar circle]
+Nurse   (tablet): [≡] [Infusion Monitor] ... [Nurse pill — blue]
+Admin   (mobile): [pump icon] [InfusionAdmin inside lavender pill] ... [→ logout icon]
+
+TopAppBar: fixed, z-40, bg white, border-b outlineVariant, h-56px
+Screen title: labelCaps (11px w700 tracked), color onSurfaceVariant
+
+Login Screen Key Measurements:
+Page bg:    #FDF8F8 (warm off-white)
+Container:  max-w-[420px], rounded-xl, shadow-md, p-32, bg-white
+
+Logo:       64×64px circle, bg #2C2C2C, rounded-full, IV-bag icon white inside
+
+Title:      "Smart Infusion Pump"      — titleStyle w700, ~24px, center
+Subtitle:   "Smart Infusion Simulator" — bodyStyle, onSurfaceVariant, center
+
+Error banner (conditional, shown above fields):
+            bg #FFEBEE, border none, rx-lg, p-12
+            red filled circle icon (●) + bold red message text
+
+Input label: captionStyle, onSurface, mb-4
+Input field: h-44px, rounded-lg, outlined (outlineVariant border)
+             Password field: eye-toggle icon right (visibility_off)
+
+Biometric:  h-44px, rounded-lg, outlined, fingerprint icon left, full-width
+            label: "Sign in with biometrics"
+
+Login btn:  h-56px, rounded-xl, bg #424242, text white w700, full-width
+            label: "Log in"
+
+Element order (top→bottom):
+  logo → title → subtitle → [error banner] → User ID field → Password field
+  → Biometric button → Login button
+
+
+
 
 ## 12. Session Management
 
@@ -908,12 +836,13 @@ class AuditLogger {
   }) async {
     await _client.from('audit_logs').insert({
       'performing_user': _client.auth.currentUser!.id,
-      'action_type':     actionType,
+      'user_id'  :       userid
+      'action_type':     action,
       'entity_type':     entityType,
       'entity_id':       entityId,
       'old_value':       oldValue,
       'new_value':       newValue,
-      'session_id':      sessionId,
+      'timestamp':      timestamp,
     });
   }
 }
@@ -940,31 +869,36 @@ class AuditLogger {
 
 ## 14. PDF Export (Doctor only)
 
-```dart
-// Uses 'pdf' and 'printing' packages
-class ReportGenerator {
-  Future<Uint8List> generateInfusionSummary({
-    required List<InfusionSession> sessions,
-    required DateTimeRange range,
-  }) async {
-    final doc = pw.Document();
-    doc.addPage(pw.MultiPage(
-      build: (context) => [
-        pw.Header(text: 'Infusion Summary Report'),
-        pw.Text('Date range: ${range.start} – ${range.end}'),
-        _buildSessionTable(sessions),
-      ],
-    ));
-    return doc.save();  // returns Uint8List → upload to Supabase Storage or share
-  }
+Future<Uint8List> generateInfusionSummary({
+  required List<InfusionSession> sessions,
+  required DateTimeRange range,
+  required String patientId,
+  required String drugName,
+}) async {
+  final doc = pw.Document();
+  doc.addPage(pw.MultiPage(
+    build: (context) => [
+      pw.Header(text: 'Infusion Summary Report'),
+      pw.Text('Date range: ${range.start} – ${range.end}'),
+      pw.Text('Patient ID: $patientId'),
+      pw.Text('Drug: $drugName'),
+      _buildSessionTable(sessions),
+    ],
+  ));
+  return doc.save();
 }
-```
 
+
+required String? patientId,   // null = all patients
+required String? drugName,    // null = all drugs
+
+if (patientId != null) pw.Text('Patient ID: $patientId'),
+if (drugName  != null) pw.Text('Drug: $drugName'),
 ---
 
 ## 15. Security Checklist
 
-- [x] Supabase Auth handles password hashing (bcrypt/Argon2 internally)
+- [x] Supabase Auth handles password and national id hashing (bcrypt internally)
 - [x] RLS enforces role boundaries at DB level — Flutter UI is secondary enforcement
 - [x] `flutter_secure_storage` for storing session token on device
 - [x] TLS enforced by Supabase (all traffic HTTPS)
@@ -999,179 +933,79 @@ dev_dependencies:
   json_serializable: ^6.8.0
 ```
 
----
-
-## 17. Prompt للـ AI (Antigravity أو غيره)
-
-لما تدي الـ AI الـ DESIGN.md ده، استخدم الـ prompt ده:
-
-```
-You are a senior Flutter engineer. Use this DESIGN.md as the single source of truth.
-Do NOT deviate from:
-- State management: Riverpod only (riverpod_annotation + code generation)
-- Routing: GoRouter with ShellRoute per role
-- Backend: Supabase (no Firebase, no REST outside Supabase client)
-- Models: Freezed + json_serializable
-- Architecture: Feature-first folder structure as defined
-
-Start by generating: [feature name, e.g. "nurse/simulation/infusion_state_machine.dart"]
-Follow the exact file path from the folder structure.
-Include all imports. Use riverpod_annotation @riverpod syntax.
-```
 
 ---
 
-## 18. Development Strategy — "Vibe" vs "Logic"
 
-> مستوحى من مبدأ: افصل الـ UI عن الـ Business Logic تماماً في مراحل البناء.
+## 17. Edge Cases — AI Blind Spots
 
-### المبدأ
-Google Stitch بتطلعلك UI شكله تحفة — بس الواجهة لوحدها مش أبلكيشن.
-الـ AI زي Antigravity يكسّر التصميم لـ Widgets صغيرة الأول، وبعدين يربط الـ Business Logic.
+> Stitch AI always generates the Happy Path only. Request these screens manually before moving to implementation.
 
-### المراحل العملية
+### Edge Case Screens Required per Role
 
-**Phase 1 — Vibe (UI Shell)**
-اطلب من الـ AI ينشئ الـ Widget بدون أي logic — بس شكل وـ layout:
+**🔐 Auth (All Roles)**
 
-```
-Prompt: "Build the NurseDashboardScreen widget.
-UI ONLY — no providers, no state, no logic.
-Use hardcoded placeholder values.
-Follow Section 11 (UI Component Specs) and Section 10 (Theme) from DESIGN.md exactly."
-```
-
-الناتج: Widget جاهز، يتعرض على المحاكي، يشبه التصميم بالظبط.
-
-**Phase 2 — Logic (Wire Up)**
-بعد ما الـ UI اتأكد، اطلب الـ logic:
-
-```
-Prompt: "Now wire up NurseDashboardScreen to Riverpod.
-- Replace hardcoded values with ref.watch(infusionProvider)
-- Replace hardcoded alarms with ref.watch(alarmListProvider)
-- Follow Section 5 (State Management) from DESIGN.md.
-- Do NOT change any UI code — only add provider connections."
-```
-
-### ليه الفصل ده مهم؟
-
-| بدون فصل | مع فصل |
+| State | Screen / Behavior |
 |---|---|
-| AI بيخلط UI + logic فبيجي spaghetti | كل ملف عنده مسؤولية واحدة |
-| لو التصميم اتغيّر، بتكسر الـ logic | تغيّر الـ UI لوحده من غير ما تلمس الـ providers |
-| صعب تعمل UI tests | ممكن تعمل Widget tests على الـ UI Shell بسهولة |
-| الـ AI بيحتار ويخترع architecture | الـ DESIGN.md هو الـ source of truth دايماً |
-
-### ترتيب البناء المقترح
-
-```
-1. Auth Shell         → Login screen (UI) → wire Supabase Auth
-2. Role Router        → GoRouter guards (logic only, no UI)
-3. Nurse UI Shell     → PumpDashboard + Controls (UI) → wire InfusionNotifier
-4. Nurse Logic        → InfusionStateMachine + BatterySimulator
-5. Doctor UI Shell    → DrugLibrary + DrugEditor (UI) → wire DrugNotifier
-6. Doctor Logic       → LimitValidator + AuditLogger
-7. Admin UI Shell     → UserManagement (UI) → wire UserNotifier
-8. Integration        → Supabase Realtime alarms + RLS testing
-9. PDF Export         → ReportGenerator (Doctor)
-10. Polish            → Session timeout + offline Drift sync
-```
-
-### قاعدة ذهبية
-> كل prompt للـ AI يبدأ بـ: **"Refer to DESIGN.md Section [X]"**
-> ده بيمنع الـ AI من اختراع architecture جديدة في كل مرة.
-
----
-
-## 19. Edge Cases — النقطة العمياء للـ AI
-
-> الـ AI في Stitch بيرسملك الـ Happy Path دايماً. لازم تطلب منه الشاشات دي بنفسك قبل ما تنقل لخطوة البرمجة.
-
-### Edge Case Screens المطلوبة لكل Role
-
-**🔐 Auth (كل الـ Roles)**
-| الحالة | الشاشة / السلوك |
-|---|---|
-| بيانات غلط | Error banner أحمر تحت الـ form |
-| حساب deactivated | رسالة واضحة: "Account has been deactivated" |
-| Session انتهى | 60s countdown banner → force logout |
-| مفيش إنترنت عند login | "No connection — cannot authenticate" |
-| Biometric فشل | Fallback لـ password بدون crash |
+| Wrong credentials | Red error banner above fields — `bg #FFEBEE` + red bold text |
+| Deactivated account | Same banner: "Account has been deactivated" |
+| Session expired | 60s countdown banner `bg amber-50` at top + `[Renew]` filled amber button |
+| No internet at login | Same error banner: "No connection — cannot authenticate" |
+| Biometric failed | Fallback to password — biometric button shows error state without crash |
 
 **👨‍⚕️ Doctor**
-| الحالة | الشاشة / السلوك |
+
+| State | Screen / Behavior |
 |---|---|
-| Drug Library فاضية | Empty state: icon + "No drugs added yet" + Add button |
-| حذف drug في session نشط | Blocking error modal: "Drug in active use" |
-| Hard limit < Soft limit | Inline validation error على الـ form فوراً |
-| Report — مفيش بيانات في الـ date range | Empty state داخل الـ report preview |
-| PDF export فشل | Error snackbar + retry button |
-| مفيش إنترنت عند generate report | "Offline — report unavailable" |
+| Empty drug library | Empty state: icon + "No drugs added yet" + Add button (teal) |
+| Delete drug in active session | Blocking error modal: "Drug in active use" |
+| Hard Limit < Soft Limit | Inline validation below Hard Limit field — `text-error` immediately |
+| Soft Limit > Default Rate | Inline warning below Soft Limit field — italic muted |
+| Report — no data in range | Empty state inside report preview |
+| PDF export failed | Error snackbar at bottom + retry |
+| No internet | Sidebar footer changes: `● Offline` instead of `● Cloud Sync Active` |
 
 **👩‍⚕️ Nurse**
-| الحالة | الشاشة / السلوك |
+
+| State | Screen / Behavior |
 |---|---|
-| Drug List فاضية | Empty state: "No drugs available — contact Doctor" |
-| Hard limit exceeded | Start button disabled + blocking error modal |
-| Soft limit exceeded | Yellow warning banner + "I understand — proceed" |
-| Infusion خلصت (No KVO) | Auto-transition لـ Complete state + confirmation |
-| Infusion خلصت (KVO enabled) | Auto-transition لـ KVO mode بدون input من الـ Nurse |
-| Critical alarm أثناء infusion | Pump auto-pause + alarm panel يطلع فوراً |
-| Battery 20% | Warning banner غير blocking |
-| Battery 5% | Auto-stop + critical alarm + لا يكمل |
-| Emergency Stop accidentally | 2s hold requirement — تأكيد بـ haptic feedback |
-| مفيش إنترنت أثناء الـ session | Simulation تكمل offline — sync لما يرجع النت |
+| Empty drug list | Empty state: "No drugs available — contact Doctor" |
+| Hard Limit exceeded | START INFUSION button disabled + blocking modal |
+| Soft Limit exceeded | Yellow warning banner `bg #FFF8E1` + "I understand — proceed" |
+| Rate out of range | Field outline turns red + range hint turns red |
+| Infusion complete (No KVO) | Auto-transition to Complete state + confirmation dialog |
+| Infusion complete (KVO enabled) | Auto-transition to KVO mode — no nurse input required |
+| Critical alarm during infusion | Pump auto-pause + alarm panel appears immediately over everything |
+| Battery at 20% | `🔋 20%` non-blocking warning banner |
+| Battery at 5% | Auto-stop + critical alarm + Emergency Stop shows active state |
+| Emergency Stop accidental press | 2s hold required — progress fill during hold + haptic feedback on trigger |
+| No internet during session | Simulation continues offline — "Last synced: X mins" in Session Log |
 
 **🔧 Admin**
-| الحالة | الشاشة / السلوك |
+
+| State | Screen / Behavior |
 |---|---|
-| حذف آخر Admin | Blocking error: "Cannot delete last admin account" |
-| User List فاضية | Empty state + Add User button بارز |
-| Deactivate نفسك | Warning: "You are deactivating your own account" |
-| Config change يأثر على safety | Double confirmation + mandatory reason field |
-| مفيش إنترنت | System health cards تعرض "Offline" badge |
+| Delete last Admin | Blocking error: "Only one Admin account remaining. Create backup account." |
+| Empty user list | Empty state + prominent Add User button (purple FAB) |
+| Deactivate own account | Warning dialog: "You are deactivating your own account" |
+| Config change affects safety | Double confirmation + mandatory reason field |
+| Memory Usage > 80% | Memory card progress bar turns amber |
+| Storage Low (Log partition > 90%) | Alert row in Active Alerts with red left-border + critical icon |
+| No internet | System health cards show `● Offline` badge instead of live values |
 
 ---
 
-### Prompt جاهز للـ AI عشان يعمل Edge Cases
-
-بعد ما تخلص الـ Happy Path لأي screen، ابعت الـ prompt ده:
-
-```
-The current screen only handles the happy path.
-Now add these edge case states to [ScreenName]:
-
-1. Empty state — when the list/data is empty
-2. Error state — when the API call fails
-3. Offline state — when there is no internet connection
-4. Loading state — skeleton loader, not a spinner
-
-For each state:
-- Add a named const to the Widget (emptyState, errorState, etc.)
-- Follow the existing theme from DESIGN.md Section 10
-- Do NOT change the happy path code
-```
-
-### قاعدة: الـ 4 States الأساسية لكل Screen
-
-```
-كل screen في الأبلكيشن لازم تتعامل مع:
-
-1. Loading   → Skeleton loader (مش CircularProgressIndicator)
-2. Empty     → Illustrated empty state + action button
-3. Error     → Error message + retry button  
-4. Success   → الـ happy path العادي
-```
-
-في Flutter مع Riverpod:
-```dart
-// Pattern موحد لكل AsyncNotifierProvider
-ref.watch(myProvider).when(
-  loading: () => const SkeletonLoader(),
-  error:   (e, _) => ErrorStateWidget(onRetry: () => ref.invalidate(myProvider)),
-  data:    (data) => data.isEmpty
-      ? const EmptyStateWidget()
-      : MyContentWidget(data: data),
-);
-```
+## 18 — Proposed building arrangement
+1.  Auth Shell        → Login screen (UI) → wire Supabase Auth
+2.  Role Router       → GoRouter guards (logic only, no UI)
+3.  Nurse UI Shell    → PumpDashboard + Controls + EmergencyStop (UI)
+                        → wire InfusionNotifier + InfusionStateMachine
+4.  Nurse Logic       → BatterySimulator + LimitValidator + KvoHandler
+5.  Doctor UI Shell   → DrugLibrary + DrugEditor sections (UI)
+                        → wire DrugNotifier
+6.  Doctor Logic      → LimitValidator + AuditLogger + ReportGenerator
+7.  Admin UI Shell    → StatusDashboard + UserManagement + LogsViewer (UI)
+                        → wire UserNotifier + SystemHealthNotifier
+8.  Integration       → Supabase Realtime alarms + RLS testing
+9.  PDF Export        → ReportGenerator (Doctor, Section 14)
+10. Polish            → Session timeout banner (60s) + offline Drift sync

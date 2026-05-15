@@ -16,35 +16,8 @@ AdminRepository adminRepository(Ref ref) {
 }
 
 @riverpod
-class AdminUserList extends _$AdminUserList {
-  @override
-  Future<List<ManagedUser>> build() async {
-    return ref.watch(adminRepositoryProvider).fetchUsers();
-  }
-
-  Future<void> addUser(ManagedUser user, String password) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      await ref.read(adminRepositoryProvider).createUser(user, password);
-      return ref.read(adminRepositoryProvider).fetchUsers();
-    });
-  }
-
-  Future<void> updateUser(ManagedUser user) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      await ref.read(adminRepositoryProvider).updateUser(user);
-      return ref.read(adminRepositoryProvider).fetchUsers();
-    });
-  }
-
-  Future<void> deleteUser(String userId) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      await ref.read(adminRepositoryProvider).deleteUser(userId);
-      return ref.read(adminRepositoryProvider).fetchUsers();
-    });
-  }
+Stream<List<ManagedUser>> adminUserList(Ref ref) {
+  return ref.watch(adminRepositoryProvider).streamUsers();
 }
 
 @riverpod

@@ -18,9 +18,15 @@ import 'audit_log_provider.dart';
 part 'infusion_provider.g.dart';
 
 // ─── Providers ──────────────────────────────────────────────────────────────
-final sessionRepositoryProvider = Provider((ref) => SessionRepository());
-final alarmRepositoryProvider = Provider((ref) => AlarmRepository());
 final auditRepositoryProvider = Provider((ref) => AuditRepository());
+final sessionRepositoryProvider = Provider((ref) {
+  final audit = ref.watch(auditRepositoryProvider);
+  return SessionRepository(audit);
+});
+final alarmRepositoryProvider = Provider((ref) {
+  final audit = ref.watch(auditRepositoryProvider);
+  return AlarmRepository(audit);
+});
 
 final alarmDefinitionsProvider = FutureProvider<List<AlarmDefinition>>((ref) async {
   return ref.watch(alarmRepositoryProvider).fetchDefinitions();
@@ -59,10 +65,10 @@ class AlarmNotifier extends _$AlarmNotifier {
     } else {
       final definitions = await ref.read(alarmDefinitionsProvider.future);
       finalDef = definitions.firstWhere(
-        (d) => d.type.toUpperCase() == typeName,
+        (d) => d.name.toUpperCase() == typeName,
         orElse: () => AlarmDefinition(
           id: '', 
-          type: typeName,
+          name: typeName,
           severity: severity.name.toUpperCase(),
           description: 'System triggered ${type.name} alert',
         ),
@@ -72,13 +78,10 @@ class AlarmNotifier extends _$AlarmNotifier {
     final alarm = Alarm(
       id: const Uuid().v4(),
       sessionId: sessionId,
-      definitionId: finalDef.id.isNotEmpty ? finalDef.id : null,
-      type: finalDef.type,
-      severity: finalDef.severity,
-      acknowledged: false,
-      timestamp: DateTime.now(),
-      resolved: false,
-      description: finalDef.description,
+      alarmId: finalDef.id,
+      alarmTime: DateTime.now(),
+      ackRes: false,
+      definition: finalDef,
     );
     
     state = [...state, alarm];
@@ -86,7 +89,7 @@ class AlarmNotifier extends _$AlarmNotifier {
     try {
       print('DEBUG: AlarmNotifier.add calling saveSession and saveAlarm for sessionId: ${alarm.sessionId}');
       await ref.read(sessionRepositoryProvider).saveSession(ref.read(infusionProvider));
-      await ref.read(alarmRepositoryProvider).saveAlarm(alarm);
+      await ref.read(alarmRepositoryProvider).saveAlarm(alarm, ref.read(authProvider)?.id ?? 'SYSTEM');
       print('DEBUG: AlarmNotifier.add save success');
       
       // Invalidate history to keep everything in sync
@@ -102,9 +105,9 @@ class AlarmNotifier extends _$AlarmNotifier {
     state = state.map((a) {
       if (a.id == alarmId) {
         updatedAlarm = a.copyWith(
-          acknowledged: true,
-          acknowledgedAt: DateTime.now(),
-          acknowledgedBy: currentUser?.id,
+          ackRes: true,
+          ackResAt: DateTime.now(),
+          ackResBy: currentUser?.id,
         );
         return updatedAlarm!;
       }
@@ -113,15 +116,14 @@ class AlarmNotifier extends _$AlarmNotifier {
 
     if (updatedAlarm != null) {
       try {
-        await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!);
+        await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!, currentUser?.id ?? 'SYSTEM');
         
         // Log acknowledgement
         ref.read(auditRepositoryProvider).logAction(
           actionType: 'ALARM_ACKNOWLEDGED',
           entityType: 'ALARM',
           entityId: alarmId,
-          sessionId: updatedAlarm!.sessionId,
-          newValue: {'alarm_type': updatedAlarm!.type, 'severity': updatedAlarm!.severity},
+          newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
           performerId: currentUser?.id,
         );
       } catch (e) {
@@ -136,8 +138,9 @@ class AlarmNotifier extends _$AlarmNotifier {
     state = state.map((a) {
       if (a.id == alarmId) {
         updatedAlarm = a.copyWith(
-          resolved: true,
-          resolvedAt: DateTime.now(),
+          ackRes: true,
+          ackResAt: DateTime.now(),
+          ackResBy: currentUser?.id,
         );
         return updatedAlarm!;
       }
@@ -146,15 +149,14 @@ class AlarmNotifier extends _$AlarmNotifier {
 
     if (updatedAlarm != null) {
       try {
-        await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!);
+        await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!, currentUser?.id ?? 'SYSTEM');
         
         // Log resolution
         ref.read(auditRepositoryProvider).logAction(
           actionType: 'ALARM_RESOLVED',
           entityType: 'ALARM',
           entityId: alarmId,
-          sessionId: updatedAlarm!.sessionId,
-          newValue: {'alarm_type': updatedAlarm!.type, 'severity': updatedAlarm!.severity},
+          newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
           performerId: currentUser?.id,
         );
       } catch (e) {
@@ -165,19 +167,16 @@ class AlarmNotifier extends _$AlarmNotifier {
 
   void clearAll() => state = [];
 
-  List<Alarm> get active => state.where((a) => !a.resolved).toList();
+  List<Alarm> get active => state.where((a) => !a.ackRes).toList();
   
   bool get canContinue {
-    // 1. All alarms must be acknowledged
-    final unacknowledged = state.any((a) => !a.acknowledged);
-    if (unacknowledged) return false;
+    // 1. All alarms must be handled (ackRes)
+    final unhandled = state.any((a) => !a.ackRes);
+    if (unhandled) return false;
 
     // 2. High and Critical alarms must be resolved (solved)
-    final unresolvedHighCritical = state.any((a) => 
-      !a.resolved && (a.severity.toLowerCase() == 'high' || a.severity.toLowerCase() == 'critical')
-    );
-    
-    return !unresolvedHighCritical;
+    // For now, ackRes covers resolution in this simplified schema
+    return true;
   }
 }
 
@@ -473,7 +472,7 @@ class InfusionNotifier extends _$InfusionNotifier {
   Future<void> triggerAlarm(AlarmType type, AlarmSeverity severity, {AlarmDefinition? definition}) async {
     // 1. Log the alarm event (this also ensures the session exists in DB)
     await _logAction('ALARM_TRIGGERED', newValue: {
-      'type': definition?.type ?? type.name,
+      'type': definition?.name ?? type.name,
       'severity': definition?.severity ?? severity.name
     });
 
@@ -544,7 +543,6 @@ class InfusionNotifier extends _$InfusionNotifier {
       actionType: type,
       entityType: 'INFUSION_SESSION',
       entityId: state.id,
-      sessionId: state.id,
       oldValue: oldValue,
       newValue: newValue,
       performerId: currentUser?.id,

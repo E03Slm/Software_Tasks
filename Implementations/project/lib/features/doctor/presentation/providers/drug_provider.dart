@@ -12,17 +12,8 @@ DrugRepository drugRepository(Ref ref) {
 }
 
 @riverpod
-class DrugListNotifier extends _$DrugListNotifier {
-  @override
-  FutureOr<List<Drug>> build() async {
-    final repo = ref.watch(drugRepositoryProvider);
-    return repo.fetchDrugs();
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => ref.read(drugRepositoryProvider).fetchDrugs());
-  }
+Stream<List<Drug>> drugList(Ref ref) {
+  return ref.watch(drugRepositoryProvider).streamDrugs();
 }
 
 @riverpod

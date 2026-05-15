@@ -15,9 +15,7 @@ abstract class Drug with _$Drug {
     @JsonKey(name: 'default_rate') required double defaultRate,
     @JsonKey(name: 'rate_unit') @Default('mL/hr') String rateUnit,
     @JsonKey(name: 'hard_limit_high') required double hardLimitHigh,
-    @JsonKey(name: 'hard_limit_low') @Default(0.0) double hardLimitLow,
     @JsonKey(name: 'soft_limit_high') double? softLimitHigh,
-    @JsonKey(name: 'soft_limit_low') double? softLimitLow,
     @JsonKey(name: 'Is_Deleted') @Default(false) bool isDeleted,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'created_by') String? createdBy,
@@ -34,7 +32,6 @@ abstract class Drug with _$Drug {
         concentrationUnit: 'mg/mL',
         defaultRate: 0,
         hardLimitHigh: 0,
-        hardLimitLow: 0,
         createdAt: DateTime.now(),
       );
 }

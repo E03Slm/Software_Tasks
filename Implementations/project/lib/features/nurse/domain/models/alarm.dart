@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'alarm_definition.dart';
 
 part 'alarm.freezed.dart';
 part 'alarm.g.dart';
@@ -8,18 +9,14 @@ abstract class Alarm with _$Alarm {
   const Alarm._();
 
   const factory Alarm({
-    @JsonKey(name: 'alarm_id') required String id,
+    @JsonKey(name: 'event_id') required String id,
     @JsonKey(name: 'session_id') required String sessionId,
-    String? definitionId,
-    required String type,
-    required String severity,
-    required DateTime timestamp,
-    @Default(false) bool acknowledged,
-    @JsonKey(name: 'acknowledged_by') String? acknowledgedBy,
-    @JsonKey(name: 'acknowledged_at') DateTime? acknowledgedAt,
-    @Default(false) bool resolved,
-    @JsonKey(name: 'resolved_at') DateTime? resolvedAt,
-    String? description,
+    @JsonKey(name: 'alarm_id') required String alarmId, // FK to alarms table
+    @JsonKey(name: 'timestamp') required DateTime alarmTime,
+    @JsonKey(name: 'ack_res') @Default(false) bool ackRes,
+    @JsonKey(name: 'ack_res_by') String? ackResBy,
+    @JsonKey(name: 'ack_res_at') DateTime? ackResAt,
+    @JsonKey(name: 'definition') AlarmDefinition? definition,
   }) = _Alarm;
 
   factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);

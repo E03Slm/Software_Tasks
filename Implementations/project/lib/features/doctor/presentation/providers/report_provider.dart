@@ -40,26 +40,35 @@ class ReportNotifier {
       final repo = ref.read(reportRepositoryProvider);
       final generator = ref.read(reportGeneratorProvider);
       
+      // Adjust end date to include the full day (23:59:59)
+      final adjustedEnd = DateTime(range.end.year, range.end.month, range.end.day, 23, 59, 59, 999);
+      
       // Multi-table parallel fetch
       final results = await Future.wait([
-        repo.fetchSessionsInRange(range.start, range.end),
-        repo.fetchAlarmsInRange(range.start, range.end),
-        repo.fetchTechnicalLogs(range.start, range.end),
+        repo.fetchSessionsInRange(range.start, adjustedEnd),
+        repo.fetchAlarmsInRange(range.start, adjustedEnd),
+        repo.fetchTechnicalLogs(range.start, adjustedEnd),
+        repo.fetchDrugManagementLogs(range.start, adjustedEnd),
       ]);
 
       final sessions = results[0] as List;
       final alarms = results[1] as List;
       final technicalLogs = results[2] as List;
+      final drugLogs = results[3] as List;
       
+      /* 
       if (sessions.isEmpty) {
         throw Exception('No clinical sessions found for the selected period.');
       }
+      */
       
+      final adjustedRange = DateTimeRange(start: range.start, end: adjustedEnd);
       final pdfBytes = await generator.generateInfusionSummary(
         sessions: sessions.cast(),
         alarms: alarms.cast(),
         technicalLogs: technicalLogs.cast(),
-        range: range,
+        drugManagementLogs: drugLogs.cast(),
+        range: adjustedRange,
         isDetailed: isDetailed,
       );
       
@@ -71,7 +80,7 @@ class ReportNotifier {
         performerId: activeUser?.id,
         oldValue: {}, // Provide empty object to prevent null
         newValue: {
-          'date_range': '${range.start} to ${range.end}',
+          'date_range': '${range.start} to $adjustedEnd',
           'is_detailed': isDetailed,
         },
       );

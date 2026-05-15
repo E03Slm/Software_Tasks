@@ -16,8 +16,6 @@ abstract class AuditLog with _$AuditLog {
     @JsonKey(name: 'entity_id') String? entityId,
     @JsonKey(name: 'old_value') String? oldValue,
     @JsonKey(name: 'new_value') String? newValue,
-    @JsonKey(name: 'ip_address') String? ipAddress,
-    @JsonKey(name: 'session_id') String? sessionId,
     @JsonKey(name: 'timestamp') required DateTime timestamp,
     @JsonKey(name: 'user') Map<String, dynamic>? userData,
   }) = _AuditLog;
@@ -26,6 +24,15 @@ abstract class AuditLog with _$AuditLog {
     final id = userData?['user_id'] as String?;
     if (id == null) return null;
     return 'ID: ${id.length > 8 ? id.substring(0, 8) : id}...';
+  }
+
+  String get fullName {
+    if (userData == null) return userId.substring(0, 8);
+    final fname = userData!['Fname'] as String? ?? '';
+    final mname = userData!['Mname'] as String? ?? '';
+    final lname = userData!['Lname'] as String? ?? '';
+    final name = '$fname $mname $lname'.trim().replaceAll(RegExp(r'\s+'), ' ');
+    return name.isNotEmpty ? name : userId.substring(0, 8);
   }
 
   String? get entityName {

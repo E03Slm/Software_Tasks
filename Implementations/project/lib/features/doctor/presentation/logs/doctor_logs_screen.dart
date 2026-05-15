@@ -85,7 +85,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                               Text('Target: ${log.entityType.replaceAll('_', ' ').toUpperCase()} ${log.entityName != null ? "(${log.entityName})" : ""}', 
                                 style: const TextStyle(fontSize: 12)),
-                              if (log.ipAddress != null) Text('IP Address: ${log.ipAddress}', style: const TextStyle(fontSize: 12)),
+
                               const SizedBox(height: 8),
                               if (log.oldValue != null) ...[
                                 const Text('OLD VALUE:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),

@@ -26,11 +26,12 @@ class AuditRepository {
         .toList();
   }
 
-  Future<List<AuditLog>> fetchLogsForEntity(String entityId) async {
+  Future<List<AuditLog>> fetchLogsForSession(String sessionId) async {
     final response = await _client
         .from('audit_log')
         .select('*, user:users!audit_log_user_id_fkey(*)')
-        .eq('entity_id', entityId)
+        .eq('entity_id', sessionId)
+        .eq('entity_type', 'INFUSION_SESSION')
         .order('timestamp', ascending: false);
     
     final list = response as List;
@@ -52,16 +53,18 @@ class AuditRepository {
     return _client
         .from('audit_log')
         .stream(primaryKey: ['log_id'])
-        .eq('session_id', sessionId)
+        .eq('entity_id', sessionId)
         .order('timestamp', ascending: false)
-        .map((data) => data.map((json) => AuditLog.fromJson(json)).toList());
+        .map((data) => data
+            .where((json) => json['entity_type'] == 'INFUSION_SESSION')
+            .map((json) => AuditLog.fromJson(json))
+            .toList());
   }
 
   Future<void> logAction({
     required String actionType,
     required String entityType,
     String? entityId,
-    String? sessionId,
     Map<String, dynamic>? oldValue,
     Map<String, dynamic>? newValue,
     String? performerId,
@@ -73,7 +76,6 @@ class AuditRepository {
     await _client.from('audit_log').insert({
       'log_id': logId,
       'user_id': finalUserId,
-      'session_id': sessionId,
       'action': actionType,
       'entity_type': entityType,
       'entity_id': entityId ?? logId, // Fallback to logId if entityId is null

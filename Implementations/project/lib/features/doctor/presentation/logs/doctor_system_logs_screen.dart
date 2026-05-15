@@ -110,8 +110,7 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
                             children: [
                               _buildDetailRow(Icons.person, 'Performer', log.userName ?? log.userId),
                               _buildDetailRow(Icons.fingerprint, 'Entity ID', log.entityId ?? 'N/A'),
-                              if (log.ipAddress != null) 
-                                _buildDetailRow(Icons.lan, 'IP Address', log.ipAddress!),
+
                               const SizedBox(height: 12),
                               if (log.oldValue != '{}' && log.oldValue != null) ...[
                                 const Text('PREVIOUS STATE', 

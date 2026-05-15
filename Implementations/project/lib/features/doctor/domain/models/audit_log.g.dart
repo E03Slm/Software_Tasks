@@ -14,8 +14,6 @@ _AuditLog _$AuditLogFromJson(Map<String, dynamic> json) => _AuditLog(
   entityId: json['entity_id'] as String?,
   oldValue: json['old_value'] as String?,
   newValue: json['new_value'] as String?,
-  ipAddress: json['ip_address'] as String?,
-  sessionId: json['session_id'] as String?,
   timestamp: DateTime.parse(json['timestamp'] as String),
   userData: json['user'] as Map<String, dynamic>?,
 );
@@ -28,8 +26,6 @@ Map<String, dynamic> _$AuditLogToJson(_AuditLog instance) => <String, dynamic>{
   'entity_id': instance.entityId,
   'old_value': instance.oldValue,
   'new_value': instance.newValue,
-  'ip_address': instance.ipAddress,
-  'session_id': instance.sessionId,
   'timestamp': instance.timestamp.toIso8601String(),
   'user': instance.userData,
 };

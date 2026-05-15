@@ -7,35 +7,27 @@ part of 'alarm.dart';
 // **************************************************************************
 
 _Alarm _$AlarmFromJson(Map<String, dynamic> json) => _Alarm(
-  id: json['alarm_id'] as String,
+  id: json['event_id'] as String,
   sessionId: json['session_id'] as String,
-  definitionId: json['definitionId'] as String?,
-  type: json['type'] as String,
-  severity: json['severity'] as String,
-  timestamp: DateTime.parse(json['timestamp'] as String),
-  acknowledged: json['acknowledged'] as bool? ?? false,
-  acknowledgedBy: json['acknowledged_by'] as String?,
-  acknowledgedAt: json['acknowledged_at'] == null
+  alarmId: json['alarm_id'] as String,
+  alarmTime: DateTime.parse(json['alarm_time'] as String),
+  ackRes: json['ack_res'] as bool? ?? false,
+  ackResBy: json['ack_res_by'] as String?,
+  ackResAt: json['ack_res_at'] == null
       ? null
-      : DateTime.parse(json['acknowledged_at'] as String),
-  resolved: json['resolved'] as bool? ?? false,
-  resolvedAt: json['resolved_at'] == null
+      : DateTime.parse(json['ack_res_at'] as String),
+  definition: json['definition'] == null
       ? null
-      : DateTime.parse(json['resolved_at'] as String),
-  description: json['description'] as String?,
+      : AlarmDefinition.fromJson(json['definition'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$AlarmToJson(_Alarm instance) => <String, dynamic>{
-  'alarm_id': instance.id,
+  'event_id': instance.id,
   'session_id': instance.sessionId,
-  'definitionId': instance.definitionId,
-  'type': instance.type,
-  'severity': instance.severity,
-  'timestamp': instance.timestamp.toIso8601String(),
-  'acknowledged': instance.acknowledged,
-  'acknowledged_by': instance.acknowledgedBy,
-  'acknowledged_at': instance.acknowledgedAt?.toIso8601String(),
-  'resolved': instance.resolved,
-  'resolved_at': instance.resolvedAt?.toIso8601String(),
-  'description': instance.description,
+  'alarm_id': instance.alarmId,
+  'alarm_time': instance.alarmTime.toIso8601String(),
+  'ack_res': instance.ackRes,
+  'ack_res_by': instance.ackResBy,
+  'ack_res_at': instance.ackResAt?.toIso8601String(),
+  'definition': instance.definition,
 };
