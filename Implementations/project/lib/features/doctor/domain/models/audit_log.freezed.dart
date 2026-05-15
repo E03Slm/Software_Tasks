@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuditLog {
 
-@JsonKey(name: 'log_id') String get id;@JsonKey(name: 'user_id') String get userId;@JsonKey(name: 'action') String get action;@JsonKey(name: 'entity_type') String get entityType;@JsonKey(name: 'entity_id') String? get entityId;@JsonKey(name: 'old_value') String? get oldValue;@JsonKey(name: 'new_value') String? get newValue;@JsonKey(name: 'ip_address') String? get ipAddress;@JsonKey(name: 'timestamp') DateTime get timestamp;@JsonKey(name: 'user') Map<String, dynamic>? get userData;
+@JsonKey(name: 'log_id') String get id;@JsonKey(name: 'user_id') String get userId;@JsonKey(name: 'action') String get action;@JsonKey(name: 'entity_type') String get entityType;@JsonKey(name: 'entity_id') String? get entityId;@JsonKey(name: 'old_value') String? get oldValue;@JsonKey(name: 'new_value') String? get newValue;@JsonKey(name: 'ip_address') String? get ipAddress;@JsonKey(name: 'session_id') String? get sessionId;@JsonKey(name: 'timestamp') DateTime get timestamp;@JsonKey(name: 'user') Map<String, dynamic>? get userData;
 /// Create a copy of AuditLog
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AuditLogCopyWith<AuditLog> get copyWith => _$AuditLogCopyWithImpl<AuditLog>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuditLog&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action)&&(identical(other.entityType, entityType) || other.entityType == entityType)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.oldValue, oldValue) || other.oldValue == oldValue)&&(identical(other.newValue, newValue) || other.newValue == newValue)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.userData, userData));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuditLog&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action)&&(identical(other.entityType, entityType) || other.entityType == entityType)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.oldValue, oldValue) || other.oldValue == oldValue)&&(identical(other.newValue, newValue) || other.newValue == newValue)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.userData, userData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,action,entityType,entityId,oldValue,newValue,ipAddress,timestamp,const DeepCollectionEquality().hash(userData));
+int get hashCode => Object.hash(runtimeType,id,userId,action,entityType,entityId,oldValue,newValue,ipAddress,sessionId,timestamp,const DeepCollectionEquality().hash(userData));
 
 @override
 String toString() {
-  return 'AuditLog(id: $id, userId: $userId, action: $action, entityType: $entityType, entityId: $entityId, oldValue: $oldValue, newValue: $newValue, ipAddress: $ipAddress, timestamp: $timestamp, userData: $userData)';
+  return 'AuditLog(id: $id, userId: $userId, action: $action, entityType: $entityType, entityId: $entityId, oldValue: $oldValue, newValue: $newValue, ipAddress: $ipAddress, sessionId: $sessionId, timestamp: $timestamp, userData: $userData)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AuditLogCopyWith<$Res>  {
   factory $AuditLogCopyWith(AuditLog value, $Res Function(AuditLog) _then) = _$AuditLogCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'log_id') String id,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'action') String action,@JsonKey(name: 'entity_type') String entityType,@JsonKey(name: 'entity_id') String? entityId,@JsonKey(name: 'old_value') String? oldValue,@JsonKey(name: 'new_value') String? newValue,@JsonKey(name: 'ip_address') String? ipAddress,@JsonKey(name: 'timestamp') DateTime timestamp,@JsonKey(name: 'user') Map<String, dynamic>? userData
+@JsonKey(name: 'log_id') String id,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'action') String action,@JsonKey(name: 'entity_type') String entityType,@JsonKey(name: 'entity_id') String? entityId,@JsonKey(name: 'old_value') String? oldValue,@JsonKey(name: 'new_value') String? newValue,@JsonKey(name: 'ip_address') String? ipAddress,@JsonKey(name: 'session_id') String? sessionId,@JsonKey(name: 'timestamp') DateTime timestamp,@JsonKey(name: 'user') Map<String, dynamic>? userData
 });
 
 
@@ -65,7 +65,7 @@ class _$AuditLogCopyWithImpl<$Res>
 
 /// Create a copy of AuditLog
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? action = null,Object? entityType = null,Object? entityId = freezed,Object? oldValue = freezed,Object? newValue = freezed,Object? ipAddress = freezed,Object? timestamp = null,Object? userData = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? action = null,Object? entityType = null,Object? entityId = freezed,Object? oldValue = freezed,Object? newValue = freezed,Object? ipAddress = freezed,Object? sessionId = freezed,Object? timestamp = null,Object? userData = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -75,6 +75,7 @@ as String,entityId: freezed == entityId ? _self.entityId : entityId // ignore: c
 as String?,oldValue: freezed == oldValue ? _self.oldValue : oldValue // ignore: cast_nullable_to_non_nullable
 as String?,newValue: freezed == newValue ? _self.newValue : newValue // ignore: cast_nullable_to_non_nullable
 as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String?,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
@@ -162,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuditLog() when $default != null:
-return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.timestamp,_that.userData);case _:
+return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.sessionId,_that.timestamp,_that.userData);case _:
   return orElse();
 
 }
@@ -183,10 +184,10 @@ return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entity
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)  $default,) {final _that = this;
 switch (_that) {
 case _AuditLog():
-return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.timestamp,_that.userData);case _:
+return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.sessionId,_that.timestamp,_that.userData);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +204,10 @@ return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entity
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'log_id')  String id, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'action')  String action, @JsonKey(name: 'entity_type')  String entityType, @JsonKey(name: 'entity_id')  String? entityId, @JsonKey(name: 'old_value')  String? oldValue, @JsonKey(name: 'new_value')  String? newValue, @JsonKey(name: 'ip_address')  String? ipAddress, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'timestamp')  DateTime timestamp, @JsonKey(name: 'user')  Map<String, dynamic>? userData)?  $default,) {final _that = this;
 switch (_that) {
 case _AuditLog() when $default != null:
-return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.timestamp,_that.userData);case _:
+return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entityId,_that.oldValue,_that.newValue,_that.ipAddress,_that.sessionId,_that.timestamp,_that.userData);case _:
   return null;
 
 }
@@ -218,7 +219,7 @@ return $default(_that.id,_that.userId,_that.action,_that.entityType,_that.entity
 @JsonSerializable()
 
 class _AuditLog extends AuditLog {
-  const _AuditLog({@JsonKey(name: 'log_id') required this.id, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'action') required this.action, @JsonKey(name: 'entity_type') required this.entityType, @JsonKey(name: 'entity_id') this.entityId, @JsonKey(name: 'old_value') this.oldValue, @JsonKey(name: 'new_value') this.newValue, @JsonKey(name: 'ip_address') this.ipAddress, @JsonKey(name: 'timestamp') required this.timestamp, @JsonKey(name: 'user') final  Map<String, dynamic>? userData}): _userData = userData,super._();
+  const _AuditLog({@JsonKey(name: 'log_id') required this.id, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'action') required this.action, @JsonKey(name: 'entity_type') required this.entityType, @JsonKey(name: 'entity_id') this.entityId, @JsonKey(name: 'old_value') this.oldValue, @JsonKey(name: 'new_value') this.newValue, @JsonKey(name: 'ip_address') this.ipAddress, @JsonKey(name: 'session_id') this.sessionId, @JsonKey(name: 'timestamp') required this.timestamp, @JsonKey(name: 'user') final  Map<String, dynamic>? userData}): _userData = userData,super._();
   factory _AuditLog.fromJson(Map<String, dynamic> json) => _$AuditLogFromJson(json);
 
 @override@JsonKey(name: 'log_id') final  String id;
@@ -229,6 +230,7 @@ class _AuditLog extends AuditLog {
 @override@JsonKey(name: 'old_value') final  String? oldValue;
 @override@JsonKey(name: 'new_value') final  String? newValue;
 @override@JsonKey(name: 'ip_address') final  String? ipAddress;
+@override@JsonKey(name: 'session_id') final  String? sessionId;
 @override@JsonKey(name: 'timestamp') final  DateTime timestamp;
  final  Map<String, dynamic>? _userData;
 @override@JsonKey(name: 'user') Map<String, dynamic>? get userData {
@@ -253,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuditLog&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action)&&(identical(other.entityType, entityType) || other.entityType == entityType)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.oldValue, oldValue) || other.oldValue == oldValue)&&(identical(other.newValue, newValue) || other.newValue == newValue)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other._userData, _userData));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuditLog&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action)&&(identical(other.entityType, entityType) || other.entityType == entityType)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.oldValue, oldValue) || other.oldValue == oldValue)&&(identical(other.newValue, newValue) || other.newValue == newValue)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other._userData, _userData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,action,entityType,entityId,oldValue,newValue,ipAddress,timestamp,const DeepCollectionEquality().hash(_userData));
+int get hashCode => Object.hash(runtimeType,id,userId,action,entityType,entityId,oldValue,newValue,ipAddress,sessionId,timestamp,const DeepCollectionEquality().hash(_userData));
 
 @override
 String toString() {
-  return 'AuditLog(id: $id, userId: $userId, action: $action, entityType: $entityType, entityId: $entityId, oldValue: $oldValue, newValue: $newValue, ipAddress: $ipAddress, timestamp: $timestamp, userData: $userData)';
+  return 'AuditLog(id: $id, userId: $userId, action: $action, entityType: $entityType, entityId: $entityId, oldValue: $oldValue, newValue: $newValue, ipAddress: $ipAddress, sessionId: $sessionId, timestamp: $timestamp, userData: $userData)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$AuditLogCopyWith<$Res> implements $AuditLogCopyWith<$Res>
   factory _$AuditLogCopyWith(_AuditLog value, $Res Function(_AuditLog) _then) = __$AuditLogCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'log_id') String id,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'action') String action,@JsonKey(name: 'entity_type') String entityType,@JsonKey(name: 'entity_id') String? entityId,@JsonKey(name: 'old_value') String? oldValue,@JsonKey(name: 'new_value') String? newValue,@JsonKey(name: 'ip_address') String? ipAddress,@JsonKey(name: 'timestamp') DateTime timestamp,@JsonKey(name: 'user') Map<String, dynamic>? userData
+@JsonKey(name: 'log_id') String id,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'action') String action,@JsonKey(name: 'entity_type') String entityType,@JsonKey(name: 'entity_id') String? entityId,@JsonKey(name: 'old_value') String? oldValue,@JsonKey(name: 'new_value') String? newValue,@JsonKey(name: 'ip_address') String? ipAddress,@JsonKey(name: 'session_id') String? sessionId,@JsonKey(name: 'timestamp') DateTime timestamp,@JsonKey(name: 'user') Map<String, dynamic>? userData
 });
 
 
@@ -290,7 +292,7 @@ class __$AuditLogCopyWithImpl<$Res>
 
 /// Create a copy of AuditLog
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? action = null,Object? entityType = null,Object? entityId = freezed,Object? oldValue = freezed,Object? newValue = freezed,Object? ipAddress = freezed,Object? timestamp = null,Object? userData = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? action = null,Object? entityType = null,Object? entityId = freezed,Object? oldValue = freezed,Object? newValue = freezed,Object? ipAddress = freezed,Object? sessionId = freezed,Object? timestamp = null,Object? userData = freezed,}) {
   return _then(_AuditLog(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -300,6 +302,7 @@ as String,entityId: freezed == entityId ? _self.entityId : entityId // ignore: c
 as String?,oldValue: freezed == oldValue ? _self.oldValue : oldValue // ignore: cast_nullable_to_non_nullable
 as String?,newValue: freezed == newValue ? _self.newValue : newValue // ignore: cast_nullable_to_non_nullable
 as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String?,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,userData: freezed == userData ? _self._userData : userData // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,

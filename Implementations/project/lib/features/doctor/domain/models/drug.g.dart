@@ -17,7 +17,7 @@ _Drug _$DrugFromJson(Map<String, dynamic> json) => _Drug(
   hardLimitLow: (json['hard_limit_low'] as num?)?.toDouble() ?? 0.0,
   softLimitHigh: (json['soft_limit_high'] as num?)?.toDouble(),
   softLimitLow: (json['soft_limit_low'] as num?)?.toDouble(),
-  isDeleted: json['is_deleted'] as bool? ?? false,
+  isDeleted: json['Is_Deleted'] as bool? ?? false,
   createdAt: DateTime.parse(json['created_at'] as String),
   createdBy: json['created_by'] as String?,
   updatedAt: json['updated_at'] == null
@@ -37,7 +37,7 @@ Map<String, dynamic> _$DrugToJson(_Drug instance) => <String, dynamic>{
   'hard_limit_low': instance.hardLimitLow,
   'soft_limit_high': instance.softLimitHigh,
   'soft_limit_low': instance.softLimitLow,
-  'is_deleted': instance.isDeleted,
+  'Is_Deleted': instance.isDeleted,
   'created_at': instance.createdAt.toIso8601String(),
   'created_by': instance.createdBy,
   'updated_at': instance.updatedAt?.toIso8601String(),

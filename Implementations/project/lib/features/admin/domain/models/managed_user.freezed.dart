@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ManagedUser {
 
- String get id;@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType get role;@JsonKey(name: 'is_deleted') bool get isDeleted; bool get isActive; DateTime? get createdAt; DateTime? get updatedAt;
+ String get id;@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType get role;@JsonKey(name: 'Is_Deleted') bool get isDeleted; bool get isActive; DateTime? get createdAt; DateTime? get updatedAt;
 /// Create a copy of ManagedUser
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ManagedUserCopyWith<$Res>  {
   factory $ManagedUserCopyWith(ManagedUser value, $Res Function(ManagedUser) _then) = _$ManagedUserCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'is_deleted') bool isDeleted, bool isActive, DateTime? createdAt, DateTime? updatedAt
+ String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'Is_Deleted') bool isDeleted, bool isActive, DateTime? createdAt, DateTime? updatedAt
 });
 
 
@@ -158,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'is_deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'Is_Deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ManagedUser() when $default != null:
 return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.createdAt,_that.updatedAt);case _:
@@ -179,7 +179,7 @@ return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.created
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'is_deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'Is_Deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ManagedUser():
 return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.createdAt,_that.updatedAt);case _:
@@ -199,7 +199,7 @@ return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.created
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'is_deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'Is_Deleted')  bool isDeleted,  bool isActive,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ManagedUser() when $default != null:
 return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.createdAt,_that.updatedAt);case _:
@@ -214,12 +214,12 @@ return $default(_that.id,_that.role,_that.isDeleted,_that.isActive,_that.created
 @JsonSerializable()
 
 class _ManagedUser extends ManagedUser {
-  const _ManagedUser({required this.id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required this.role, @JsonKey(name: 'is_deleted') this.isDeleted = false, this.isActive = true, this.createdAt, this.updatedAt}): super._();
+  const _ManagedUser({required this.id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required this.role, @JsonKey(name: 'Is_Deleted') this.isDeleted = false, this.isActive = true, this.createdAt, this.updatedAt}): super._();
   factory _ManagedUser.fromJson(Map<String, dynamic> json) => _$ManagedUserFromJson(json);
 
 @override final  String id;
 @override@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) final  RoleType role;
-@override@JsonKey(name: 'is_deleted') final  bool isDeleted;
+@override@JsonKey(name: 'Is_Deleted') final  bool isDeleted;
 @override@JsonKey() final  bool isActive;
 @override final  DateTime? createdAt;
 @override final  DateTime? updatedAt;
@@ -257,7 +257,7 @@ abstract mixin class _$ManagedUserCopyWith<$Res> implements $ManagedUserCopyWith
   factory _$ManagedUserCopyWith(_ManagedUser value, $Res Function(_ManagedUser) _then) = __$ManagedUserCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'is_deleted') bool isDeleted, bool isActive, DateTime? createdAt, DateTime? updatedAt
+ String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'Is_Deleted') bool isDeleted, bool isActive, DateTime? createdAt, DateTime? updatedAt
 });
 
 
