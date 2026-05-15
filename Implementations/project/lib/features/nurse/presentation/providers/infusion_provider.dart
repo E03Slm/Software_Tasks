@@ -287,6 +287,7 @@ class InfusionNotifier extends _$InfusionNotifier {
   void setParameters({
     required double infusionRate,
     required double totalVolume,
+    String? patientId,
     double? bolusDose,
   }) {
     final drug = state.drug;
@@ -300,10 +301,15 @@ class InfusionNotifier extends _$InfusionNotifier {
       return; // Prevent setting parameters
     }
 
-    final oldParams = {'rate': state.infusionRate, 'volume': state.totalVolume};
+    final oldParams = {
+      'rate': state.infusionRate, 
+      'volume': state.totalVolume,
+      'patient_id': state.patientId,
+    };
     state = state.copyWith(
       infusionRate: infusionRate,
       totalVolume: totalVolume,
+      patientId: patientId,
       status: 'Programming',
     );
     _syncDoseFromRate();
@@ -311,7 +317,7 @@ class InfusionNotifier extends _$InfusionNotifier {
     _logAction(
       'PARAMETERS_SET',
       oldValue: oldParams,
-      newValue: {'rate': infusionRate, 'volume': totalVolume},
+      newValue: {'rate': infusionRate, 'volume': totalVolume, 'patient_id': patientId},
     );
   }
 

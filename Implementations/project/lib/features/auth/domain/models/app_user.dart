@@ -10,7 +10,6 @@ abstract class AppUser with _$AppUser {
 
   const factory AppUser({
     @JsonKey(name: 'user_id') required String id,
-    required String username,
     @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required RoleType role,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'last_login') DateTime? lastLogin,
@@ -23,6 +22,7 @@ RoleType _roleFromJson(String role) {
   switch (role.toUpperCase()) {
     case 'DOCTOR': return RoleType.doctor;
     case 'ADMIN': return RoleType.admin;
+    case 'PATIENT': return RoleType.patient;
     default: return RoleType.nurse;
   }
 }

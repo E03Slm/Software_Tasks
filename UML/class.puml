@@ -3,13 +3,18 @@ skinparam classAttributeIconSize 0
 
 ' --- User Management & RBAC (F-A-01, S-ALL-01) ---
 abstract class User {
-  -userId: UUID
-  -username: String
-  -passwordHash: String
+  -userId: TEXT
+  -Fname: String
+  -Mname: String
+  -Lname: String
+  -passwordHash: TEXT
   -role: RoleType
+  -created_at: Timestamp
+  -last_login: Timestamp
+  --
   +login()
   +logout()
-    --
+  ==
   ' Doctor-specific functions
   +manageDrugLibrary()
   +setSafetyLimits()
@@ -34,8 +39,7 @@ enum RoleType {
   DOCTOR
   NURSE
   ADMIN
-}
-
+  }
 
 ' --- Drug Library & Safety (F-D-01, F-D-02, SF-D-01) ---
 class Drug {
@@ -97,6 +101,7 @@ class AuditLog {
   +previewActiveSession()
   +queryByDateRange() 
 }
+
 
 
 ' Doctor governs Drug (F-D-01)

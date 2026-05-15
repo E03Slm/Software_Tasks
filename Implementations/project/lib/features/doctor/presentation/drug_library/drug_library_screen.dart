@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/drug_provider.dart';
 import '../../domain/models/drug.dart';
+import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../../core/theme/doctor_theme.dart';
 
 class DrugLibraryScreen extends ConsumerWidget {
@@ -90,7 +91,8 @@ class DrugLibraryScreen extends ConsumerWidget {
           TextButton(
             onPressed: () async {
               try {
-                await ref.read(drugRepositoryProvider).deleteDrug(drug.id);
+                final currentUser = ref.read(authProvider);
+                await ref.read(drugRepositoryProvider).deleteDrug(drug.id, currentUser?.id ?? '');
                 // Invalidate the provider to trigger a fresh fetch
                 ref.invalidate(drugListProvider);
                 if (context.mounted) Navigator.pop(context);

@@ -10,6 +10,7 @@ _InfusionSession _$InfusionSessionFromJson(Map<String, dynamic> json) =>
     _InfusionSession(
       id: json['session_id'] as String,
       userId: json['user_id'] as String?,
+      patientId: json['patient_id'] as String?,
       drugId: json['drug_id'] as String?,
       drug: json['drug'] == null
           ? null
@@ -38,6 +39,7 @@ Map<String, dynamic> _$InfusionSessionToJson(_InfusionSession instance) =>
     <String, dynamic>{
       'session_id': instance.id,
       'user_id': instance.userId,
+      'patient_id': instance.patientId,
       'drug_id': instance.drugId,
       'drug': instance.drug,
       'rate': instance.infusionRate,

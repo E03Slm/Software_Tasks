@@ -13,7 +13,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _nationalIdController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
@@ -25,7 +25,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     final success = await ref.read(authProvider.notifier).login(
-      _usernameController.text.trim(),
+      _nationalIdController.text.trim(),
       _passwordController.text.trim(),
     );
 
@@ -41,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } else {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Invalid username or password. Please try again.';
+          _errorMessage = 'Invalid National ID or password. Please try again.';
           _isLoading = false;
         });
       }
@@ -111,10 +111,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
 
                     TextField(
-                      controller: _usernameController,
+                      controller: _nationalIdController,
                       decoration: InputDecoration(
-                        labelText: 'Username',
-                        prefixIcon: const Icon(Icons.person_outline_rounded),
+                        labelText: 'National ID',
+                        prefixIcon: const Icon(Icons.badge_outlined),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                         filled: true,
                         fillColor: Colors.grey.shade50,

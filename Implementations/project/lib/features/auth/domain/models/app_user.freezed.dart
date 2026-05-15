@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppUser {
 
-@JsonKey(name: 'user_id') String get id; String get username;@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType get role;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'last_login') DateTime? get lastLogin;
+@JsonKey(name: 'user_id') String get id;@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType get role;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'last_login') DateTime? get lastLogin;
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AppUserCopyWith<AppUser> get copyWith => _$AppUserCopyWithImpl<AppUser>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppUser&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppUser&&(identical(other.id, id) || other.id == id)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,role,createdAt,lastLogin);
+int get hashCode => Object.hash(runtimeType,id,role,createdAt,lastLogin);
 
 @override
 String toString() {
-  return 'AppUser(id: $id, username: $username, role: $role, createdAt: $createdAt, lastLogin: $lastLogin)';
+  return 'AppUser(id: $id, role: $role, createdAt: $createdAt, lastLogin: $lastLogin)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AppUserCopyWith<$Res>  {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) _then) = _$AppUserCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'user_id') String id, String username,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'last_login') DateTime? lastLogin
+@JsonKey(name: 'user_id') String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'last_login') DateTime? lastLogin
 });
 
 
@@ -65,10 +65,9 @@ class _$AppUserCopyWithImpl<$Res>
 
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = null,Object? role = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? role = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as RoleType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastLogin: freezed == lastLogin ? _self.lastLogin : lastLogin // ignore: cast_nullable_to_non_nullable
@@ -157,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String id,  String username, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppUser() when $default != null:
-return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLogin);case _:
+return $default(_that.id,_that.role,_that.createdAt,_that.lastLogin);case _:
   return orElse();
 
 }
@@ -178,10 +177,10 @@ return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLog
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String id,  String username, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)  $default,) {final _that = this;
 switch (_that) {
 case _AppUser():
-return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLogin);case _:
+return $default(_that.id,_that.role,_that.createdAt,_that.lastLogin);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +197,10 @@ return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLog
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'user_id')  String id,  String username, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'user_id')  String id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson)  RoleType role, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'last_login')  DateTime? lastLogin)?  $default,) {final _that = this;
 switch (_that) {
 case _AppUser() when $default != null:
-return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLogin);case _:
+return $default(_that.id,_that.role,_that.createdAt,_that.lastLogin);case _:
   return null;
 
 }
@@ -213,11 +212,10 @@ return $default(_that.id,_that.username,_that.role,_that.createdAt,_that.lastLog
 @JsonSerializable()
 
 class _AppUser extends AppUser {
-  const _AppUser({@JsonKey(name: 'user_id') required this.id, required this.username, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required this.role, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'last_login') this.lastLogin}): super._();
+  const _AppUser({@JsonKey(name: 'user_id') required this.id, @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required this.role, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'last_login') this.lastLogin}): super._();
   factory _AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);
 
 @override@JsonKey(name: 'user_id') final  String id;
-@override final  String username;
 @override@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) final  RoleType role;
 @override@JsonKey(name: 'created_at') final  DateTime createdAt;
 @override@JsonKey(name: 'last_login') final  DateTime? lastLogin;
@@ -235,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppUser&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppUser&&(identical(other.id, id) || other.id == id)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,role,createdAt,lastLogin);
+int get hashCode => Object.hash(runtimeType,id,role,createdAt,lastLogin);
 
 @override
 String toString() {
-  return 'AppUser(id: $id, username: $username, role: $role, createdAt: $createdAt, lastLogin: $lastLogin)';
+  return 'AppUser(id: $id, role: $role, createdAt: $createdAt, lastLogin: $lastLogin)';
 }
 
 
@@ -255,7 +253,7 @@ abstract mixin class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
   factory _$AppUserCopyWith(_AppUser value, $Res Function(_AppUser) _then) = __$AppUserCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'user_id') String id, String username,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'last_login') DateTime? lastLogin
+@JsonKey(name: 'user_id') String id,@JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) RoleType role,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'last_login') DateTime? lastLogin
 });
 
 
@@ -272,10 +270,9 @@ class __$AppUserCopyWithImpl<$Res>
 
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = null,Object? role = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? role = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
   return _then(_AppUser(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as RoleType,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastLogin: freezed == lastLogin ? _self.lastLogin : lastLogin // ignore: cast_nullable_to_non_nullable

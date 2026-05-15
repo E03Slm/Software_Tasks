@@ -3,8 +3,8 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/managed_user.dart';
 import '../../domain/repositories/admin_repository.dart';
-import '../../../doctor/domain/models/audit_log.dart';
 import '../../../doctor/data/repositories/audit_repository.dart';
+import '../../../doctor/domain/models/audit_log.dart';
 
 class SupabaseAdminRepository implements AdminRepository {
   final _client = Supabase.instance.client;
@@ -17,32 +17,35 @@ class SupabaseAdminRepository implements AdminRepository {
     final response = await _client
         .from('users')
         .select()
-        .order('username', ascending: true);
+        .eq('Is_Deleted', false);
     
-    final list = response as List;
+    final List list = response as List;
     return list
-        .where((json) => json['user_id'] != null && json['username'] != null && json['role'] != null)
+        .where((json) => json['user_id'] != null)
         .map((json) {
-      // Map user_id to id for ManagedUser
       final data = Map<String, dynamic>.from(json);
+      // Map database user_id to model id
       data['id'] = data['user_id'];
-      // Handle is_active if it doesn't exist in DB (default to true)
-      data['isActive'] = data['is_active'] ?? true;
       return ManagedUser.fromJson(data);
     }).toList();
   }
 
   @override
   Future<void> createUser(ManagedUser user, String password) async {
+    final String plainNationalId = user.id; 
+    final String userId = const Uuid().v4();
+    
+    // Hash both National ID and Password using Bcrypt
+    final nationalIdHash = BCrypt.hashpw(plainNationalId, BCrypt.gensalt());
     final passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
-    final userId = const Uuid().v4();
     
     final userData = {
       'user_id': userId,
-      'username': user.username,
+      'national_id': nationalIdHash,
       'password_hash': passwordHash,
       'role': user.role.name.toUpperCase(),
       'created_at': DateTime.now().toIso8601String(),
+      'Is_Deleted': false,
     };
 
     await _client.from('users').insert(userData);
@@ -51,82 +54,68 @@ class SupabaseAdminRepository implements AdminRepository {
       actionType: 'CREATE_USER',
       entityType: 'USER',
       entityId: userId,
-      newValue: {'username': user.username, 'role': user.role.name},
+      newValue: {'role': user.role.name},
     );
   }
 
   @override
   Future<void> updateUser(ManagedUser user) async {
-    // Fetch old data for audit
-    final oldData = await _client
-        .from('users')
-        .select()
-        .eq('user_id', user.id)
-        .single();
-
     final updateData = {
-      'username': user.username,
       'role': user.role.name.toUpperCase(),
+      'is_active': user.isActive,
     };
 
-    await _client.from('users').update(updateData).eq('user_id', user.id);
+    await _client
+        .from('users')
+        .update(updateData)
+        .eq('user_id', user.id);
 
     await _auditRepo.logAction(
       actionType: 'UPDATE_USER',
       entityType: 'USER',
       entityId: user.id,
-      oldValue: oldData,
       newValue: updateData,
     );
   }
 
   @override
   Future<void> deleteUser(String userId) async {
-    // 1. Fetch old data for audit before anything else
-    final oldData = await _client
+    final performerId = _client.auth.currentUser?.id;
+    // Perform soft deletion as per requirement
+    await _client
         .from('users')
-        .select()
-        .eq('user_id', userId)
-        .single();
+        .update({'Is_Deleted': true})
+        .eq('user_id', userId);
 
-    // 2. Log the deletion action FIRST (while user still exists)
     await _auditRepo.logAction(
       actionType: 'DELETE_USER',
       entityType: 'USER',
       entityId: userId,
-      oldValue: oldData,
+      performerId: performerId,
+      newValue: {'Is_Deleted': true},
     );
-
-    // 3. Nullify user_id in audit_log to satisfy foreign key constraint
-    // This preserves the logs but removes the hard link to the deleted user
-    await _client
-        .from('audit_log')
-        .update({'user_id': null})
-        .eq('user_id', userId);
-
-    // 4. Finally delete the user
-    await _client.from('users').delete().eq('user_id', userId);
   }
 
   @override
   Future<List<AuditLog>> fetchAuditLogs() async {
-    final logs = await _auditRepo.fetchLogs();
-    // AuditRepo already returns objects, but if we wanted to filter here:
-    return logs; 
+    return _auditRepo.fetchLogs();
   }
 
   @override
   Future<Map<String, dynamic>> fetchSystemStats() async {
-    // Fetch data and get counts
-    final userList = await _client.from('users').select('user_id');
-    final sessionList = await _client.from('infusion_session').select('session_id');
-    final alarmList = await _client.from('alarm').select('alarm_id'); // Fixed column name
+    final userCountResponse = await _client
+        .from('users')
+        .select('user_id')
+        .eq('Is_Deleted', false);
+    
+    final logsCountResponse = await _client
+        .from('audit_log')
+        .select('log_id');
 
     return {
-      'total_users': (userList as List).length,
-      'active_sessions': (sessionList as List).length,
-      'total_alarms': (alarmList as List).length,
-      'system_status': 'Healthy',
+      'total_users': (userCountResponse as List).length,
+      'total_logs': (logsCountResponse as List).length,
+      'last_updated': DateTime.now().toIso8601String(),
     };
   }
 }

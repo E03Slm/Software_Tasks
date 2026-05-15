@@ -8,7 +8,6 @@ part of 'app_user.dart';
 
 _AppUser _$AppUserFromJson(Map<String, dynamic> json) => _AppUser(
   id: json['user_id'] as String,
-  username: json['username'] as String,
   role: _roleFromJson(json['role'] as String),
   createdAt: DateTime.parse(json['created_at'] as String),
   lastLogin: json['last_login'] == null
@@ -18,7 +17,6 @@ _AppUser _$AppUserFromJson(Map<String, dynamic> json) => _AppUser(
 
 Map<String, dynamic> _$AppUserToJson(_AppUser instance) => <String, dynamic>{
   'user_id': instance.id,
-  'username': instance.username,
   'role': _roleToJson(instance.role),
   'created_at': instance.createdAt.toIso8601String(),
   'last_login': instance.lastLogin?.toIso8601String(),

@@ -18,6 +18,7 @@ abstract class Drug with _$Drug {
     @JsonKey(name: 'hard_limit_low') @Default(0.0) double hardLimitLow,
     @JsonKey(name: 'soft_limit_high') double? softLimitHigh,
     @JsonKey(name: 'soft_limit_low') double? softLimitLow,
+    @JsonKey(name: 'Is_Deleted') @Default(false) bool isDeleted,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,

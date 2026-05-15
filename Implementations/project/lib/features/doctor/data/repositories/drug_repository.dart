@@ -12,6 +12,7 @@ class DrugRepository {
     final response = await _client
         .from('drug')
         .select()
+        .eq('Is_Deleted', false)
         .order('name', ascending: true);
     
     final list = response as List;
@@ -27,7 +28,7 @@ class DrugRepository {
         .stream(primaryKey: ['drug_id'])
         .order('name', ascending: true)
         .map((data) => data
-            .where((json) => json['drug_id'] != null && json['name'] != null)
+            .where((json) => json['drug_id'] != null && json['name'] != null && json['Is_Deleted'] == false)
             .map((json) => Drug.fromJson(json))
             .toList());
   }
@@ -53,7 +54,6 @@ class DrugRepository {
       entityId: result['drug_id'],
       oldValue: {}, // Provide empty object to prevent null
       newValue: result,
-      sessionId: result['drug_id'], // Map session_id to drug_id as requested
       performerId: userId,
     );
   }
@@ -84,25 +84,26 @@ class DrugRepository {
       entityId: drug.id,
       oldValue: oldData,
       newValue: json,
-      sessionId: drug.id, // Map session_id to drug_id as requested
       performerId: userId,
     );
   }
 
-  Future<void> deleteDrug(String id) async {
+  Future<void> deleteDrug(String id, String userId) async {
     final oldData = await _client
         .from('drug')
         .select()
         .eq('drug_id', id)
         .single();
 
-    await _client.from('drug').delete().eq('drug_id', id);
+    await _client.from('drug').update({'Is_Deleted': true}).eq('drug_id', id);
 
     await _auditRepo.logAction(
       actionType: 'DELETE_DRUG',
       entityType: 'DRUG',
       entityId: id,
       oldValue: oldData,
+      newValue: {'Is_Deleted': true},
+      performerId: userId,
     );
   }
 }

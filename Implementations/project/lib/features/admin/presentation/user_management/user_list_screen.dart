@@ -17,9 +17,9 @@ class UserListScreen extends ConsumerWidget {
       body: usersAsync.when(
         data: (users) {
           final filteredUsers = users.where((user) {
-            final username = user.username.toLowerCase();
+            final nationalId = user.id.toLowerCase();
             final role = user.role.toString().split('.').last.toLowerCase();
-            return username.contains(searchQuery) || role.contains(searchQuery);
+            return nationalId.contains(searchQuery) || role.contains(searchQuery);
           }).toList();
 
           return Column(
@@ -28,7 +28,7 @@ class UserListScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search users by username or role...',
+                    hintText: 'Search users by ID or role...',
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -52,7 +52,8 @@ class UserListScreen extends ConsumerWidget {
                             backgroundColor: _getRoleColor(user.role).withOpacity(0.1),
                             child: Icon(_getRoleIcon(user.role), color: _getRoleColor(user.role)),
                           ),
-                          title: Text(user.username, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text('ID: ${user.id.length > 10 ? user.id.substring(0, 10) : user.id}...', 
+                                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                           subtitle: Text('Role: ${user.role.toString().split('.').last.toUpperCase()}'),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -111,7 +112,7 @@ class UserListScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Confirm Delete'),
-        content: Text('Are you sure you want to delete user "${user.username}"? This action cannot be undone.'),
+        content: Text('Are you sure you want to delete user "${user.id.substring(0, 8)}..."? This action cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

@@ -89,15 +89,7 @@ class AdminShell extends ConsumerWidget {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('System Configuration'),
-              selected: location == '/admin/config',
-              onTap: () {
-                // Not implemented yet
-                Navigator.pop(context);
-              },
-            ),
+            const Divider(),
             const Spacer(),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),

@@ -8,9 +8,9 @@ abstract class Alarm with _$Alarm {
   const Alarm._();
 
   const factory Alarm({
-    @JsonKey(name: 'event_id') required String id,
+    @JsonKey(name: 'alarm_id') required String id,
     @JsonKey(name: 'session_id') required String sessionId,
-    @JsonKey(name: 'alarm_id') String? definitionId,
+    String? definitionId,
     required String type,
     required String severity,
     required DateTime timestamp,

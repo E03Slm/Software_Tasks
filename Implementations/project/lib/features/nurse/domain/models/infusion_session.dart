@@ -12,6 +12,7 @@ abstract class InfusionSession with _$InfusionSession {
   const factory InfusionSession({
     @JsonKey(name: 'session_id') required String id,
     @JsonKey(name: 'user_id') String? userId,
+    @JsonKey(name: 'patient_id') String? patientId,
     @JsonKey(name: 'drug_id') String? drugId,
     @JsonKey(name: 'drug') Drug? drug,
     @JsonKey(name: 'rate') required double infusionRate,
@@ -30,7 +31,11 @@ abstract class InfusionSession with _$InfusionSession {
     @JsonKey(name: 'clinician') Map<String, dynamic>? clinicianData,
   }) = _InfusionSession;
 
-  String? get clinicianName => clinicianData?['username'] as String?;
+  String? get clinicianName {
+    final id = clinicianData?['user_id'] as String?;
+    if (id == null) return null;
+    return 'ID: ${id.length > 8 ? id.substring(0, 8) : id}...';
+  }
 
   factory InfusionSession.fromJson(Map<String, dynamic> json) => _$InfusionSessionFromJson(json);
 

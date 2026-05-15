@@ -37,7 +37,7 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'This is a simulation of the Admin Audit View inside the Doctor interface.',
+                    'This is a simulation of the Admin Audit View inside the Doctor interface. (Login logs are excluded per policy)',
                     style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
                   ),
                 ),
@@ -67,10 +67,12 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
           Expanded(
             child: logsAsync.when(
               data: (logs) {
+                // Filter out LOGIN and LOGOUT actions in the UI as requested for Doctors
                 final filteredLogs = logs.where((log) => 
-                  log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                  !['LOGIN', 'LOGOUT'].contains(log.action.toUpperCase()) &&
+                  (log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                   log.entityType.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  (log.userName?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false)
+                  (log.userName?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false))
                 ).toList();
 
                 if (filteredLogs.isEmpty) {

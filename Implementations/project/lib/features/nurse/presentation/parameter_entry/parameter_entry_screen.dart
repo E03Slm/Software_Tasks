@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project/features/nurse/presentation/providers/infusion_provider.dart';
+import 'package:project/features/nurse/presentation/providers/patients_provider.dart';
 import 'package:project/features/nurse/domain/models/infusion_session.dart';
 import 'package:project/features/doctor/domain/models/drug.dart';
+import 'package:project/features/admin/domain/models/managed_user.dart';
 import '../../../../core/theme/nurse_theme.dart';
 
 class ParameterEntryScreen extends ConsumerStatefulWidget {
@@ -19,6 +21,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
   late TextEditingController _doseController;
   late TextEditingController _rateController;
   late TextEditingController _volumeController;
+  String? _selectedPatientId;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
         
     _rateController = TextEditingController(text: initialRate.toStringAsFixed(1));
     _volumeController = TextEditingController(text: session.totalVolume > 0 ? session.totalVolume.toStringAsFixed(0) : "100");
+    _selectedPatientId = session.patientId;
     
     // Unused controllers kept for minimal code churn but removed from UI
     _weightController = TextEditingController();
@@ -57,6 +61,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
       ref.read(infusionProvider.notifier).setParameters(
             infusionRate: double.parse(_rateController.text),
             totalVolume: double.parse(_volumeController.text),
+            patientId: _selectedPatientId,
           );
       context.go('/nurse');
     }
@@ -83,6 +88,8 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(drug),
+              const SizedBox(height: 24),
+              _buildPatientSelection(),
               const SizedBox(height: 24),
               _buildParameterGrid(drug),
               const SizedBox(height: 32),
@@ -442,6 +449,44 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
               ],
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPatientSelection() {
+    final patientsAsync = ref.watch(patientsProvider);
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'PATIENT IDENTIFICATION',
+          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11, letterSpacing: 0.8, color: Colors.blueGrey),
+        ),
+        const SizedBox(height: 12),
+        patientsAsync.when(
+          data: (patients) => DropdownButtonFormField<String>(
+            value: _selectedPatientId,
+            decoration: InputDecoration(
+              hintText: 'Select Patient (National ID)',
+              prefixIcon: const Icon(Icons.person_search),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
+            items: patients.map((p) => DropdownMenuItem(
+              value: p.id,
+              child: Text('Patient ID: ${p.id.substring(0, 8)}...'), // Bcrypted IDs are long, show snippet
+            )).toList(),
+            onChanged: (val) => setState(() => _selectedPatientId = val),
+            validator: (val) => val == null ? 'Patient required' : null,
+          ),
+          loading: () => const LinearProgressIndicator(),
+          error: (err, _) => Text('Error loading patients: $err', style: const TextStyle(color: Colors.red)),
         ),
       ],
     );

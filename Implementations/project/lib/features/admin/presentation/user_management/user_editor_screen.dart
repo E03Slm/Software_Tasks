@@ -16,7 +16,7 @@ class UserEditorScreen extends ConsumerStatefulWidget {
 
 class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _usernameController;
+  late TextEditingController _nationalIdController;
   late TextEditingController _passwordController;
   RoleType _selectedRole = RoleType.nurse;
   bool _isEditing = false;
@@ -25,7 +25,7 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   void initState() {
     super.initState();
     _isEditing = widget.userId != null;
-    _usernameController = TextEditingController();
+    _nationalIdController = TextEditingController();
     _passwordController = TextEditingController();
 
     if (_isEditing) {
@@ -35,7 +35,7 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
         final user = users?.firstWhere((u) => u.id == widget.userId);
         if (user != null) {
           setState(() {
-            _usernameController.text = user.username;
+            _nationalIdController.text = user.id;
             _selectedRole = user.role;
           });
         }
@@ -45,7 +45,7 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _nationalIdController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -64,12 +64,13 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: _usernameController,
+                controller: _nationalIdController,
                 decoration: const InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: Icon(Icons.person),
+                  labelText: 'National ID',
+                  prefixIcon: Icon(Icons.badge),
                   border: OutlineInputBorder(),
                 ),
+                enabled: !_isEditing, // National ID (user_id) shouldn't change after creation
                 validator: (value) => (value == null || value.isEmpty) ? 'Required' : null,
               ),
               const SizedBox(height: 24),
@@ -125,8 +126,7 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final user = ManagedUser(
-      id: widget.userId ?? '',
-      username: _usernameController.text,
+      id: _nationalIdController.text,
       role: _selectedRole,
     );
 

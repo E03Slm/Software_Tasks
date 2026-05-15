@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Drug {
 
-@JsonKey(name: 'drug_id') String get id; String get name; double get concentration;@JsonKey(name: 'concentration_unit') String get concentrationUnit;@JsonKey(name: 'default_rate') double get defaultRate;@JsonKey(name: 'rate_unit') String get rateUnit;@JsonKey(name: 'hard_limit_high') double get hardLimitHigh;@JsonKey(name: 'hard_limit_low') double get hardLimitLow;@JsonKey(name: 'soft_limit_high') double? get softLimitHigh;@JsonKey(name: 'soft_limit_low') double? get softLimitLow;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'created_by') String? get createdBy;@JsonKey(name: 'updated_at') DateTime? get updatedAt;@JsonKey(name: 'updated_by') String? get updatedBy;
+@JsonKey(name: 'drug_id') String get id; String get name; double get concentration;@JsonKey(name: 'concentration_unit') String get concentrationUnit;@JsonKey(name: 'default_rate') double get defaultRate;@JsonKey(name: 'rate_unit') String get rateUnit;@JsonKey(name: 'hard_limit_high') double get hardLimitHigh;@JsonKey(name: 'hard_limit_low') double get hardLimitLow;@JsonKey(name: 'soft_limit_high') double? get softLimitHigh;@JsonKey(name: 'soft_limit_low') double? get softLimitLow;@JsonKey(name: 'is_deleted') bool get isDeleted;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'created_by') String? get createdBy;@JsonKey(name: 'updated_at') DateTime? get updatedAt;@JsonKey(name: 'updated_by') String? get updatedBy;
 /// Create a copy of Drug
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DrugCopyWith<Drug> get copyWith => _$DrugCopyWithImpl<Drug>(this as Drug, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Drug&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.concentration, concentration) || other.concentration == concentration)&&(identical(other.concentrationUnit, concentrationUnit) || other.concentrationUnit == concentrationUnit)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.rateUnit, rateUnit) || other.rateUnit == rateUnit)&&(identical(other.hardLimitHigh, hardLimitHigh) || other.hardLimitHigh == hardLimitHigh)&&(identical(other.hardLimitLow, hardLimitLow) || other.hardLimitLow == hardLimitLow)&&(identical(other.softLimitHigh, softLimitHigh) || other.softLimitHigh == softLimitHigh)&&(identical(other.softLimitLow, softLimitLow) || other.softLimitLow == softLimitLow)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.updatedBy, updatedBy) || other.updatedBy == updatedBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Drug&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.concentration, concentration) || other.concentration == concentration)&&(identical(other.concentrationUnit, concentrationUnit) || other.concentrationUnit == concentrationUnit)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.rateUnit, rateUnit) || other.rateUnit == rateUnit)&&(identical(other.hardLimitHigh, hardLimitHigh) || other.hardLimitHigh == hardLimitHigh)&&(identical(other.hardLimitLow, hardLimitLow) || other.hardLimitLow == hardLimitLow)&&(identical(other.softLimitHigh, softLimitHigh) || other.softLimitHigh == softLimitHigh)&&(identical(other.softLimitLow, softLimitLow) || other.softLimitLow == softLimitLow)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.updatedBy, updatedBy) || other.updatedBy == updatedBy));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,concentration,concentrationUnit,defaultRate,rateUnit,hardLimitHigh,hardLimitLow,softLimitHigh,softLimitLow,createdAt,createdBy,updatedAt,updatedBy);
+int get hashCode => Object.hash(runtimeType,id,name,concentration,concentrationUnit,defaultRate,rateUnit,hardLimitHigh,hardLimitLow,softLimitHigh,softLimitLow,isDeleted,createdAt,createdBy,updatedAt,updatedBy);
 
 @override
 String toString() {
-  return 'Drug(id: $id, name: $name, concentration: $concentration, concentrationUnit: $concentrationUnit, defaultRate: $defaultRate, rateUnit: $rateUnit, hardLimitHigh: $hardLimitHigh, hardLimitLow: $hardLimitLow, softLimitHigh: $softLimitHigh, softLimitLow: $softLimitLow, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+  return 'Drug(id: $id, name: $name, concentration: $concentration, concentrationUnit: $concentrationUnit, defaultRate: $defaultRate, rateUnit: $rateUnit, hardLimitHigh: $hardLimitHigh, hardLimitLow: $hardLimitLow, softLimitHigh: $softLimitHigh, softLimitLow: $softLimitLow, isDeleted: $isDeleted, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DrugCopyWith<$Res>  {
   factory $DrugCopyWith(Drug value, $Res Function(Drug) _then) = _$DrugCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'drug_id') String id, String name, double concentration,@JsonKey(name: 'concentration_unit') String concentrationUnit,@JsonKey(name: 'default_rate') double defaultRate,@JsonKey(name: 'rate_unit') String rateUnit,@JsonKey(name: 'hard_limit_high') double hardLimitHigh,@JsonKey(name: 'hard_limit_low') double hardLimitLow,@JsonKey(name: 'soft_limit_high') double? softLimitHigh,@JsonKey(name: 'soft_limit_low') double? softLimitLow,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'created_by') String? createdBy,@JsonKey(name: 'updated_at') DateTime? updatedAt,@JsonKey(name: 'updated_by') String? updatedBy
+@JsonKey(name: 'drug_id') String id, String name, double concentration,@JsonKey(name: 'concentration_unit') String concentrationUnit,@JsonKey(name: 'default_rate') double defaultRate,@JsonKey(name: 'rate_unit') String rateUnit,@JsonKey(name: 'hard_limit_high') double hardLimitHigh,@JsonKey(name: 'hard_limit_low') double hardLimitLow,@JsonKey(name: 'soft_limit_high') double? softLimitHigh,@JsonKey(name: 'soft_limit_low') double? softLimitLow,@JsonKey(name: 'is_deleted') bool isDeleted,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'created_by') String? createdBy,@JsonKey(name: 'updated_at') DateTime? updatedAt,@JsonKey(name: 'updated_by') String? updatedBy
 });
 
 
@@ -65,7 +65,7 @@ class _$DrugCopyWithImpl<$Res>
 
 /// Create a copy of Drug
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? concentration = null,Object? concentrationUnit = null,Object? defaultRate = null,Object? rateUnit = null,Object? hardLimitHigh = null,Object? hardLimitLow = null,Object? softLimitHigh = freezed,Object? softLimitLow = freezed,Object? createdAt = null,Object? createdBy = freezed,Object? updatedAt = freezed,Object? updatedBy = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? concentration = null,Object? concentrationUnit = null,Object? defaultRate = null,Object? rateUnit = null,Object? hardLimitHigh = null,Object? hardLimitLow = null,Object? softLimitHigh = freezed,Object? softLimitLow = freezed,Object? isDeleted = null,Object? createdAt = null,Object? createdBy = freezed,Object? updatedAt = freezed,Object? updatedBy = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,8 @@ as String,hardLimitHigh: null == hardLimitHigh ? _self.hardLimitHigh : hardLimit
 as double,hardLimitLow: null == hardLimitLow ? _self.hardLimitLow : hardLimitLow // ignore: cast_nullable_to_non_nullable
 as double,softLimitHigh: freezed == softLimitHigh ? _self.softLimitHigh : softLimitHigh // ignore: cast_nullable_to_non_nullable
 as double?,softLimitLow: freezed == softLimitLow ? _self.softLimitLow : softLimitLow // ignore: cast_nullable_to_non_nullable
-as double?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as double?,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,createdBy: freezed == createdBy ? _self.createdBy : createdBy // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedBy: freezed == updatedBy ? _self.updatedBy : updatedBy // ignore: cast_nullable_to_non_nullable
@@ -166,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'is_deleted')  bool isDeleted, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Drug() when $default != null:
-return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
+return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.isDeleted,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
   return orElse();
 
 }
@@ -187,10 +188,10 @@ return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'is_deleted')  bool isDeleted, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)  $default,) {final _that = this;
 switch (_that) {
 case _Drug():
-return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
+return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.isDeleted,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +208,10 @@ return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'drug_id')  String id,  String name,  double concentration, @JsonKey(name: 'concentration_unit')  String concentrationUnit, @JsonKey(name: 'default_rate')  double defaultRate, @JsonKey(name: 'rate_unit')  String rateUnit, @JsonKey(name: 'hard_limit_high')  double hardLimitHigh, @JsonKey(name: 'hard_limit_low')  double hardLimitLow, @JsonKey(name: 'soft_limit_high')  double? softLimitHigh, @JsonKey(name: 'soft_limit_low')  double? softLimitLow, @JsonKey(name: 'is_deleted')  bool isDeleted, @JsonKey(name: 'created_at')  DateTime createdAt, @JsonKey(name: 'created_by')  String? createdBy, @JsonKey(name: 'updated_at')  DateTime? updatedAt, @JsonKey(name: 'updated_by')  String? updatedBy)?  $default,) {final _that = this;
 switch (_that) {
 case _Drug() when $default != null:
-return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
+return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,_that.defaultRate,_that.rateUnit,_that.hardLimitHigh,_that.hardLimitLow,_that.softLimitHigh,_that.softLimitLow,_that.isDeleted,_that.createdAt,_that.createdBy,_that.updatedAt,_that.updatedBy);case _:
   return null;
 
 }
@@ -222,7 +223,7 @@ return $default(_that.id,_that.name,_that.concentration,_that.concentrationUnit,
 @JsonSerializable()
 
 class _Drug extends Drug {
-  const _Drug({@JsonKey(name: 'drug_id') required this.id, required this.name, required this.concentration, @JsonKey(name: 'concentration_unit') required this.concentrationUnit, @JsonKey(name: 'default_rate') required this.defaultRate, @JsonKey(name: 'rate_unit') this.rateUnit = 'mL/hr', @JsonKey(name: 'hard_limit_high') required this.hardLimitHigh, @JsonKey(name: 'hard_limit_low') this.hardLimitLow = 0.0, @JsonKey(name: 'soft_limit_high') this.softLimitHigh, @JsonKey(name: 'soft_limit_low') this.softLimitLow, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'created_by') this.createdBy, @JsonKey(name: 'updated_at') this.updatedAt, @JsonKey(name: 'updated_by') this.updatedBy}): super._();
+  const _Drug({@JsonKey(name: 'drug_id') required this.id, required this.name, required this.concentration, @JsonKey(name: 'concentration_unit') required this.concentrationUnit, @JsonKey(name: 'default_rate') required this.defaultRate, @JsonKey(name: 'rate_unit') this.rateUnit = 'mL/hr', @JsonKey(name: 'hard_limit_high') required this.hardLimitHigh, @JsonKey(name: 'hard_limit_low') this.hardLimitLow = 0.0, @JsonKey(name: 'soft_limit_high') this.softLimitHigh, @JsonKey(name: 'soft_limit_low') this.softLimitLow, @JsonKey(name: 'is_deleted') this.isDeleted = false, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'created_by') this.createdBy, @JsonKey(name: 'updated_at') this.updatedAt, @JsonKey(name: 'updated_by') this.updatedBy}): super._();
   factory _Drug.fromJson(Map<String, dynamic> json) => _$DrugFromJson(json);
 
 @override@JsonKey(name: 'drug_id') final  String id;
@@ -235,6 +236,7 @@ class _Drug extends Drug {
 @override@JsonKey(name: 'hard_limit_low') final  double hardLimitLow;
 @override@JsonKey(name: 'soft_limit_high') final  double? softLimitHigh;
 @override@JsonKey(name: 'soft_limit_low') final  double? softLimitLow;
+@override@JsonKey(name: 'is_deleted') final  bool isDeleted;
 @override@JsonKey(name: 'created_at') final  DateTime createdAt;
 @override@JsonKey(name: 'created_by') final  String? createdBy;
 @override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
@@ -253,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Drug&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.concentration, concentration) || other.concentration == concentration)&&(identical(other.concentrationUnit, concentrationUnit) || other.concentrationUnit == concentrationUnit)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.rateUnit, rateUnit) || other.rateUnit == rateUnit)&&(identical(other.hardLimitHigh, hardLimitHigh) || other.hardLimitHigh == hardLimitHigh)&&(identical(other.hardLimitLow, hardLimitLow) || other.hardLimitLow == hardLimitLow)&&(identical(other.softLimitHigh, softLimitHigh) || other.softLimitHigh == softLimitHigh)&&(identical(other.softLimitLow, softLimitLow) || other.softLimitLow == softLimitLow)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.updatedBy, updatedBy) || other.updatedBy == updatedBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Drug&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.concentration, concentration) || other.concentration == concentration)&&(identical(other.concentrationUnit, concentrationUnit) || other.concentrationUnit == concentrationUnit)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.rateUnit, rateUnit) || other.rateUnit == rateUnit)&&(identical(other.hardLimitHigh, hardLimitHigh) || other.hardLimitHigh == hardLimitHigh)&&(identical(other.hardLimitLow, hardLimitLow) || other.hardLimitLow == hardLimitLow)&&(identical(other.softLimitHigh, softLimitHigh) || other.softLimitHigh == softLimitHigh)&&(identical(other.softLimitLow, softLimitLow) || other.softLimitLow == softLimitLow)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.updatedBy, updatedBy) || other.updatedBy == updatedBy));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,concentration,concentrationUnit,defaultRate,rateUnit,hardLimitHigh,hardLimitLow,softLimitHigh,softLimitLow,createdAt,createdBy,updatedAt,updatedBy);
+int get hashCode => Object.hash(runtimeType,id,name,concentration,concentrationUnit,defaultRate,rateUnit,hardLimitHigh,hardLimitLow,softLimitHigh,softLimitLow,isDeleted,createdAt,createdBy,updatedAt,updatedBy);
 
 @override
 String toString() {
-  return 'Drug(id: $id, name: $name, concentration: $concentration, concentrationUnit: $concentrationUnit, defaultRate: $defaultRate, rateUnit: $rateUnit, hardLimitHigh: $hardLimitHigh, hardLimitLow: $hardLimitLow, softLimitHigh: $softLimitHigh, softLimitLow: $softLimitLow, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+  return 'Drug(id: $id, name: $name, concentration: $concentration, concentrationUnit: $concentrationUnit, defaultRate: $defaultRate, rateUnit: $rateUnit, hardLimitHigh: $hardLimitHigh, hardLimitLow: $hardLimitLow, softLimitHigh: $softLimitHigh, softLimitLow: $softLimitLow, isDeleted: $isDeleted, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$DrugCopyWith<$Res> implements $DrugCopyWith<$Res> {
   factory _$DrugCopyWith(_Drug value, $Res Function(_Drug) _then) = __$DrugCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'drug_id') String id, String name, double concentration,@JsonKey(name: 'concentration_unit') String concentrationUnit,@JsonKey(name: 'default_rate') double defaultRate,@JsonKey(name: 'rate_unit') String rateUnit,@JsonKey(name: 'hard_limit_high') double hardLimitHigh,@JsonKey(name: 'hard_limit_low') double hardLimitLow,@JsonKey(name: 'soft_limit_high') double? softLimitHigh,@JsonKey(name: 'soft_limit_low') double? softLimitLow,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'created_by') String? createdBy,@JsonKey(name: 'updated_at') DateTime? updatedAt,@JsonKey(name: 'updated_by') String? updatedBy
+@JsonKey(name: 'drug_id') String id, String name, double concentration,@JsonKey(name: 'concentration_unit') String concentrationUnit,@JsonKey(name: 'default_rate') double defaultRate,@JsonKey(name: 'rate_unit') String rateUnit,@JsonKey(name: 'hard_limit_high') double hardLimitHigh,@JsonKey(name: 'hard_limit_low') double hardLimitLow,@JsonKey(name: 'soft_limit_high') double? softLimitHigh,@JsonKey(name: 'soft_limit_low') double? softLimitLow,@JsonKey(name: 'is_deleted') bool isDeleted,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'created_by') String? createdBy,@JsonKey(name: 'updated_at') DateTime? updatedAt,@JsonKey(name: 'updated_by') String? updatedBy
 });
 
 
@@ -290,7 +292,7 @@ class __$DrugCopyWithImpl<$Res>
 
 /// Create a copy of Drug
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? concentration = null,Object? concentrationUnit = null,Object? defaultRate = null,Object? rateUnit = null,Object? hardLimitHigh = null,Object? hardLimitLow = null,Object? softLimitHigh = freezed,Object? softLimitLow = freezed,Object? createdAt = null,Object? createdBy = freezed,Object? updatedAt = freezed,Object? updatedBy = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? concentration = null,Object? concentrationUnit = null,Object? defaultRate = null,Object? rateUnit = null,Object? hardLimitHigh = null,Object? hardLimitLow = null,Object? softLimitHigh = freezed,Object? softLimitLow = freezed,Object? isDeleted = null,Object? createdAt = null,Object? createdBy = freezed,Object? updatedAt = freezed,Object? updatedBy = freezed,}) {
   return _then(_Drug(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -302,7 +304,8 @@ as String,hardLimitHigh: null == hardLimitHigh ? _self.hardLimitHigh : hardLimit
 as double,hardLimitLow: null == hardLimitLow ? _self.hardLimitLow : hardLimitLow // ignore: cast_nullable_to_non_nullable
 as double,softLimitHigh: freezed == softLimitHigh ? _self.softLimitHigh : softLimitHigh // ignore: cast_nullable_to_non_nullable
 as double?,softLimitLow: freezed == softLimitLow ? _self.softLimitLow : softLimitLow // ignore: cast_nullable_to_non_nullable
-as double?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as double?,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,createdBy: freezed == createdBy ? _self.createdBy : createdBy // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedBy: freezed == updatedBy ? _self.updatedBy : updatedBy // ignore: cast_nullable_to_non_nullable

@@ -16,26 +16,36 @@ AuthRepository authRepository(Ref ref) {
 class AuthNotifier extends _$AuthNotifier {
   @override
   AppUser? build() {
-    // For now, return null to force login
     return null;
   }
 
-  Future<bool> login(String username, String password) async {
+  /// Attempts to log in the user with National ID and Password.
+  /// Returns true if successful, false otherwise.
+  Future<bool> login(String nationalId, String password) async {
     try {
       final user = await ref.read(authRepositoryProvider).signIn(
-            username: username,
+            nationalId: nationalId,
             password: password,
           );
-      state = user;
-      return user != null;
+      
+      if (user != null) {
+        state = user;
+        return true;
+      }
+      return false;
     } catch (e) {
+      print('AuthProvider Login Error: $e');
       return false;
     }
   }
 
-  void logout() async {
-    await ref.read(authRepositoryProvider).signOut();
-    state = null;
+  /// Resets the auth state.
+  Future<void> logout() async {
+    try {
+      await ref.read(authRepositoryProvider).signOut();
+    } finally {
+      state = null;
+    }
   }
 }
 

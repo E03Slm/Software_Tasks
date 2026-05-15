@@ -46,7 +46,9 @@ class AlarmPanelScreen extends ConsumerWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (!alarm.acknowledged)
+                          if (!alarm.acknowledged && 
+                              alarm.severity.toLowerCase() != 'high' && 
+                              alarm.severity.toLowerCase() != 'critical')
                             ElevatedButton(
                               onPressed: () async {
                                 await ref.read(alarmProvider.notifier).acknowledge(alarm.id);
@@ -58,7 +60,7 @@ class AlarmPanelScreen extends ConsumerWidget {
                               ),
                               child: const Text('ACKNOWLEDGE'),
                             )
-                          else
+                          else if (alarm.acknowledged)
                             const Icon(Icons.check_circle, color: Colors.green),
                           
                           const SizedBox(width: 8),
