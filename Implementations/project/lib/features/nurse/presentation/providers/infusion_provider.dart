@@ -662,7 +662,7 @@ final sessionNamesMapProvider = FutureProvider<Map<String, String>>((ref) async 
       final drugName = drugId != null ? (drugMap[drugId] ?? 'Unknown Drug') : 'No Drug';
       final patientName = patientId != null ? (userNames[patientId] ?? 'Unknown Patient') : 'No Patient';
 
-      sessionMap[id] = '$drugName for $patientName ($status)';
+      sessionMap[id] = '$drugName for $patientName ($status) [${id.substring(0, 8)}]';
     }
     return sessionMap;
   } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/drug.dart';
 import '../../data/repositories/drug_repository.dart';
 import './audit_provider.dart';
@@ -40,6 +41,13 @@ AsyncValue<List<Drug>> filteredDrugs(Ref ref) {
 }
 
 final drugNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
-  final drugs = await ref.watch(drugListProvider.future);
-  return {for (final d in drugs) d.id: d.name};
+  try {
+    final client = Supabase.instance.client;
+    // We fetch ALL drugs, including deleted ones, so audit logs can resolve names for historical data
+    final response = await client.from('drug').select('drug_id, name');
+    return {for (final d in response) d['drug_id'] as String: d['name'] as String};
+  } catch (e) {
+    print('Error fetching drug names: $e');
+    return {};
+  }
 });
