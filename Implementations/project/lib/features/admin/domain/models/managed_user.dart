@@ -20,6 +20,11 @@ abstract class ManagedUser with _$ManagedUser {
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ManagedUser;
 
+  String get fullName {
+    final name = '${fname ?? ''} ${mname ?? ''} ${lname ?? ''}'.trim().replaceAll(RegExp(r'\s+'), ' ');
+    return name.isNotEmpty ? name : id.substring(0, 8);
+  }
+
   factory ManagedUser.fromJson(Map<String, dynamic> json) => _$ManagedUserFromJson(json);
 }
 

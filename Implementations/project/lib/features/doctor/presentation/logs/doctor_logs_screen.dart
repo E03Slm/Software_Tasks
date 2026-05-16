@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:convert';
 import '../providers/audit_provider.dart';
+import 'package:project/features/admin/presentation/providers/admin_providers.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class DoctorLogsScreen extends ConsumerStatefulWidget {
@@ -18,6 +20,8 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
   @override
   Widget build(BuildContext context) {
     final logsAsync = ref.watch(auditLogListProvider);
+    final userNamesAsync = ref.watch(userNamesMapProvider);
+    final userMap = userNamesAsync.value ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +56,8 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
               data: (logs) {
                 final filteredLogs = logs.where((log) => 
                   log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase())
+                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                  log.userName.toLowerCase().contains(_searchQuery.toLowerCase())
                 ).toList();
 
                 if (filteredLogs.isEmpty) {
@@ -72,7 +77,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
-                        '${log.entityType} • ${DateFormat('yyyy-MM-dd HH:mm:ss').format(log.timestamp)}',
+                        '${log.entityType}${log.entityName != null ? ' (${log.entityName})' : ''} • ${DateFormat('yyyy-MM-dd HH:mm:ss').format(log.timestamp)}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       children: [
@@ -81,37 +86,36 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Clinician: ${log.userName ?? log.userId}', 
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                              Text('Target: ${log.entityType.replaceAll('_', ' ').toUpperCase()} ${log.entityName != null ? "(${log.entityName})" : ""}', 
-                                style: const TextStyle(fontSize: 12)),
+                              Row(
+                                children: [
+                                  const Icon(Icons.person_outline, size: 14, color: Colors.blueGrey),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    log.userName, 
+                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)
+                                  ),
+                                  if (log.userRole != null) ...[
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color: Colors.teal.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        log.userRole!,
+                                        style: TextStyle(fontSize: 9, color: Colors.teal.shade800, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              Text('Entity ID: ${log.entityId}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
 
+                              const Divider(height: 24),
+                              const Text('DATA CHANGES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 0.5, color: Colors.grey)),
                               const SizedBox(height: 8),
-                              if (log.oldValue != null) ...[
-                                const Text('OLD VALUE:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(log.oldValue!, style: const TextStyle(fontFamily: 'monospace', fontSize: 10)),
-                                ),
-                                const SizedBox(height: 8),
-                              ],
-                              if (log.newValue != null) ...[
-                                const Text('NEW VALUE:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(log.newValue!, style: const TextStyle(fontFamily: 'monospace', fontSize: 10)),
-                                ),
-                              ],
+                              _buildDataDiff(log.oldValue, log.newValue, userMap),
                             ],
                           ),
                         ),
@@ -127,6 +131,90 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap) {
+    try {
+      final oldData = (oldJson != null && oldJson != '{}') ? jsonDecode(oldJson) as Map<String, dynamic> : <String, dynamic>{};
+      final newData = (newJson != null && newJson != '{}') ? jsonDecode(newJson) as Map<String, dynamic> : <String, dynamic>{};
+
+      final allKeys = {...oldData.keys, ...newData.keys};
+      final List<Widget> changes = [];
+
+      for (final key in allKeys) {
+        final oldValue = oldData[key];
+        final newValue = newData[key];
+
+        if (oldValue.toString() == newValue.toString()) continue;
+
+        changes.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_formatKey(key), style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.blueGrey.shade700)),
+                const SizedBox(height: 2),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (oldValue != null)
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(4)),
+                          child: Text(
+                            _formatValue(key, oldValue, userMap),
+                            style: TextStyle(color: Colors.red.shade800, fontSize: 12, decoration: TextDecoration.lineThrough),
+                          ),
+                        ),
+                      ),
+                    if (oldValue != null && newValue != null)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6),
+                        child: Icon(Icons.arrow_forward_rounded, size: 14, color: Colors.grey),
+                      ),
+                    if (newValue != null)
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(4)),
+                          child: Text(
+                            _formatValue(key, newValue, userMap),
+                            style: TextStyle(color: Colors.green.shade800, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      if (changes.isEmpty) {
+        return const Text('No detailed field changes recorded.', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 11, color: Colors.grey));
+      }
+
+      return Column(children: changes);
+    } catch (e) {
+      return Text('Error displaying changes: $e', style: const TextStyle(color: Colors.red, fontSize: 11));
+    }
+  }
+
+  String _formatValue(String key, dynamic value, Map<String, String> userMap) {
+    if ((key == 'created_by' || key == 'updated_by') && value is String) {
+      return userMap[value] ?? value;
+    }
+    return value.toString();
+  }
+
+  String _formatKey(String key) {
+    return key.split('_').map((word) {
+      if (word.isEmpty) return '';
+      return word[0].toUpperCase() + word.substring(1);
+    }).join(' ');
   }
 
   Widget _getIconForAction(String action) {

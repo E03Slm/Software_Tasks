@@ -30,6 +30,11 @@ Future<Map<String, dynamic>> systemStats(Ref ref) async {
   return ref.watch(adminRepositoryProvider).fetchSystemStats();
 }
 
+final userNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
+  final users = await ref.watch(adminRepositoryProvider).fetchUsers();
+  return {for (final u in users) u.id: u.fullName};
+});
+
 @riverpod
 class UserSearchQuery extends _$UserSearchQuery {
   @override

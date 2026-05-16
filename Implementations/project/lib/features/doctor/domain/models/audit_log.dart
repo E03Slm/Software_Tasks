@@ -20,10 +20,13 @@ abstract class AuditLog with _$AuditLog {
     @JsonKey(name: 'user') Map<String, dynamic>? userData,
   }) = _AuditLog;
 
-  String? get userName {
-    final id = userData?['user_id'] as String?;
-    if (id == null) return null;
-    return 'ID: ${id.length > 8 ? id.substring(0, 8) : id}...';
+  String get userName {
+    final name = fullName;
+    if (name.length <= 8 && name == userId.substring(0, 8)) {
+      // It's just the ID, return it with label
+      return 'ID: $name...';
+    }
+    return name;
   }
 
   String get fullName {
@@ -35,15 +38,21 @@ abstract class AuditLog with _$AuditLog {
     return name.isNotEmpty ? name : userId.substring(0, 8);
   }
 
+  String? get userRole {
+    return userData?['role'] as String?;
+  }
+
   String? get entityName {
     try {
-      if (newValue != null) {
+      if (newValue != null && newValue != '{}') {
         final data = Map<String, dynamic>.from(jsonDecode(newValue!));
         if (data.containsKey('name')) return data['name'] as String?;
+        if (data.containsKey('drug_name')) return data['drug_name'] as String?;
       }
-      if (oldValue != null) {
+      if (oldValue != null && oldValue != '{}') {
         final data = Map<String, dynamic>.from(jsonDecode(oldValue!));
         if (data.containsKey('name')) return data['name'] as String?;
+        if (data.containsKey('drug_name')) return data['drug_name'] as String?;
       }
     } catch (_) {}
     return null;
