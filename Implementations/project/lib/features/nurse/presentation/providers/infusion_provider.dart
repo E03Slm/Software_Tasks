@@ -13,6 +13,9 @@ import 'package:project/features/doctor/domain/models/audit_log.dart';
 import 'package:project/features/auth/presentation/providers/auth_provider.dart';
 import 'package:project/features/nurse/data/repositories/session_repository.dart';
 import 'package:project/features/nurse/domain/models/alarm_definition.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../doctor/presentation/providers/drug_provider.dart';
+import '../../../admin/presentation/providers/admin_providers.dart';
 import 'audit_log_provider.dart';
 
 part 'infusion_provider.g.dart';
@@ -638,5 +641,34 @@ class InfusionNotifier extends _$InfusionNotifier {
     return (state.volumeInfused / state.totalVolume).clamp(0.0, 1.0);
   }
 }
+
+final sessionNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
+  try {
+    final client = Supabase.instance.client;
+    // We try to fetch sessions with drug and patient names
+    final response = await client.from('infusion_session').select('session_id, status, drug_id, Patient_id');
+    
+    // We also need the drug and user maps for internal lookup
+    final drugMap = await ref.watch(drugNamesMapProvider.future);
+    final Map<String, String> userNames = await ref.read(userNamesMapProvider.future);
+
+    final Map<String, String> sessionMap = {};
+    for (final row in response) {
+      final id = row['session_id'] as String;
+      final drugId = row['drug_id'] as String?;
+      final patientId = row['Patient_id'] as String?;
+      final status = row['status'] as String? ?? 'Unknown';
+
+      final drugName = drugId != null ? (drugMap[drugId] ?? 'Unknown Drug') : 'No Drug';
+      final patientName = patientId != null ? (userNames[patientId] ?? 'Unknown Patient') : 'No Patient';
+
+      sessionMap[id] = '$drugName for $patientName ($status)';
+    }
+    return sessionMap;
+  } catch (e) {
+    print('Error fetching session names: $e');
+    return {};
+  }
+});
 
 

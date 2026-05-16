@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/drug.dart';
 import '../../data/repositories/drug_repository.dart';
 import './audit_provider.dart';
@@ -37,3 +38,8 @@ AsyncValue<List<Drug>> filteredDrugs(Ref ref) {
     }).toList();
   });
 }
+
+final drugNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
+  final drugs = await ref.watch(drugListProvider.future);
+  return {for (final d in drugs) d.id: d.name};
+});

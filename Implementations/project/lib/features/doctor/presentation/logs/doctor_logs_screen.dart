@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:convert';
 import '../providers/audit_provider.dart';
+import '../providers/drug_provider.dart';
+import '../../../nurse/presentation/providers/infusion_provider.dart';
 import 'package:project/features/admin/presentation/providers/admin_providers.dart';
 import '../../../../core/theme/app_theme.dart';
 
@@ -21,7 +23,12 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
   Widget build(BuildContext context) {
     final logsAsync = ref.watch(auditLogListProvider);
     final userNamesAsync = ref.watch(userNamesMapProvider);
+    final drugNamesAsync = ref.watch(drugNamesMapProvider);
+    final sessionsAsync = ref.watch(sessionNamesMapProvider);
+    
     final userMap = userNamesAsync.value ?? {};
+    final drugMap = drugNamesAsync.value ?? {};
+    final sessionMap = sessionsAsync.value ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -110,12 +117,15 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                                   ],
                                 ],
                               ),
-                              Text('Entity ID: ${log.entityId}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                              Text(
+                                'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap)}', 
+                                style: const TextStyle(fontSize: 11, color: Colors.grey)
+                              ),
 
                               const Divider(height: 24),
                               const Text('DATA CHANGES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 0.5, color: Colors.grey)),
                               const SizedBox(height: 8),
-                              _buildDataDiff(log.oldValue, log.newValue, userMap),
+                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap),
                             ],
                           ),
                         ),
@@ -133,7 +143,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     );
   }
 
-  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap) {
+  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
     try {
       final oldData = (oldJson != null && oldJson != '{}') ? jsonDecode(oldJson) as Map<String, dynamic> : <String, dynamic>{};
       final newData = (newJson != null && newJson != '{}') ? jsonDecode(newJson) as Map<String, dynamic> : <String, dynamic>{};
@@ -164,7 +174,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, oldValue, userMap),
+                            _formatValue(key, oldValue, userMap, drugMap, sessionMap),
                             style: TextStyle(color: Colors.red.shade800, fontSize: 12, decoration: TextDecoration.lineThrough),
                           ),
                         ),
@@ -180,7 +190,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, newValue, userMap),
+                            _formatValue(key, newValue, userMap, drugMap, sessionMap),
                             style: TextStyle(color: Colors.green.shade800, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -203,11 +213,36 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     }
   }
 
-  String _formatValue(String key, dynamic value, Map<String, String> userMap) {
-    if ((key == 'created_by' || key == 'updated_by') && value is String) {
-      return userMap[value] ?? value;
+  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+    if (value == null) return 'N/A';
+    final valStr = value.toString();
+
+    final normalizedKey = key.toLowerCase();
+    if (normalizedKey.contains('user') || normalizedKey.contains('patient') || normalizedKey.contains('by')) {
+      if (userMap.containsKey(valStr)) return userMap[valStr]!;
     }
-    return value.toString();
+    if (normalizedKey.contains('drug')) {
+      if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
+    }
+    if (normalizedKey.contains('session')) {
+      if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+    }
+
+    if (valStr.length >= 32) {
+      if (userMap.containsKey(valStr)) return userMap[valStr]!;
+      if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
+      if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+    }
+
+    return valStr;
+  }
+
+  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+    if (id == null) return 'N/A';
+    if (userMap.containsKey(id)) return userMap[id]!;
+    if (drugMap.containsKey(id)) return drugMap[id]!;
+    if (sessionMap.containsKey(id)) return sessionMap[id]!;
+    return id;
   }
 
   String _formatKey(String key) {

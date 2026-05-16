@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:project/features/admin/presentation/providers/admin_providers.dart';
+import 'package:project/features/doctor/presentation/providers/drug_provider.dart';
+import 'package:project/features/nurse/presentation/providers/infusion_provider.dart';
 import 'package:project/core/theme/doctor_theme.dart';
 
 class DoctorSystemLogsScreen extends ConsumerStatefulWidget {
@@ -19,7 +21,12 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
   Widget build(BuildContext context) {
     final logsAsync = ref.watch(adminAuditLogsProvider);
     final userNamesAsync = ref.watch(userNamesMapProvider);
+    final drugNamesAsync = ref.watch(drugNamesMapProvider);
+    final sessionsAsync = ref.watch(sessionNamesMapProvider);
+    
     final userMap = userNamesAsync.value ?? {};
+    final drugMap = drugNamesAsync.value ?? {};
+    final sessionMap = sessionsAsync.value ?? {};
     final doctorColors = Theme.of(context).extension<DoctorColors>() ?? 
                          doctorTheme.extension<DoctorColors>()!;
 
@@ -140,14 +147,17 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
                                 children: [
                                   Icon(Icons.fingerprint, size: 14, color: Colors.teal[300]),
                                   const SizedBox(width: 8),
-                                  Text('Entity ID: ${log.entityId ?? 'N/A'}', style: const TextStyle(fontSize: 12)),
+                                  Text(
+                                    'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap)}', 
+                                    style: const TextStyle(fontSize: 12)
+                                  ),
                                 ],
                               ),
 
                               const Divider(height: 24),
                               const Text('DATA CHANGES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 0.5, color: Colors.grey)),
                               const SizedBox(height: 8),
-                              _buildDataDiff(log.oldValue, log.newValue, userMap),
+                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap),
                             ],
                           ),
                         ),
@@ -165,7 +175,7 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
     );
   }
 
-  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap) {
+  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
     try {
       final oldData = (oldJson != null && oldJson != '{}') ? jsonDecode(oldJson) as Map<String, dynamic> : <String, dynamic>{};
       final newData = (newJson != null && newJson != '{}') ? jsonDecode(newJson) as Map<String, dynamic> : <String, dynamic>{};
@@ -196,7 +206,7 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, oldValue, userMap),
+                            _formatValue(key, oldValue, userMap, drugMap, sessionMap),
                             style: TextStyle(color: Colors.red.shade800, fontSize: 12, decoration: TextDecoration.lineThrough),
                           ),
                         ),
@@ -212,7 +222,7 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, newValue, userMap),
+                            _formatValue(key, newValue, userMap, drugMap, sessionMap),
                             style: TextStyle(color: Colors.green.shade800, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -235,11 +245,36 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
     }
   }
 
-  String _formatValue(String key, dynamic value, Map<String, String> userMap) {
-    if ((key == 'created_by' || key == 'updated_by') && value is String) {
-      return userMap[value] ?? value;
+  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+    if (value == null) return 'N/A';
+    final valStr = value.toString();
+
+    final normalizedKey = key.toLowerCase();
+    if (normalizedKey.contains('user') || normalizedKey.contains('patient') || normalizedKey.contains('by')) {
+      if (userMap.containsKey(valStr)) return userMap[valStr]!;
     }
-    return value.toString();
+    if (normalizedKey.contains('drug')) {
+      if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
+    }
+    if (normalizedKey.contains('session')) {
+      if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+    }
+
+    if (valStr.length >= 32) {
+      if (userMap.containsKey(valStr)) return userMap[valStr]!;
+      if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
+      if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+    }
+
+    return valStr;
+  }
+
+  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+    if (id == null) return 'N/A';
+    if (userMap.containsKey(id)) return userMap[id]!;
+    if (drugMap.containsKey(id)) return drugMap[id]!;
+    if (sessionMap.containsKey(id)) return sessionMap[id]!;
+    return id;
   }
 
   String _formatKey(String key) {
