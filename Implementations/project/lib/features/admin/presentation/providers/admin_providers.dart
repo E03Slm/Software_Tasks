@@ -32,10 +32,7 @@ Future<Map<String, dynamic>> systemStats(Ref ref) async {
 
 final userNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
   final users = await ref.watch(adminRepositoryProvider).fetchUsers();
-  final Map<String, String> userMap = {
-    for (final u in users) u.id: '${u.fullName} [${u.id.substring(0, 8)}]'
-  };
-  return userMap;
+  return {for (final u in users) u.id: u.fullName};
 });
 
 @riverpod

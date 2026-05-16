@@ -47,7 +47,7 @@ final drugNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
     final response = await client.from('drug').select('drug_id, name');
     return {
       for (final d in response) 
-        d['drug_id'] as String: '${d['name']} [${(d['drug_id'] as String).substring(0, 8)}]'
+        d['drug_id'] as String: d['name'] as String
     };
   } catch (e) {
     print('Error fetching drug names: $e');
