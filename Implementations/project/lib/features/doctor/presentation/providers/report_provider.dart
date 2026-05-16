@@ -6,6 +6,8 @@ import '../../data/services/report_generator.dart';
 import './audit_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
+import '../../../admin/presentation/providers/admin_providers.dart';
+
 // Standard Providers to avoid riverpod_generator issues with PDF/Uint8List types
 final reportRepositoryProvider = Provider((ref) => ReportRepository());
 final reportGeneratorProvider = Provider((ref) => ReportGenerator());
@@ -40,6 +42,9 @@ class ReportNotifier {
       final repo = ref.read(reportRepositoryProvider);
       final generator = ref.read(reportGeneratorProvider);
       
+      // Fetch user names map
+      final userNames = await ref.read(userNamesMapProvider.future);
+      
       // Adjust end date to include the full day (23:59:59)
       final adjustedEnd = DateTime(range.end.year, range.end.month, range.end.day, 23, 59, 59, 999);
       
@@ -68,6 +73,7 @@ class ReportNotifier {
         alarms: alarms.cast(),
         technicalLogs: technicalLogs.cast(),
         drugManagementLogs: drugLogs.cast(),
+        userNames: userNames,
         range: adjustedRange,
         isDetailed: isDetailed,
       );

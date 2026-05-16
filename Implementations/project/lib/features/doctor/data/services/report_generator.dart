@@ -12,6 +12,7 @@ class ReportGenerator {
     required List<Alarm> alarms,
     required List<AuditLog> technicalLogs,
     required List<AuditLog> drugManagementLogs,
+    required Map<String, String> userNames,
     required DateTimeRange range,
     bool isDetailed = true,
   }) async {
@@ -59,7 +60,7 @@ class ReportGenerator {
             pw.SizedBox(height: 20),
             // 6. Detailed Session Logs
             _sectionTitle('6. DETAILED SESSION LOGS'),
-            _buildSessionTable(sessions, dateFormat),
+            _buildSessionTable(sessions, dateFormat, userNames),
           ],
         ],
       ),
@@ -200,7 +201,7 @@ class ReportGenerator {
     );
   }
 
-  pw.Widget _buildSessionTable(List<InfusionSession> sessions, DateFormat dateFormat) {
+  pw.Widget _buildSessionTable(List<InfusionSession> sessions, DateFormat dateFormat, Map<String, String> userNames) {
     return pw.TableHelper.fromTextArray(
       headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9, color: PdfColors.white),
       headerDecoration: const pw.BoxDecoration(color: PdfColors.teal700),
@@ -212,7 +213,7 @@ class ReportGenerator {
         (s.status).toUpperCase(),
         '${s.infusionRate.toStringAsFixed(1)}',
         '${s.volumeInfused.toStringAsFixed(1)}',
-        s.userId?.substring(0, 8) ?? 'N/A',
+        s.userId != null ? (userNames[s.userId] ?? s.userId!.substring(0, 8)) : 'N/A',
       ]).toList(),
     );
   }
