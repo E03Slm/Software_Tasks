@@ -103,7 +103,8 @@ class _DrugSelectionScreenState extends ConsumerState<DrugSelectionScreen> {
   }
 
   Widget _buildCommonlyPrescribed(List<dynamic> drugList) {
-    // Just take the first 3 for now as "common"
+    // Sort by name or just take the first 3 for now. 
+    // In a real app, you'd sort by a 'prescription_count' field from DB.
     final commonDrugs = drugList.take(3).toList();
     if (commonDrugs.isEmpty) return const SizedBox.shrink();
 
@@ -115,7 +116,7 @@ class _DrugSelectionScreenState extends ConsumerState<DrugSelectionScreen> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 18,
           ),
         ),
         const SizedBox(height: 16),
@@ -124,17 +125,65 @@ class _DrugSelectionScreenState extends ConsumerState<DrugSelectionScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: commonDrugs.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: 1, // Stack them on mobile for better visibility
             mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 3.5, // Even more compact
+            childAspectRatio: 4.5, 
           ),
           itemBuilder: (context, index) {
             final drug = commonDrugs[index];
-            return _buildDrugCard(drug);
+            return _buildCommonlyDrugCard(drug);
           },
         ),
       ],
+    );
+  }
+
+  Widget _buildCommonlyDrugCard(dynamic drug) {
+    return InkWell(
+      onTap: () => _selectDrug(drug),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white, Colors.blue.shade50.withValues(alpha: 0.3)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.star, color: Colors.blue, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    drug.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Text(
+                    '${drug.concentration} ${drug.concentrationUnit}',
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).colorScheme.primary),
+          ],
+        ),
+      ),
     );
   }
 

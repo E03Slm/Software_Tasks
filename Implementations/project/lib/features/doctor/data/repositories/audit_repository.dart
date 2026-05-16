@@ -8,13 +8,15 @@ class AuditRepository {
   final _client = Supabase.instance.client;
   String? _cachedIp;
 
-  Future<List<AuditLog>> fetchLogs({bool excludeLoginLogs = false}) async {
+  Future<List<AuditLog>> fetchLogs({String? currentUserId}) async {
     var query = _client
         .from('audit_log')
         .select('*, user:users!audit_log_user_id_fkey(*)');
     
-    if (excludeLoginLogs) {
-      query = query.not('action', 'in', '("LOGIN", "LOGOUT")');
+    if (currentUserId != null) {
+      // (Action is NOT LOGIN/LOGOUT) OR (User is the current doctor)
+      // This shows all clinical logs plus the doctor's own login/logout logs.
+      query = query.or('action.not.in.("LOGIN","LOGOUT"),user_id.eq.$currentUserId');
     }
 
     final response = await query.order('timestamp', ascending: false);

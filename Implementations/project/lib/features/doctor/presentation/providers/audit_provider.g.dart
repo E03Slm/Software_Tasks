@@ -75,7 +75,7 @@ final class AuditLogListProvider
   AuditLogList create() => AuditLogList();
 }
 
-String _$auditLogListHash() => r'c4a25e60e000089ac1889f9c9586a6a4e1175b2a';
+String _$auditLogListHash() => r'a39fe158b26a657fc8eea50a22ad2254fab4fff6';
 
 abstract class _$AuditLogList extends $AsyncNotifier<List<AuditLog>> {
   FutureOr<List<AuditLog>> build();

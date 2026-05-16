@@ -25,8 +25,8 @@ class ReportRepository {
     final response = await _client
         .from('alarm')
         .select()
-        .gte('timestamp', start.toIso8601String())
-        .lte('timestamp', end.toIso8601String());
+        .gte('alarm_time', start.toIso8601String())
+        .lte('alarm_time', end.toIso8601String());
     
     final list = response as List;
     return list

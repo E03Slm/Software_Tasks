@@ -212,13 +212,13 @@ return $default(_that.id,_that.name,_that.severity,_that.description);case _:
 @JsonSerializable()
 
 class _AlarmDefinition implements AlarmDefinition {
-  const _AlarmDefinition({@JsonKey(name: 'alarm_id') required this.id, @JsonKey(name: 'alarm_name') required this.name, required this.severity, required this.description});
+  const _AlarmDefinition({@JsonKey(name: 'alarm_id') required this.id, @JsonKey(name: 'alarm_name') this.name = 'Unknown', this.severity = 'LOW', this.description = 'No description available'});
   factory _AlarmDefinition.fromJson(Map<String, dynamic> json) => _$AlarmDefinitionFromJson(json);
 
 @override@JsonKey(name: 'alarm_id') final  String id;
 @override@JsonKey(name: 'alarm_name') final  String name;
-@override final  String severity;
-@override final  String description;
+@override@JsonKey() final  String severity;
+@override@JsonKey() final  String description;
 
 /// Create a copy of AlarmDefinition
 /// with the given fields replaced by the non-null parameter values.

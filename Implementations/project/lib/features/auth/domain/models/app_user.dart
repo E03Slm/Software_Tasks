@@ -23,10 +23,13 @@ abstract class AppUser with _$AppUser {
   factory AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);
 }
 
-RoleType _roleFromJson(String role) {
-  switch (role.toUpperCase()) {
+RoleType _roleFromJson(dynamic role) {
+  if (role == null) return RoleType.nurse;
+  final roleStr = role.toString().toUpperCase();
+  switch (roleStr) {
     case 'DOCTOR': return RoleType.doctor;
     case 'ADMIN': return RoleType.admin;
+    case 'ADMINISTRATOR': return RoleType.admin;
     case 'PATIENT': return RoleType.patient;
     default: return RoleType.nurse;
   }

@@ -41,7 +41,7 @@ final class AlarmNotifierProvider
   }
 }
 
-String _$alarmNotifierHash() => r'acc277b0e1aab5e1826a0cc959d87d5d82f82bc4';
+String _$alarmNotifierHash() => r'afdcd29214fd14e843e86722f28fea185b1ff880';
 
 abstract class _$AlarmNotifier extends $Notifier<List<Alarm>> {
   List<Alarm> build();
@@ -65,7 +65,7 @@ abstract class _$AlarmNotifier extends $Notifier<List<Alarm>> {
 final batteryProvider = BatteryNotifierProvider._();
 
 final class BatteryNotifierProvider
-    extends $NotifierProvider<BatteryNotifier, double> {
+    extends $NotifierProvider<BatteryNotifier, PowerState> {
   BatteryNotifierProvider._()
     : super(
         from: null,
@@ -85,27 +85,27 @@ final class BatteryNotifierProvider
   BatteryNotifier create() => BatteryNotifier();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(double value) {
+  Override overrideWithValue(PowerState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<double>(value),
+      providerOverride: $SyncValueProvider<PowerState>(value),
     );
   }
 }
 
-String _$batteryNotifierHash() => r'2762c190f43a5467a05dc6ba4b54709a50a71ccf';
+String _$batteryNotifierHash() => r'beec3d4765d45ac077f3a300236f92b4d66f003a';
 
-abstract class _$BatteryNotifier extends $Notifier<double> {
-  double build();
+abstract class _$BatteryNotifier extends $Notifier<PowerState> {
+  PowerState build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<double, double>;
+    final ref = this.ref as $Ref<PowerState, PowerState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<double, double>,
-              double,
+              AnyNotifier<PowerState, PowerState>,
+              PowerState,
               Object?,
               Object?
             >;
@@ -145,7 +145,7 @@ final class InfusionNotifierProvider
   }
 }
 
-String _$infusionNotifierHash() => r'2a04a19ec5d6d22fd9c8928ecf4c80be429c8370';
+String _$infusionNotifierHash() => r'282c4ecf363979cb163690c23708cfa11c4093ee';
 
 abstract class _$InfusionNotifier extends $Notifier<InfusionSession> {
   InfusionSession build();

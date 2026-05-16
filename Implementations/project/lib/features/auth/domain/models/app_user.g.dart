@@ -12,7 +12,7 @@ _AppUser _$AppUserFromJson(Map<String, dynamic> json) => _AppUser(
   fname: json['Fname'] as String?,
   mname: json['Mname'] as String?,
   lname: json['Lname'] as String?,
-  role: _roleFromJson(json['role'] as String),
+  role: _roleFromJson(json['role']),
   createdAt: DateTime.parse(json['created_at'] as String),
   lastLogin: json['last_login'] == null
       ? null

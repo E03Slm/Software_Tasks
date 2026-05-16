@@ -32,6 +32,6 @@ final alarmHistoryProvider = FutureProvider.autoDispose<List<Alarm>>((ref) async
   }
   
   final result = allAlarms.values.toList();
-  result.sort((a, b) => b.alarmTime.compareTo(a.alarmTime));
+  result.sort((a, b) => b.displayTime.compareTo(a.displayTime));
   return result;
 });

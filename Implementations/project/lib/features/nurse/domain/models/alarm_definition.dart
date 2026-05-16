@@ -7,9 +7,9 @@ part 'alarm_definition.g.dart';
 abstract class AlarmDefinition with _$AlarmDefinition {
   const factory AlarmDefinition({
     @JsonKey(name: 'alarm_id') required String id,
-    @JsonKey(name: 'alarm_name') required String name,
-    required String severity,
-    required String description,
+    @JsonKey(name: 'alarm_name') @Default('Unknown') String name,
+    @Default('LOW') String severity,
+    @Default('No description available') String description,
   }) = _AlarmDefinition;
 
   factory AlarmDefinition.fromJson(Map<String, dynamic> json) => _$AlarmDefinitionFromJson(json);

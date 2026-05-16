@@ -24,7 +24,7 @@ class AlarmRepository {
         'event_id': alarm.id,
         'session_id': alarm.sessionId,
         'alarm_id': alarm.alarmId,
-        'timestamp': alarm.alarmTime.toIso8601String(),
+        'alarm_time': alarm.displayTime.toIso8601String(),
         'ack/res': alarm.ackRes,
         'ack/res_by': alarm.ackResBy,
         'ack/res_at': alarm.ackResAt?.toIso8601String(),
@@ -52,7 +52,7 @@ class AlarmRepository {
         .from('alarm')
         .select('*, definition:alarms(*)')
         .eq('session_id', sessionId)
-        .order('timestamp', ascending: false);
+        .order('alarm_time', ascending: false);
     
     final list = response as List;
     return list
@@ -68,7 +68,7 @@ class AlarmRepository {
         .from('alarm')
         .stream(primaryKey: ['event_id'])
         .eq('session_id', sessionId)
-        .order('timestamp', ascending: false)
+        .order('alarm_time', ascending: false)
         .map((data) => data.map((json) => Alarm.fromJson(json)).toList());
   }
 }

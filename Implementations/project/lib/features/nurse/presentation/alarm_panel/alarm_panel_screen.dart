@@ -135,7 +135,7 @@ class _AlarmPanelScreenState extends ConsumerState<AlarmPanelScreen> {
                             ),
                           ),
                           Text(
-                            DateFormat('HH:mm:ss').format(alarm.alarmTime),
+                            DateFormat('HH:mm:ss').format(alarm.displayTime),
                             style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                           ),
                         ],

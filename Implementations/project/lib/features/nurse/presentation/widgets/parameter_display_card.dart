@@ -34,16 +34,18 @@ class ParameterDisplayCard extends StatelessWidget {
           children: [
             Text(
               value,
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 color: valueColor ?? Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
+                fontSize: 24, // Explicitly capped for mobile
               ),
             ),
             const SizedBox(width: 4),
             Text(
               unit,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 10,
               ),
             ),
           ],

@@ -8,9 +8,11 @@ part of 'alarm.dart';
 
 _Alarm _$AlarmFromJson(Map<String, dynamic> json) => _Alarm(
   id: json['event_id'] as String,
-  sessionId: json['session_id'] as String,
-  alarmId: json['alarm_id'] as String,
-  alarmTime: DateTime.parse(json['timestamp'] as String),
+  sessionId: json['session_id'] as String?,
+  alarmId: json['alarm_id'] as String?,
+  alarmTime: json['alarm_time'] == null
+      ? null
+      : DateTime.parse(json['alarm_time'] as String),
   type: json['type'] as String?,
   ackRes: json['ack/res'] as bool? ?? false,
   ackResBy: json['ack/res_by'] as String?,
@@ -26,7 +28,7 @@ Map<String, dynamic> _$AlarmToJson(_Alarm instance) => <String, dynamic>{
   'event_id': instance.id,
   'session_id': instance.sessionId,
   'alarm_id': instance.alarmId,
-  'timestamp': instance.alarmTime.toIso8601String(),
+  'alarm_time': instance.alarmTime?.toIso8601String(),
   'type': instance.type,
   'ack/res': instance.ackRes,
   'ack/res_by': instance.ackResBy,

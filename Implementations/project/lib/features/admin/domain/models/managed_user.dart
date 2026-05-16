@@ -29,8 +29,10 @@ abstract class ManagedUser with _$ManagedUser {
   factory ManagedUser.fromJson(Map<String, dynamic> json) => _$ManagedUserFromJson(json);
 }
 
-RoleType _roleFromJson(String role) {
-  switch (role.toUpperCase()) {
+RoleType _roleFromJson(dynamic role) {
+  if (role == null) return RoleType.nurse;
+  final roleStr = role.toString().toUpperCase();
+  switch (roleStr) {
     case 'DOCTOR': return RoleType.doctor;
     case 'ADMIN': return RoleType.admin;
     case 'PATIENT': return RoleType.patient;

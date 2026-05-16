@@ -162,20 +162,20 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(drug),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               _buildPatientSelection(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               _buildParameterGrid(drug),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               _buildInfusionSummary(session),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               _buildActionButtons(),
             ],
           ),
@@ -198,7 +198,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
                   'Parameter Entry',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w900,
-                        fontSize: 32,
+                        fontSize: 28,
                         letterSpacing: -0.5,
                       ),
                 ),
@@ -473,8 +473,10 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Wrap(
+              spacing: 24,
+              runSpacing: 16,
+              alignment: WrapAlignment.spaceAround,
               children: [
                 _buildSummaryItem('Volume Infused', '${session.volumeInfused.toStringAsFixed(1)} mL'),
                 _buildSummaryItem('Volume Remaining', '${session.volumeRemaining.toStringAsFixed(1)} mL'),

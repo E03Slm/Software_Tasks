@@ -16,7 +16,7 @@ class PumpDashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final nurseColors = Theme.of(context).extension<NurseColors>()!;
     final session = ref.watch(infusionProvider);
-    final battery = ref.watch(batteryProvider);
+    final powerState = ref.watch(batteryProvider);
     final alarms = ref.watch(alarmProvider);
     final notifier = ref.read(infusionProvider.notifier);
     final canContinue = ref.watch(alarmProvider.notifier).canContinue;
@@ -58,14 +58,14 @@ class PumpDashboardScreen extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Status Header Row
             Wrap(
-              spacing: 16,
-              runSpacing: 16,
+              spacing: 8,
+              runSpacing: 8,
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
@@ -75,12 +75,13 @@ class PumpDashboardScreen extends ConsumerWidget {
                   isAlarm: isAlarm,
                 ),
                 PowerStatusCard(
-                  batteryLevel: battery,
-                  isACConnected: true, // Mocked for now
+                  batteryLevel: powerState.level,
+                  isACConnected: powerState.isACConnected,
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
+            // ... rest of the code reduced spacing ...
 
             // Main Bento Grid
             LayoutBuilder(
@@ -91,20 +92,20 @@ class PumpDashboardScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(flex: 2, child: _buildParametersSection(context, session, notifier, nurseName)),
-                          const SizedBox(width: 24),
+                          const SizedBox(width: 12),
                           Expanded(flex: 1, child: _buildProgressSection(context, session, notifier)),
                         ],
                       )
                     : Column(
                         children: [
                           _buildParametersSection(context, session, notifier, nurseName),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
                           _buildProgressSection(context, session, notifier),
                         ],
                       );
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             // Smart Primary Control
             AnimatedContainer(
@@ -119,32 +120,30 @@ class PumpDashboardScreen extends ConsumerWidget {
                 },
                 icon: Icon(
                   isRunning ? Icons.pause_circle_filled_rounded : Icons.play_circle_filled_rounded,
-                  size: 32,
+                  size: 24,
                 ),
                 label: Text(
                   isRunning 
-                    ? 'PAUSE INFUSION' 
-                    : isPaused ? 'RESUME INFUSION' : 'START INFUSION',
+                    ? 'PAUSE' 
+                    : isPaused ? 'RESUME' : 'START',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 1.5,
+                    letterSpacing: 1.2,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isRunning ? nurseColors.pauseAmber : nurseColors.successGreen,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 28),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: 8,
-                  shadowColor: (isRunning ? nurseColors.pauseAmber : nurseColors.successGreen).withValues(alpha: 0.4),
                 ),
               ),
             ),
             
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             const AlarmActivationPanel(),
           ],
         ),
@@ -190,34 +189,43 @@ class PumpDashboardScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 3.5,
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 16,
+              runSpacing: 16,
               children: [
-                ParameterDisplayCard(
-                  label: 'Infusion Rate',
-                  value: session.infusionRate.toStringAsFixed(1),
-                  unit: 'mL/hr',
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 64) / 2, // Approximate 2-column on phone
+                  child: ParameterDisplayCard(
+                    label: 'Infusion Rate',
+                    value: session.infusionRate.toStringAsFixed(1),
+                    unit: 'mL/hr',
+                  ),
                 ),
-                ParameterDisplayCard(
-                  label: 'Volume Infused',
-                  value: session.volumeInfused.toStringAsFixed(3), // Increased precision for visibility
-                  unit: 'mL',
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 64) / 2,
+                  child: ParameterDisplayCard(
+                    label: 'Volume Infused',
+                    value: session.volumeInfused.toStringAsFixed(2),
+                    unit: 'mL',
+                  ),
                 ),
-                ParameterDisplayCard(
-                  label: 'Volume Remaining',
-                  value: (session.totalVolume - session.volumeInfused).clamp(0.0, double.infinity).toStringAsFixed(3),
-                  unit: 'mL',
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 64) / 2,
+                  child: ParameterDisplayCard(
+                    label: 'Volume Remaining',
+                    value: (session.totalVolume - session.volumeInfused).clamp(0.0, double.infinity).toStringAsFixed(2),
+                    unit: 'mL',
+                  ),
                 ),
-                ParameterDisplayCard(
-                  label: 'Time Remaining',
-                  value: notifier.timeRemaining.toString().split('.').first.substring(0, 5),
-                  unit: 'hh:mm',
-                  valueColor: Theme.of(context).colorScheme.primary,
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 64) / 2,
+                  child: ParameterDisplayCard(
+                    label: 'Time Remaining',
+                    value: _formatDisplayTime(notifier.timeRemaining),
+                    unit: 'hh:mm',
+                    valueColor: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),
@@ -225,6 +233,12 @@ class PumpDashboardScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _formatDisplayTime(Duration d) {
+    if (d.inHours > 99) return "99:59";
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    return "${twoDigits(d.inHours)}:${twoDigits(d.inMinutes.remainder(60))}";
   }
 
   Widget _buildProgressSection(BuildContext context, dynamic session, dynamic notifier) {

@@ -118,7 +118,7 @@ class AlarmNotifier extends _$AlarmNotifier {
             'severity': alarm.definition?.severity,
             'type': alarm.type,
             'session_id': alarm.sessionId,
-            'timestamp': alarm.alarmTime.toIso8601String(),
+            'timestamp': alarm.displayTime.toIso8601String(),
           },
         );
         
@@ -202,6 +202,12 @@ class AlarmNotifier extends _$AlarmNotifier {
         
         final fullName = currentUser != null ? '${currentUser.fname} ${currentUser.lname}' : 'Unknown';
 
+        // Connect AC if it was a battery alarm
+        final alarmName = updatedAlarm!.definition?.name.toUpperCase() ?? '';
+        if (alarmName.contains('BATTERY')) {
+          ref.read(batteryProvider.notifier).connectAC();
+        }
+
         // Final Unified Resolution Log
         await ref.read(auditRepositoryProvider).logAction(
           actionType: 'ALARM_RESOLVED_ACK',
@@ -270,44 +276,94 @@ class AlarmNotifier extends _$AlarmNotifier {
 }
 
 // ─── Battery Provider ────────────────────────────────────────────────────────
+class PowerState {
+  final double level;
+  final bool isACConnected;
+  final bool isCharging;
+
+  PowerState({
+    required this.level,
+    required this.isACConnected,
+    this.isCharging = false,
+  });
+
+  PowerState copyWith({double? level, bool? isACConnected, bool? isCharging}) {
+    return PowerState(
+      level: level ?? this.level,
+      isACConnected: isACConnected ?? this.isACConnected,
+      isCharging: isCharging ?? this.isCharging,
+    );
+  }
+}
+
 @Riverpod(keepAlive: true)
 class BatteryNotifier extends _$BatteryNotifier {
   Timer? _timer;
 
   @override
-  double build() {
+  PowerState build() {
     ref.onDispose(() => _timer?.cancel());
-    return 100.0;
+    return PowerState(level: 100.0, isACConnected: true);
   }
 
-  void startDrain(String sessionId) {
+  void connectAC() {
+    _timer?.cancel();
+    state = state.copyWith(isACConnected: true, isCharging: state.level < 100);
+    if (state.isCharging) {
+      _startCharging();
+    }
+  }
+
+  void disconnectAC(String sessionId) {
+    _timer?.cancel();
+    state = state.copyWith(isACConnected: false, isCharging: false);
+    _startDrain(sessionId);
+  }
+
+  void _startCharging() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      state = (state - 1).clamp(0, 100);
+      if (state.level >= 100) {
+        state = state.copyWith(level: 100, isCharging: false);
+        _timer?.cancel();
+        return;
+      }
+      state = state.copyWith(level: (state.level + 2).clamp(0.0, 100.0));
+    });
+  }
 
-      if (state <= 5.0 && state > 4.9) {
+  void _startDrain(String sessionId) {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
+      final newLevel = (state.level - 1).clamp(0.0, 100.0);
+      state = state.copyWith(level: newLevel);
+
+      if (newLevel <= 5.0 && newLevel > 4.0) {
         ref.read(alarmProvider.notifier).add(
               AlarmType.batteryCritical,
               AlarmSeverity.critical,
               sessionId,
             );
-        // Auto-emergency stop on critical battery
         ref.read(infusionProvider.notifier).emergencyStop();
-      } else if (state <= 20.0 && state > 19.9) {
+      } else if (newLevel <= 20.0 && newLevel > 19.0) {
         ref.read(alarmProvider.notifier).add(
               AlarmType.batteryLow,
               AlarmSeverity.medium,
               sessionId,
             );
       }
+      
+      if (newLevel <= 0) {
+        _timer?.cancel();
+      }
     });
   }
 
-  void stopDrain() => _timer?.cancel();
+  void stopAll() => _timer?.cancel();
 
   void reset() {
     _timer?.cancel();
-    state = 100.0;
+    state = PowerState(level: 100.0, isACConnected: true);
   }
 }
 
@@ -517,7 +573,7 @@ class InfusionNotifier extends _$InfusionNotifier {
     );
 
     _startTick();
-    ref.read(batteryProvider.notifier).startDrain(sessionId);
+    ref.read(batteryProvider.notifier).disconnectAC(sessionId);
     
     await _logAction('INFUSION_STARTED', newValue: {'rate': state.infusionRate, 'drug': drug?.name});
   }
@@ -525,7 +581,7 @@ class InfusionNotifier extends _$InfusionNotifier {
   void pause() {
     if (state.status != 'Infusing') return;
     _stopTick();
-    ref.read(batteryProvider.notifier).stopDrain();
+        ref.read(batteryProvider.notifier).stopAll();
     state = state.copyWith(status: 'Paused');
     _logAction('INFUSION_PAUSED');
   }
@@ -537,14 +593,14 @@ class InfusionNotifier extends _$InfusionNotifier {
 
   void stop() {
     _stopTick();
-    ref.read(batteryProvider.notifier).stopDrain();
+        ref.read(batteryProvider.notifier).stopAll();
     state = state.copyWith(status: 'Stopped');
     _logAction('INFUSION_STOPPED', newValue: {'total_infused': state.volumeInfused});
   }
 
   Future<void> emergencyStop() async {
     _stopTick();
-    ref.read(batteryProvider.notifier).stopDrain();
+        ref.read(batteryProvider.notifier).stopAll();
     
     state = state.copyWith(status: 'EmergencyStop');
     
@@ -583,7 +639,7 @@ class InfusionNotifier extends _$InfusionNotifier {
       case AlarmSeverity.critical:
       case AlarmSeverity.high:
         _stopTick();
-        ref.read(batteryProvider.notifier).stopDrain();
+            ref.read(batteryProvider.notifier).stopAll();
         state = state.copyWith(status: 'Alarm');
         break;
       case AlarmSeverity.medium:
@@ -718,7 +774,7 @@ class InfusionNotifier extends _$InfusionNotifier {
         _logAction('TRANSITION_KVO');
       } else {
         _stopTick();
-        ref.read(batteryProvider.notifier).stopDrain();
+        ref.read(batteryProvider.notifier).stopAll();
         state = session.copyWith(
           volumeInfused: session.totalVolume,
           status: 'Stopped',

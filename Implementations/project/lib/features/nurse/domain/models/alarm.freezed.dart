@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Alarm {
 
-@JsonKey(name: 'event_id') String get id;@JsonKey(name: 'session_id') String get sessionId;@JsonKey(name: 'alarm_id') String get alarmId;// FK to alarms table
-@JsonKey(name: 'timestamp') DateTime get alarmTime;@JsonKey(name: 'type') String? get type;@JsonKey(name: 'ack/res') bool get ackRes;@JsonKey(name: 'ack/res_by') String? get ackResBy;@JsonKey(name: 'ack/res_at') DateTime? get ackResAt;@JsonKey(name: 'definition') AlarmDefinition? get definition;
+@JsonKey(name: 'event_id') String get id;@JsonKey(name: 'session_id') String? get sessionId;@JsonKey(name: 'alarm_id') String? get alarmId;// FK to alarms table
+@JsonKey(name: 'alarm_time') DateTime? get alarmTime;@JsonKey(name: 'type') String? get type;@JsonKey(name: 'ack/res') bool get ackRes;@JsonKey(name: 'ack/res_by') String? get ackResBy;@JsonKey(name: 'ack/res_at') DateTime? get ackResAt;@JsonKey(name: 'definition') AlarmDefinition? get definition;
 /// Create a copy of Alarm
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AlarmCopyWith<$Res>  {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) _then) = _$AlarmCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'alarm_id') String alarmId,@JsonKey(name: 'timestamp') DateTime alarmTime,@JsonKey(name: 'type') String? type,@JsonKey(name: 'ack/res') bool ackRes,@JsonKey(name: 'ack/res_by') String? ackResBy,@JsonKey(name: 'ack/res_at') DateTime? ackResAt,@JsonKey(name: 'definition') AlarmDefinition? definition
+@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String? sessionId,@JsonKey(name: 'alarm_id') String? alarmId,@JsonKey(name: 'alarm_time') DateTime? alarmTime,@JsonKey(name: 'type') String? type,@JsonKey(name: 'ack/res') bool ackRes,@JsonKey(name: 'ack/res_by') String? ackResBy,@JsonKey(name: 'ack/res_at') DateTime? ackResAt,@JsonKey(name: 'definition') AlarmDefinition? definition
 });
 
 
@@ -66,13 +66,13 @@ class _$AlarmCopyWithImpl<$Res>
 
 /// Create a copy of Alarm
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? sessionId = null,Object? alarmId = null,Object? alarmTime = null,Object? type = freezed,Object? ackRes = null,Object? ackResBy = freezed,Object? ackResAt = freezed,Object? definition = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? sessionId = freezed,Object? alarmId = freezed,Object? alarmTime = freezed,Object? type = freezed,Object? ackRes = null,Object? ackResBy = freezed,Object? ackResAt = freezed,Object? definition = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
-as String,alarmId: null == alarmId ? _self.alarmId : alarmId // ignore: cast_nullable_to_non_nullable
-as String,alarmTime: null == alarmTime ? _self.alarmTime : alarmTime // ignore: cast_nullable_to_non_nullable
-as DateTime,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
+as String?,alarmId: freezed == alarmId ? _self.alarmId : alarmId // ignore: cast_nullable_to_non_nullable
+as String?,alarmTime: freezed == alarmTime ? _self.alarmTime : alarmTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String?,ackRes: null == ackRes ? _self.ackRes : ackRes // ignore: cast_nullable_to_non_nullable
 as bool,ackResBy: freezed == ackResBy ? _self.ackResBy : ackResBy // ignore: cast_nullable_to_non_nullable
 as String?,ackResAt: freezed == ackResAt ? _self.ackResAt : ackResAt // ignore: cast_nullable_to_non_nullable
@@ -174,7 +174,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String alarmId, @JsonKey(name: 'timestamp')  DateTime alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'alarm_id')  String? alarmId, @JsonKey(name: 'alarm_time')  DateTime? alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Alarm() when $default != null:
 return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.type,_that.ackRes,_that.ackResBy,_that.ackResAt,_that.definition);case _:
@@ -195,7 +195,7 @@ return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.typ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String alarmId, @JsonKey(name: 'timestamp')  DateTime alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'alarm_id')  String? alarmId, @JsonKey(name: 'alarm_time')  DateTime? alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)  $default,) {final _that = this;
 switch (_that) {
 case _Alarm():
 return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.type,_that.ackRes,_that.ackResBy,_that.ackResAt,_that.definition);case _:
@@ -215,7 +215,7 @@ return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.typ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String sessionId, @JsonKey(name: 'alarm_id')  String alarmId, @JsonKey(name: 'timestamp')  DateTime alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'event_id')  String id, @JsonKey(name: 'session_id')  String? sessionId, @JsonKey(name: 'alarm_id')  String? alarmId, @JsonKey(name: 'alarm_time')  DateTime? alarmTime, @JsonKey(name: 'type')  String? type, @JsonKey(name: 'ack/res')  bool ackRes, @JsonKey(name: 'ack/res_by')  String? ackResBy, @JsonKey(name: 'ack/res_at')  DateTime? ackResAt, @JsonKey(name: 'definition')  AlarmDefinition? definition)?  $default,) {final _that = this;
 switch (_that) {
 case _Alarm() when $default != null:
 return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.type,_that.ackRes,_that.ackResBy,_that.ackResAt,_that.definition);case _:
@@ -230,14 +230,14 @@ return $default(_that.id,_that.sessionId,_that.alarmId,_that.alarmTime,_that.typ
 @JsonSerializable()
 
 class _Alarm extends Alarm {
-  const _Alarm({@JsonKey(name: 'event_id') required this.id, @JsonKey(name: 'session_id') required this.sessionId, @JsonKey(name: 'alarm_id') required this.alarmId, @JsonKey(name: 'timestamp') required this.alarmTime, @JsonKey(name: 'type') this.type, @JsonKey(name: 'ack/res') this.ackRes = false, @JsonKey(name: 'ack/res_by') this.ackResBy, @JsonKey(name: 'ack/res_at') this.ackResAt, @JsonKey(name: 'definition') this.definition}): super._();
+  const _Alarm({@JsonKey(name: 'event_id') required this.id, @JsonKey(name: 'session_id') this.sessionId, @JsonKey(name: 'alarm_id') this.alarmId, @JsonKey(name: 'alarm_time') this.alarmTime, @JsonKey(name: 'type') this.type, @JsonKey(name: 'ack/res') this.ackRes = false, @JsonKey(name: 'ack/res_by') this.ackResBy, @JsonKey(name: 'ack/res_at') this.ackResAt, @JsonKey(name: 'definition') this.definition}): super._();
   factory _Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
 
 @override@JsonKey(name: 'event_id') final  String id;
-@override@JsonKey(name: 'session_id') final  String sessionId;
-@override@JsonKey(name: 'alarm_id') final  String alarmId;
+@override@JsonKey(name: 'session_id') final  String? sessionId;
+@override@JsonKey(name: 'alarm_id') final  String? alarmId;
 // FK to alarms table
-@override@JsonKey(name: 'timestamp') final  DateTime alarmTime;
+@override@JsonKey(name: 'alarm_time') final  DateTime? alarmTime;
 @override@JsonKey(name: 'type') final  String? type;
 @override@JsonKey(name: 'ack/res') final  bool ackRes;
 @override@JsonKey(name: 'ack/res_by') final  String? ackResBy;
@@ -277,7 +277,7 @@ abstract mixin class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
   factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) _then) = __$AlarmCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String sessionId,@JsonKey(name: 'alarm_id') String alarmId,@JsonKey(name: 'timestamp') DateTime alarmTime,@JsonKey(name: 'type') String? type,@JsonKey(name: 'ack/res') bool ackRes,@JsonKey(name: 'ack/res_by') String? ackResBy,@JsonKey(name: 'ack/res_at') DateTime? ackResAt,@JsonKey(name: 'definition') AlarmDefinition? definition
+@JsonKey(name: 'event_id') String id,@JsonKey(name: 'session_id') String? sessionId,@JsonKey(name: 'alarm_id') String? alarmId,@JsonKey(name: 'alarm_time') DateTime? alarmTime,@JsonKey(name: 'type') String? type,@JsonKey(name: 'ack/res') bool ackRes,@JsonKey(name: 'ack/res_by') String? ackResBy,@JsonKey(name: 'ack/res_at') DateTime? ackResAt,@JsonKey(name: 'definition') AlarmDefinition? definition
 });
 
 
@@ -294,13 +294,13 @@ class __$AlarmCopyWithImpl<$Res>
 
 /// Create a copy of Alarm
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? sessionId = null,Object? alarmId = null,Object? alarmTime = null,Object? type = freezed,Object? ackRes = null,Object? ackResBy = freezed,Object? ackResAt = freezed,Object? definition = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? sessionId = freezed,Object? alarmId = freezed,Object? alarmTime = freezed,Object? type = freezed,Object? ackRes = null,Object? ackResBy = freezed,Object? ackResAt = freezed,Object? definition = freezed,}) {
   return _then(_Alarm(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
-as String,alarmId: null == alarmId ? _self.alarmId : alarmId // ignore: cast_nullable_to_non_nullable
-as String,alarmTime: null == alarmTime ? _self.alarmTime : alarmTime // ignore: cast_nullable_to_non_nullable
-as DateTime,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
+as String?,alarmId: freezed == alarmId ? _self.alarmId : alarmId // ignore: cast_nullable_to_non_nullable
+as String?,alarmTime: freezed == alarmTime ? _self.alarmTime : alarmTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String?,ackRes: null == ackRes ? _self.ackRes : ackRes // ignore: cast_nullable_to_non_nullable
 as bool,ackResBy: freezed == ackResBy ? _self.ackResBy : ackResBy // ignore: cast_nullable_to_non_nullable
 as String?,ackResAt: freezed == ackResAt ? _self.ackResAt : ackResAt // ignore: cast_nullable_to_non_nullable

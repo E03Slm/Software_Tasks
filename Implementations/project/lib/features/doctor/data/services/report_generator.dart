@@ -251,7 +251,7 @@ class ReportGenerator {
   String _calculateAvgResponse(List<Alarm> alarms) {
     final acked = alarms.where((a) => a.ackRes && a.ackResAt != null).toList();
     if (acked.isEmpty) return 'N/A';
-    final totalSeconds = acked.fold(0.0, (sum, a) => sum + a.ackResAt!.difference(a.alarmTime).inSeconds);
+    final totalSeconds = acked.fold(0.0, (sum, a) => sum + a.ackResAt!.difference(a.displayTime).inSeconds);
     final avg = totalSeconds / acked.length;
     return '${(avg / 60).toStringAsFixed(1)} min';
   }

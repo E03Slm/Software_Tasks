@@ -32,7 +32,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (success) {
       if (mounted) {
         final role = ref.read(roleProvider);
-        if (role == RoleType.doctor || role == RoleType.admin) {
+        if (role == RoleType.admin) {
+          context.go('/admin');
+        } else if (role == RoleType.doctor) {
           context.go('/doctor');
         } else {
           context.go('/nurse');
