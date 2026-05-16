@@ -91,15 +91,20 @@ class AlarmNotifier extends _$AlarmNotifier {
     state = [...state, alarm];
     
     try {
-      print('DEBUG: AlarmNotifier.add calling saveSession and saveAlarm for sessionId: ${alarm.sessionId}');
-      await ref.read(sessionRepositoryProvider).saveSession(ref.read(infusionProvider));
-      await ref.read(alarmRepositoryProvider).saveAlarm(alarm, ref.read(authProvider)?.id ?? 'SYSTEM');
-      print('DEBUG: AlarmNotifier.add save success');
-      
-      // Invalidate history to keep everything in sync
-      ref.invalidate(alarmHistoryProvider);
+      final infusion = ref.read(infusionProvider);
+      if (infusion.patientId != null) {
+        print('DEBUG: AlarmNotifier.add calling saveSession and saveAlarm for sessionId: ${alarm.sessionId}');
+        await ref.read(sessionRepositoryProvider).saveSession(infusion);
+        await ref.read(alarmRepositoryProvider).saveAlarm(alarm, ref.read(authProvider)?.id ?? 'SYSTEM');
+        print('DEBUG: AlarmNotifier.add save success');
+        
+        // Invalidate history to keep everything in sync
+        ref.invalidate(alarmHistoryProvider);
+      } else {
+        print('DEBUG: AlarmNotifier.add: No patient yet, keeping alarm in memory only (will sync later)');
+      }
     } catch (e) {
-      print('CRITICAL: Failed to link alarm to DB: $e');
+      print('DEBUG: AlarmNotifier.add partial failure (expected if programming): $e');
     }
   }
 
@@ -178,9 +183,21 @@ class AlarmNotifier extends _$AlarmNotifier {
     final unhandled = state.any((a) => !a.ackRes);
     if (unhandled) return false;
 
-    // 2. High and Critical alarms must be resolved (solved)
-    // For now, ackRes covers resolution in this simplified schema
     return true;
+  }
+
+  Future<void> syncPendingAlarms(String sessionId) async {
+    final currentUser = ref.read(authProvider);
+    for (final alarm in state) {
+      try {
+        await ref.read(alarmRepositoryProvider).saveAlarm(alarm, currentUser?.id ?? 'SYSTEM');
+      } catch (e) {
+        // Ignore if already exists or fails for other reasons
+        print('DEBUG: AlarmNotifier.syncPendingAlarms partial failure: $e');
+      }
+    }
+    // Refresh history
+    ref.invalidate(alarmHistoryProvider);
   }
 }
 
@@ -532,11 +549,15 @@ class InfusionNotifier extends _$InfusionNotifier {
         state = sessionToSave;
       }
 
-      print('DEBUG: InfusionNotifier._logAction saving session: ${sessionToSave.id}');
-      await ref.read(sessionRepositoryProvider).saveSession(sessionToSave);
-      // Keep alarm state in sync with DB
-      await ref.read(alarmProvider.notifier).hydrate(sessionToSave.id);
-      print('DEBUG: InfusionNotifier._logAction session save success');
+      if (sessionToSave.patientId != null) {
+        print('DEBUG: InfusionNotifier._logAction saving session: ${sessionToSave.id}');
+        await ref.read(sessionRepositoryProvider).saveSession(sessionToSave);
+        // Sync any alarms that happened before patient selection
+        await ref.read(alarmProvider.notifier).syncPendingAlarms(sessionToSave.id);
+        print('DEBUG: InfusionNotifier._logAction session & alarm sync success');
+      } else {
+        print('DEBUG: InfusionNotifier._logAction skipping session save (no patient selected yet)');
+      }
     } catch (e) {
       print('DEBUG: InfusionNotifier._logAction session save failed: $e');
     }

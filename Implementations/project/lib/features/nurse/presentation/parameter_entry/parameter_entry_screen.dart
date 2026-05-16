@@ -480,7 +480,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
             ),
             items: patients.map((p) => DropdownMenuItem(
               value: p.id,
-              child: Text('Patient ID: ${p.id.substring(0, 8)}...'), // Bcrypted IDs are long, show snippet
+              child: Text(p.fullName),
             )).toList(),
             onChanged: (val) => setState(() => _selectedPatientId = val),
             validator: (val) => val == null ? 'Patient required' : null,

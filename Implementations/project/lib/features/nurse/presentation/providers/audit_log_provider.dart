@@ -15,6 +15,23 @@ final alarmHistoryProvider = FutureProvider.autoDispose<List<Alarm>>((ref) async
   final sessionId = ref.watch(infusionProvider.select((s) => s.id));
   if (sessionId.isEmpty) return [];
   
+  // 1. Include real-time memory alarms for immediate feedback
+  final memoryAlarms = ref.watch(alarmProvider);
+  
+  // 2. Fetch historical alarms from DB
   final repo = ref.watch(alarmRepositoryProvider);
-  return repo.fetchAlarmsForSession(sessionId);
+  final dbAlarms = await repo.fetchAlarmsForSession(sessionId);
+  
+  // 3. Merge and deduplicate
+  final allAlarms = <String, Alarm>{};
+  for (final a in dbAlarms) {
+    allAlarms[a.id] = a;
+  }
+  for (final a in memoryAlarms) {
+    allAlarms[a.id] = a; // Memory state takes precedence for active alarms
+  }
+  
+  final result = allAlarms.values.toList();
+  result.sort((a, b) => b.alarmTime.compareTo(a.alarmTime));
+  return result;
 });

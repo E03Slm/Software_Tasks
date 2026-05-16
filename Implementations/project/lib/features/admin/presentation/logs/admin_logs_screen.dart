@@ -213,10 +213,22 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
   String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
     if (value == null) return 'N/A';
     final valStr = value.toString();
-
-    // High priority: Check key name to be sure
     final normalizedKey = key.toLowerCase();
     
+    // Formatting numeric clinical parameters with units
+    if (value is num || double.tryParse(valStr) != null) {
+      final numVal = double.tryParse(valStr) ?? 0.0;
+      final formattedNum = numVal.toStringAsFixed(numVal.truncateToDouble() == numVal ? 0 : 2);
+      
+      if (normalizedKey.contains('rate')) return '$formattedNum mL/hr';
+      if (normalizedKey.contains('volume')) return '$formattedNum mL';
+      if (normalizedKey.contains('weight')) return '$formattedNum kg';
+      if (normalizedKey.contains('dose') && !normalizedKey.contains('unit')) {
+        return '$formattedNum (Clinical Dose)';
+      }
+      return formattedNum;
+    }
+
     // User/Patient resolution
     if (normalizedKey.contains('user') || normalizedKey.contains('patient') || normalizedKey.contains('by')) {
       if (userMap.containsKey(valStr)) return userMap[valStr]!;
