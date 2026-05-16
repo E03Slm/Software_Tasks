@@ -31,14 +31,6 @@ class AlarmRepository {
       };
 
       await _client.from('alarm').insert(data);
-
-      await _auditRepo.logAction(
-        actionType: 'TRIGGER_ALARM',
-        entityType: 'ALARM',
-        entityId: alarm.id,
-        performerId: userId,
-        newValue: data,
-      );
     } catch (e) {
       print('DEBUG: AlarmRepository.saveAlarm error: $e');
       rethrow;
@@ -53,14 +45,6 @@ class AlarmRepository {
     };
 
     await _client.from('alarm').update(updateData).eq('event_id', alarm.id);
-
-    await _auditRepo.logAction(
-      actionType: 'ACKNOWLEDGE_ALARM',
-      entityType: 'ALARM',
-      entityId: alarm.id,
-      performerId: userId,
-      newValue: updateData,
-    );
   }
 
   Future<List<Alarm>> fetchAlarmsForSession(String sessionId) async {

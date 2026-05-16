@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:project/features/admin/domain/models/managed_user.dart';
 import 'package:project/features/auth/domain/enums/role_type.dart';
 import 'package:project/features/admin/presentation/providers/admin_providers.dart';
+import 'package:project/features/auth/presentation/providers/auth_provider.dart';
 
 class UserEditorScreen extends ConsumerStatefulWidget {
   final String? userId;
@@ -176,11 +177,15 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
     );
 
     try {
+      final currentUser = ref.read(authProvider);
+      final performerId = currentUser?.id ?? 'SYSTEM';
+      
       if (_isEditing) {
-        await ref.read(adminRepositoryProvider).updateUser(user);
+        await ref.read(adminRepositoryProvider).updateUser(user, performerId);
       } else {
-        await ref.read(adminRepositoryProvider).createUser(user, _passwordController.text);
+        await ref.read(adminRepositoryProvider).createUser(user, _passwordController.text, performerId);
       }
+      ref.invalidate(adminUserListProvider);
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/doctor_theme.dart';
 import '../../../shared/widgets/role_badge.dart';
+import '../../auth/presentation/providers/auth_provider.dart';
 
 class DoctorShell extends ConsumerWidget {
   final Widget child;
@@ -19,35 +20,44 @@ class DoctorShell extends ConsumerWidget {
                          doctorTheme.extension<DoctorColors>()!;
     final location = GoRouterState.of(context).uri.path;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('DRUG LIBRARY MGMT'),
-        backgroundColor: doctorColors.primary,
-        foregroundColor: Colors.white,
-        actions: const [
-          RoleBadge(role: 'DOCTOR'),
-          SizedBox(width: 16),
-        ],
-      ),
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _getSelectedIndex(location),
-        selectedItemColor: doctorColors.primary,
-        onTap: (index) => _onItemTapped(index, context),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            label: 'Library',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Audit Logs',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assessment),
-            label: 'Reports',
-          ),
-        ],
+    return Theme(
+      data: doctorTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('DRUG LIBRARY MGMT'),
+          backgroundColor: doctorColors.primary,
+          foregroundColor: Colors.white,
+          actions: [
+            const RoleBadge(role: 'DOCTOR'),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                await ref.read(authProvider.notifier).logout();
+              },
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: child,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _getSelectedIndex(location),
+          selectedItemColor: doctorColors.primary,
+          onTap: (index) => _onItemTapped(index, context),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.library_books),
+              label: 'Library',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'Audit Logs',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.assessment),
+              label: 'Reports',
+            ),
+          ],
+        ),
       ),
     );
   }

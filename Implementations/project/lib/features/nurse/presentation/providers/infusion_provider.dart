@@ -106,6 +106,22 @@ class AlarmNotifier extends _$AlarmNotifier {
         print('DEBUG: AlarmNotifier.add calling saveSession and saveAlarm for sessionId: ${alarm.sessionId}');
         await ref.read(sessionRepositoryProvider).saveSession(infusion);
         await ref.read(alarmRepositoryProvider).saveAlarm(alarm, ref.read(authProvider)?.id ?? 'SYSTEM');
+        
+        // Unified Alarm Trigger Log
+        await ref.read(auditRepositoryProvider).logAction(
+          actionType: 'ALARM_TRIGGERED',
+          entityType: 'ALARM',
+          entityId: alarm.id,
+          performerId: ref.read(authProvider)?.id ?? 'SYSTEM',
+          newValue: {
+            'alarm_id': alarm.alarmId,
+            'severity': alarm.definition?.severity,
+            'type': alarm.type,
+            'session_id': alarm.sessionId,
+            'timestamp': alarm.alarmTime.toIso8601String(),
+          },
+        );
+        
         print('DEBUG: AlarmNotifier.add save success');
         
         // Invalidate history to keep everything in sync
@@ -137,16 +153,27 @@ class AlarmNotifier extends _$AlarmNotifier {
       try {
         await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!, currentUser?.id ?? 'SYSTEM');
         
-        // Log acknowledgement
-        ref.read(auditRepositoryProvider).logAction(
-          actionType: 'ALARM_ACKNOWLEDGED',
+        final fullName = currentUser != null ? '${currentUser.fname} ${currentUser.lname}' : 'Unknown';
+        
+        // Final Unified Resolution Log
+        await ref.read(auditRepositoryProvider).logAction(
+          actionType: 'ALARM_RESOLVED_ACK',
           entityType: 'ALARM',
           entityId: alarmId,
-          newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
+          newValue: {
+            'alarm_id': updatedAlarm!.alarmId,
+            'final_status': 'Resolved',
+            'ack_details': {
+              'status': true,
+              'performed_by': fullName,
+              'role': currentUser?.role.name.toUpperCase() ?? 'NURSE',
+            },
+            'severity': updatedAlarm!.definition?.severity ?? 'MEDIUM',
+            'timestamp': DateTime.now().toIso8601String(),
+          },
           performerId: currentUser?.id,
         );
         
-        // Refresh history and potentially active list
         ref.invalidate(alarmHistoryProvider);
       } catch (e) {
         print('Failed to update alarm: $e');
@@ -173,16 +200,27 @@ class AlarmNotifier extends _$AlarmNotifier {
       try {
         await ref.read(alarmRepositoryProvider).updateAlarm(updatedAlarm!, currentUser?.id ?? 'SYSTEM');
         
-        // Log resolution
-        ref.read(auditRepositoryProvider).logAction(
-          actionType: 'ALARM_RESOLVED',
+        final fullName = currentUser != null ? '${currentUser.fname} ${currentUser.lname}' : 'Unknown';
+
+        // Final Unified Resolution Log
+        await ref.read(auditRepositoryProvider).logAction(
+          actionType: 'ALARM_RESOLVED_ACK',
           entityType: 'ALARM',
           entityId: alarmId,
-          newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
+          newValue: {
+            'alarm_id': updatedAlarm!.alarmId,
+            'final_status': 'Completed',
+            'ack_details': {
+              'status': true,
+              'performed_by': fullName,
+              'role': currentUser?.role.name.toUpperCase() ?? 'NURSE',
+            },
+            'severity': updatedAlarm!.definition?.severity ?? 'MEDIUM',
+            'timestamp': DateTime.now().toIso8601String(),
+          },
           performerId: currentUser?.id,
         );
         
-        // Refresh history and potentially active list
         ref.invalidate(alarmHistoryProvider);
       } catch (e) {
         print('Failed to update alarm: $e');
@@ -612,7 +650,27 @@ class InfusionNotifier extends _$InfusionNotifier {
 
   void resolveAlarm() {
     if (state.status != 'Alarm') return;
+    
+    final currentUser = ref.read(authProvider);
+    final fullName = currentUser != null ? '${currentUser.fname} ${currentUser.lname}' : 'Unknown';
+
     state = state.copyWith(status: 'Programming');
+    
+    _logAction(
+      'ALARM_SESSION_RESOLVED', 
+      newValue: {
+        'status_update': 'Programming',
+        'interaction_type': 'State Recovery',
+        'auth_context': {
+          'user': fullName,
+          'role': currentUser?.role.name.toUpperCase() ?? 'NURSE',
+        },
+        'timestamp_precision': DateTime.now().toIso8601String(),
+        'metadata': {
+          'ui_asset': 'status_recovery_icon.png'
+        }
+      }
+    );
   }
 
   void reset() {

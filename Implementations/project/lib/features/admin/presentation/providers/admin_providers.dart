@@ -5,6 +5,7 @@ import '../../domain/repositories/admin_repository.dart';
 import '../../data/repositories/supabase_admin_repository.dart';
 import '../../../doctor/data/repositories/audit_repository.dart';
 import '../../../doctor/domain/models/audit_log.dart';
+import '../../../nurse/presentation/providers/infusion_provider.dart';
 
 part 'admin_providers.g.dart';
 
@@ -33,6 +34,12 @@ Future<Map<String, dynamic>> systemStats(Ref ref) async {
 final userNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
   final users = await ref.watch(adminRepositoryProvider).fetchUsers();
   return {for (final u in users) u.id: u.fullName};
+});
+
+final alarmNamesMapProvider = FutureProvider<Map<String, String>>((ref) async {
+  // Accessing definitions via the infusion provider's existing repo
+  final definitions = await ref.watch(alarmDefinitionsProvider.future);
+  return {for (final d in definitions) d.id: d.name};
 });
 
 @riverpod

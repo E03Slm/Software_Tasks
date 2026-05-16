@@ -82,7 +82,11 @@ class AuthRepository {
     // Update last login timestamp
     _client.from('users').update({
       'last_login': DateTime.now().toIso8601String(),
-    }).eq('user_id', userId).then((_) => null).catchError((_) => null);
+    }).eq('user_id', userId).then((_) {
+      print('Auth: Updated last_login for $userId');
+    }).catchError((error) {
+      print('Auth: Error updating last_login: $error');
+    });
 
     // Log the successful login to audit trail
     _auditRepo.logAction(

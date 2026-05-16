@@ -33,13 +33,12 @@ class SimulatorApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userRole = ref.watch(roleProvider);
     final router = ref.watch(routerProvider);
     
     return MaterialApp.router(
       title: 'Smart Infusion Pump Simulator',
       debugShowCheckedModeBanner: false,
-      theme: userRole == RoleType.doctor ? doctorTheme : nurseTheme,
+      theme: nurseTheme, // Use nurseTheme as stable base theme
       routerConfig: router,
     );
   }

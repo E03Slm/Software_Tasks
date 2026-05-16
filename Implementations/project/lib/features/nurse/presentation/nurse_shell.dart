@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project/features/nurse/presentation/providers/infusion_provider.dart';
 import 'package:project/core/theme/nurse_theme.dart';
+import 'package:project/features/auth/presentation/providers/auth_provider.dart';
 
 class NurseShell extends ConsumerWidget {
   final Widget child;
@@ -43,8 +44,8 @@ class NurseShell extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () {
-              context.go('/login');
+            onPressed: () async {
+              await ref.read(authProvider.notifier).logout();
             },
           ),
         ],

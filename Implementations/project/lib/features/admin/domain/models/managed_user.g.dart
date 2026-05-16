@@ -17,6 +17,9 @@ _ManagedUser _$ManagedUserFromJson(Map<String, dynamic> json) => _ManagedUser(
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
+  lastLogin: json['last_login'] == null
+      ? null
+      : DateTime.parse(json['last_login'] as String),
   updatedAt: json['updated_at'] == null
       ? null
       : DateTime.parse(json['updated_at'] as String),
@@ -32,5 +35,6 @@ Map<String, dynamic> _$ManagedUserToJson(_ManagedUser instance) =>
       'role': _roleToJson(instance.role),
       'Is_Deleted': instance.isDeleted,
       'created_at': instance.createdAt?.toIso8601String(),
+      'last_login': instance.lastLogin?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
     };

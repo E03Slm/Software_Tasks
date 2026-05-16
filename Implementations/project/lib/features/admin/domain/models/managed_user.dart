@@ -17,6 +17,7 @@ abstract class ManagedUser with _$ManagedUser {
     @JsonKey(name: 'role', fromJson: _roleFromJson, toJson: _roleToJson) required RoleType role,
     @JsonKey(name: 'Is_Deleted') @Default(false) bool isDeleted,
     @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'last_login') DateTime? lastLogin,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ManagedUser;
 

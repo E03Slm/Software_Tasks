@@ -44,7 +44,7 @@ class SupabaseAdminRepository implements AdminRepository {
   }
 
   @override
-  Future<void> createUser(ManagedUser user, String password) async {
+  Future<void> createUser(ManagedUser user, String password, String performerId) async {
     final String userId = const Uuid().v4();
     
     // Hash both National ID and Password using Bcrypt if they are intended to be secure
@@ -61,6 +61,7 @@ class SupabaseAdminRepository implements AdminRepository {
       'password_hash': passwordHash,
       'role': user.role.name.toUpperCase(),
       'created_at': DateTime.now().toIso8601String(),
+      'last_login': DateTime.now().toIso8601String(),
       'Is_Deleted': false,
     };
 
@@ -70,6 +71,7 @@ class SupabaseAdminRepository implements AdminRepository {
       actionType: 'CREATE_USER',
       entityType: 'USER',
       entityId: userId,
+      performerId: performerId,
       newValue: {
         'role': user.role.name,
         'Fname': user.fname,
@@ -79,7 +81,7 @@ class SupabaseAdminRepository implements AdminRepository {
   }
 
   @override
-  Future<void> updateUser(ManagedUser user) async {
+  Future<void> updateUser(ManagedUser user, String performerId) async {
     final updateData = {
       'role': user.role.name.toUpperCase(),
       'Fname': user.fname,
@@ -96,13 +98,13 @@ class SupabaseAdminRepository implements AdminRepository {
       actionType: 'UPDATE_USER',
       entityType: 'USER',
       entityId: user.id,
+      performerId: performerId,
       newValue: updateData,
     );
   }
 
   @override
-  Future<void> deleteUser(String userId) async {
-    final performerId = _client.auth.currentUser?.id;
+  Future<void> deleteUser(String userId, String performerId) async {
     // Perform soft deletion as per requirement
     await _client
         .from('users')
@@ -130,13 +132,19 @@ class SupabaseAdminRepository implements AdminRepository {
         .select('user_id')
         .eq('Is_Deleted', false);
     
-    final logsCountResponse = await _client
-        .from('audit_log')
-        .select('log_id');
+    final activeSessionsResponse = await _client
+        .from('infusion_session')
+        .select('session_id')
+        .eq('status', 'Infusing');
+
+    final alarmsCountResponse = await _client
+        .from('alarm')
+        .select('alarm_id');
 
     return {
       'total_users': (userCountResponse as List).length,
-      'total_logs': (logsCountResponse as List).length,
+      'active_sessions': (activeSessionsResponse as List).length,
+      'total_alarms': (alarmsCountResponse as List).length,
       'last_updated': DateTime.now().toIso8601String(),
     };
   }

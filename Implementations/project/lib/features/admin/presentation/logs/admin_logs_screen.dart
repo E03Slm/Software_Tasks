@@ -22,17 +22,24 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     final userNamesAsync = ref.watch(userNamesMapProvider);
     final drugNamesAsync = ref.watch(drugNamesMapProvider);
     final sessionsAsync = ref.watch(sessionNamesMapProvider);
+    final alarmsAsync = ref.watch(alarmNamesMapProvider);
     
     final userMap = userNamesAsync.value ?? {};
     final drugMap = drugNamesAsync.value ?? {};
     final sessionMap = sessionsAsync.value ?? {};
+    final alarmMap = alarmsAsync.value ?? {};
 
     return Scaffold(
       body: Column(
         children: [
           logsAsync.when(
             data: (logs) {
-              final actions = logs.map((l) => l.action).toSet().toList()..sort();
+              final actions = logs.map((l) {
+                if (l.action == 'ACKNOWLEDGE_ALARM' || l.action == 'ALARM_ACKNOWLEDGED' || l.action == 'ALARM_ACK' || l.action == 'ALARM_RESOLVED') return 'ALARM_RESOLVED_ACK';
+                if (l.action == 'TRIGGER_ALARM') return 'ALARM_TRIGGERED';
+                return l.action;
+              }).toSet().toList()..sort();
+              
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: DropdownButtonFormField<String>(
@@ -60,9 +67,16 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
           Expanded(
             child: logsAsync.when(
               data: (logs) {
-                final filteredLogs = logs.where((log) => 
-                  _searchQuery.isEmpty || log.action == _searchQuery
-                ).toList();
+                final deduplicatedLogs = _deduplicateLogs(logs);
+                final filteredLogs = deduplicatedLogs.where((log) {
+                  if (_searchQuery.isEmpty) return true;
+                  
+                  final normalizedAction = (log.action == 'ACKNOWLEDGE_ALARM' || log.action == 'ALARM_ACKNOWLEDGED' || log.action == 'ALARM_ACK' || log.action == 'ALARM_RESOLVED')
+                      ? 'ALARM_RESOLVED_ACK' 
+                      : (log.action == 'TRIGGER_ALARM' ? 'ALARM_TRIGGERED' : log.action);
+                      
+                  return normalizedAction == _searchQuery;
+                }).toList();
 
                 if (filteredLogs.isEmpty) {
                   return const Center(child: Text('No matching logs found.'));
@@ -76,7 +90,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                     return ExpansionTile(
                       leading: _getIconForAction(log.action),
                       title: Text(
-                        log.action.replaceAll('_', ' '),
+                        _getDisplayTitle(log),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
@@ -115,14 +129,14 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap)}', 
+                                'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap, alarmMap)}', 
                                 style: const TextStyle(fontSize: 12, color: Colors.grey)
                               ),
 
                               const Divider(height: 24),
                               const Text('DATA CHANGES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, letterSpacing: 0.5, color: Colors.grey)),
                               const SizedBox(height: 8),
-                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap),
+                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap, alarmMap),
                             ],
                           ),
                         ),
@@ -140,7 +154,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     );
   }
 
-  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     try {
       final oldData = (oldJson != null && oldJson != '{}') ? jsonDecode(oldJson) as Map<String, dynamic> : <String, dynamic>{};
       final newData = (newJson != null && newJson != '{}') ? jsonDecode(newJson) as Map<String, dynamic> : <String, dynamic>{};
@@ -171,7 +185,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, oldValue, userMap, drugMap, sessionMap),
+                            _formatValue(key, oldValue, userMap, drugMap, sessionMap, alarmMap),
                             style: TextStyle(color: Colors.red.shade800, fontSize: 13, decoration: TextDecoration.lineThrough),
                           ),
                         ),
@@ -187,7 +201,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, newValue, userMap, drugMap, sessionMap),
+                            _formatValue(key, newValue, userMap, drugMap, sessionMap, alarmMap),
                             style: TextStyle(color: Colors.green.shade800, fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -210,7 +224,28 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     }
   }
 
-  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  String _getDisplayTitle(dynamic log) {
+    final action = log.action as String;
+    if (action == 'ALARM_RESOLVED_ACK' || action == 'ALARM_RESOLVED') {
+       try {
+         final data = jsonDecode(log.newValue ?? '{}') as Map<String, dynamic>;
+         final alarmId = data['alarm_id'] ?? 'N/A';
+         final performer = data['ack_details']?['performed_by'] ?? 'Clinician';
+         return 'Alarm $alarmId Resolved/Acknowledged by $performer';
+       } catch (e) {
+         return 'Alarm Resolved/Acknowledged';
+       }
+    }
+    
+    // Support legacy names in title display too
+    if (action == 'ACKNOWLEDGE_ALARM' || action == 'ALARM_ACKNOWLEDGED' || action == 'ALARM_ACK') {
+      return 'Alarm Resolved/Acknowledged';
+    }
+
+    return action.replaceAll('_', ' ');
+  }
+
+  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     if (value == null) return 'N/A';
     final valStr = value.toString();
     final normalizedKey = key.toLowerCase();
@@ -244,21 +279,28 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
       if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
     }
 
+    // Alarm resolution
+    if (normalizedKey.contains('alarm')) {
+      if (alarmMap.containsKey(valStr)) return alarmMap[valStr]!;
+    }
+
     // Fallback: Check all maps if it's a UUID-like string
     if (valStr.length >= 32) {
       if (userMap.containsKey(valStr)) return userMap[valStr]!;
       if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
       if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+      if (alarmMap.containsKey(valStr)) return alarmMap[valStr]!;
     }
 
     return valStr;
   }
 
-  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     if (id == null) return 'N/A';
     if (userMap.containsKey(id)) return userMap[id]!;
     if (drugMap.containsKey(id)) return drugMap[id]!;
     if (sessionMap.containsKey(id)) return sessionMap[id]!;
+    if (alarmMap.containsKey(id)) return alarmMap[id]!;
     return id;
   }
 
@@ -276,5 +318,50 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     if (action.contains('LOGIN')) return const Icon(Icons.login, color: Colors.orange);
     if (action.contains('ALARM')) return const Icon(Icons.warning, color: Colors.amber);
     return const Icon(Icons.history);
+  }
+
+  List<dynamic> _deduplicateLogs(List<dynamic> logs) {
+    if (logs.isEmpty) return [];
+    
+    final List<dynamic> result = [];
+    final Map<String, dynamic> mergedLogs = {};
+
+    for (final log in logs) {
+      final isAlarmAction = log.action.contains('ALARM') && 
+          (log.action.contains('ACK') || log.action.contains('RESOLVE'));
+      
+      if (isAlarmAction) {
+        // Group by Entity, Performer, and Timestamp (rounded to nearest second)
+        final timeKey = (log.timestamp.millisecondsSinceEpoch / 1000).floor();
+        final key = '${log.entityId}_${log.userId}_$timeKey';
+
+        if (mergedLogs.containsKey(key)) {
+          final existing = mergedLogs[key];
+          try {
+            final existingData = jsonDecode(existing.newValue ?? '{}') as Map<String, dynamic>;
+            final newData = jsonDecode(log.newValue ?? '{}') as Map<String, dynamic>;
+            
+            // Simple merge of top-level keys
+            final mergedData = {...existingData, ...newData};
+            
+            // Keep the one with ALARM_RESOLVED_ACK action if possible
+            final bestAction = (log.action == 'ALARM_RESOLVED_ACK') ? log.action : existing.action;
+            
+            mergedLogs[key] = existing.copyWith(
+              action: bestAction,
+              newValue: jsonEncode(mergedData)
+            );
+          } catch (e) {
+            result.add(log);
+          }
+        } else {
+          mergedLogs[key] = log;
+          result.add(mergedLogs[key]);
+        }
+      } else {
+        result.add(log);
+      }
+    }
+    return result;
   }
 }

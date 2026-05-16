@@ -25,10 +25,12 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     final userNamesAsync = ref.watch(userNamesMapProvider);
     final drugNamesAsync = ref.watch(drugNamesMapProvider);
     final sessionsAsync = ref.watch(sessionNamesMapProvider);
+    final alarmNamesAsync = ref.watch(alarmNamesMapProvider);
     
     final userMap = userNamesAsync.value ?? {};
     final drugMap = drugNamesAsync.value ?? {};
     final sessionMap = sessionsAsync.value ?? {};
+    final alarmMap = alarmNamesAsync.value ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -132,14 +134,14 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                                 ],
                               ),
                               Text(
-                                'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap)}', 
+                                'Entity: ${_resolveEntity(log.entityId, log.entityType, userMap, drugMap, sessionMap, alarmMap)}', 
                                 style: const TextStyle(fontSize: 11, color: Colors.grey)
                               ),
 
                               const Divider(height: 24),
                               const Text('DATA CHANGES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 0.5, color: Colors.grey)),
                               const SizedBox(height: 8),
-                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap),
+                              _buildDataDiff(log.oldValue, log.newValue, userMap, drugMap, sessionMap, alarmMap),
                             ],
                           ),
                         ),
@@ -157,7 +159,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     );
   }
 
-  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  Widget _buildDataDiff(String? oldJson, String? newJson, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     try {
       final oldData = (oldJson != null && oldJson != '{}') ? jsonDecode(oldJson) as Map<String, dynamic> : <String, dynamic>{};
       final newData = (newJson != null && newJson != '{}') ? jsonDecode(newJson) as Map<String, dynamic> : <String, dynamic>{};
@@ -188,7 +190,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, oldValue, userMap, drugMap, sessionMap),
+                            _formatValue(key, oldValue, userMap, drugMap, sessionMap, alarmMap),
                             style: TextStyle(color: Colors.red.shade800, fontSize: 12, decoration: TextDecoration.lineThrough),
                           ),
                         ),
@@ -204,7 +206,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(4)),
                           child: Text(
-                            _formatValue(key, newValue, userMap, drugMap, sessionMap),
+                            _formatValue(key, newValue, userMap, drugMap, sessionMap, alarmMap),
                             style: TextStyle(color: Colors.green.shade800, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -227,7 +229,7 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     }
   }
 
-  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  String _formatValue(String key, dynamic value, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     if (value == null) return 'N/A';
     final valStr = value.toString();
     final normalizedKey = key.toLowerCase();
@@ -255,21 +257,26 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
     if (normalizedKey.contains('session')) {
       if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
     }
+    if (normalizedKey.contains('alarm')) {
+      if (alarmMap.containsKey(valStr)) return alarmMap[valStr]!;
+    }
 
     if (valStr.length >= 32) {
       if (userMap.containsKey(valStr)) return userMap[valStr]!;
       if (drugMap.containsKey(valStr)) return drugMap[valStr]!;
       if (sessionMap.containsKey(valStr)) return sessionMap[valStr]!;
+      if (alarmMap.containsKey(valStr)) return alarmMap[valStr]!;
     }
 
     return valStr;
   }
 
-  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap) {
+  String _resolveEntity(String? id, String type, Map<String, String> userMap, Map<String, String> drugMap, Map<String, String> sessionMap, Map<String, String> alarmMap) {
     if (id == null) return 'N/A';
     if (userMap.containsKey(id)) return userMap[id]!;
     if (drugMap.containsKey(id)) return drugMap[id]!;
     if (sessionMap.containsKey(id)) return sessionMap[id]!;
+    if (alarmMap.containsKey(id)) return alarmMap[id]!;
     return id;
   }
 
