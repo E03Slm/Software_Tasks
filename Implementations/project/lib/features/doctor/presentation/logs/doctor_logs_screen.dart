@@ -47,24 +47,38 @@ class _DoctorLogsScreenState extends ConsumerState<DoctorLogsScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(spaceMd),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Filter by action (e.g., CREATE_DRUG)',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              onChanged: (value) => setState(() => _searchQuery = value),
-            ),
+          logsAsync.when(
+            data: (logs) {
+              final actions = logs.map((l) => l.action).toSet().toList()..sort();
+              return Padding(
+                padding: const EdgeInsets.all(spaceMd),
+                child: DropdownButtonFormField<String>(
+                  value: _searchQuery.isEmpty ? 'All Actions' : _searchQuery,
+                  decoration: InputDecoration(
+                    labelText: 'Filter by Action',
+                    prefixIcon: const Icon(Icons.filter_list),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  items: ['All Actions', ...actions].map((action) => DropdownMenuItem(
+                    value: action,
+                    child: Text(action.replaceAll('_', ' ')),
+                  )).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = (value == 'All Actions') ? '' : value!;
+                    });
+                  },
+                ),
+              );
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
           ),
           Expanded(
             child: logsAsync.when(
               data: (logs) {
                 final filteredLogs = logs.where((log) => 
-                  log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.userName.toLowerCase().contains(_searchQuery.toLowerCase())
+                  _searchQuery.isEmpty || log.action == _searchQuery
                 ).toList();
 
                 if (filteredLogs.isEmpty) {

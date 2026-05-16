@@ -54,36 +54,57 @@ class _DoctorSystemLogsScreenState extends ConsumerState<DoctorSystemLogsScreen>
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search system logs...',
-                prefixIcon: const Icon(Icons.search, color: Colors.teal),
-                filled: true,
-                fillColor: Colors.grey[50],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+          logsAsync.when(
+            data: (logs) {
+              final actions = logs
+                .where((l) => l.action != 'LOGIN' && l.action != 'LOGOUT')
+                .map((l) => l.action)
+                .toSet()
+                .toList()
+                ..sort();
+                
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: DropdownButtonFormField<String>(
+                  value: _searchQuery.isEmpty ? 'All Actions' : _searchQuery,
+                  decoration: InputDecoration(
+                    labelText: 'Filter by Action',
+                    prefixIcon: const Icon(Icons.filter_list, color: Colors.teal),
+                    filled: true,
+                    fillColor: Colors.grey[50],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.teal.withOpacity(0.1)),
+                    ),
+                  ),
+                  items: ['All Actions', ...actions].map((action) => DropdownMenuItem(
+                    value: action,
+                    child: Text(action.replaceAll('_', ' ')),
+                  )).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = (value == 'All Actions') ? '' : value!;
+                    });
+                  },
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.teal.withOpacity(0.1)),
-                ),
-              ),
-              onChanged: (value) => setState(() => _searchQuery = value),
-            ),
+              );
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
           ),
           Expanded(
             child: logsAsync.when(
               data: (logs) {
                 // Filter out LOGIN and LOGOUT actions in the UI as requested for Doctors
-                final filteredLogs = logs.where((log) => 
-                  !['LOGIN', 'LOGOUT'].contains(log.action.toUpperCase()) &&
-                  (log.action.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.entityType.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  log.userName.toLowerCase().contains(_searchQuery.toLowerCase()))
-                ).toList();
+                final filteredLogs = logs.where((log) {
+                  final matchesAction = log.action != 'LOGIN' && log.action != 'LOGOUT';
+                  final matchesFilter = _searchQuery.isEmpty || log.action == _searchQuery;
+                  return matchesAction && matchesFilter;
+                }).toList();
 
                 if (filteredLogs.isEmpty) {
                   return const Center(child: Text('No matching system logs found.'));
