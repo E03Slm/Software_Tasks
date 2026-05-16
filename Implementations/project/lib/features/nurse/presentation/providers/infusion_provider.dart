@@ -80,6 +80,7 @@ class AlarmNotifier extends _$AlarmNotifier {
       sessionId: sessionId,
       alarmId: finalDef.id,
       alarmTime: DateTime.now(),
+      type: finalDef.name,
       ackRes: false,
       definition: finalDef,
     );

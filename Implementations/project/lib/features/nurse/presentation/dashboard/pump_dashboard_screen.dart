@@ -64,7 +64,7 @@ class PumpDashboardScreen extends ConsumerWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 PumpStatusCard(
-                  status: isAlarm && alarms.isNotEmpty ? 'ALARM: ${alarms.first.definition?.name ?? "Unknown"}' : session.status,
+                  status: isAlarm && alarms.isNotEmpty ? 'ALARM: ${alarms.first.type}' : session.status,
                   subtitle: isRunning ? 'Infusion Active - Channel A' : 'Ready to start',
                   isAlarm: isAlarm,
                 ),

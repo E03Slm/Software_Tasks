@@ -41,7 +41,7 @@ final class AlarmNotifierProvider
   }
 }
 
-String _$alarmNotifierHash() => r'fcdf0558ac20a2b1706571bee3cc3edb49901883';
+String _$alarmNotifierHash() => r'6b10580e469a9c69296577bb69942b36cd3ac06e';
 
 abstract class _$AlarmNotifier extends $Notifier<List<Alarm>> {
   List<Alarm> build();
