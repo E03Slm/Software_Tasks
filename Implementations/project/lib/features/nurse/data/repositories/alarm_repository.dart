@@ -25,9 +25,9 @@ class AlarmRepository {
         'session_id': alarm.sessionId,
         'alarm_id': alarm.alarmId,
         'timestamp': alarm.alarmTime.toIso8601String(),
-        'ack_res': alarm.ackRes,
-        'ack_res_by': alarm.ackResBy,
-        'ack_res_at': alarm.ackResAt?.toIso8601String(),
+        'ack/res': alarm.ackRes,
+        'ack/res_by': alarm.ackResBy,
+        'ack/res_at': alarm.ackResAt?.toIso8601String(),
       };
 
       await _client.from('alarm').insert(data);
@@ -47,9 +47,9 @@ class AlarmRepository {
 
   Future<void> updateAlarm(Alarm alarm, String userId) async {
     final updateData = {
-      'ack_res': alarm.ackRes,
-      'ack_res_by': alarm.ackResBy,
-      'ack_res_at': alarm.ackResAt?.toIso8601String(),
+      'ack/res': alarm.ackRes,
+      'ack/res_by': alarm.ackResBy,
+      'ack/res_at': alarm.ackResAt?.toIso8601String(),
     };
 
     await _client.from('alarm').update(updateData).eq('event_id', alarm.id);

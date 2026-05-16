@@ -14,9 +14,9 @@ abstract class Alarm with _$Alarm {
     @JsonKey(name: 'alarm_id') required String alarmId, // FK to alarms table
     @JsonKey(name: 'timestamp') required DateTime alarmTime,
     @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'ack_res') @Default(false) bool ackRes,
-    @JsonKey(name: 'ack_res_by') String? ackResBy,
-    @JsonKey(name: 'ack_res_at') DateTime? ackResAt,
+    @JsonKey(name: 'ack/res') @Default(false) bool ackRes,
+    @JsonKey(name: 'ack/res_by') String? ackResBy,
+    @JsonKey(name: 'ack/res_at') DateTime? ackResAt,
     @JsonKey(name: 'definition') AlarmDefinition? definition,
   }) = _Alarm;
 

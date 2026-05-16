@@ -7,6 +7,7 @@ import '../../../../core/theme/nurse_theme.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../widgets/nurse_widgets.dart';
 import 'widgets/alarm_activation_panel.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 class PumpDashboardScreen extends ConsumerWidget {
   const PumpDashboardScreen({super.key});
@@ -19,6 +20,11 @@ class PumpDashboardScreen extends ConsumerWidget {
     final alarms = ref.watch(alarmProvider);
     final notifier = ref.read(infusionProvider.notifier);
     final canContinue = ref.watch(alarmProvider.notifier).canContinue;
+    final user = ref.watch(authProvider);
+
+    final nurseName = user != null 
+        ? '${user.fname ?? ''} ${user.lname ?? ''}'.trim() 
+        : 'Unknown Nurse';
 
     final isRunning = session.status == 'Infusing' || session.status == 'KVO';
     final isAlarm = session.status == 'Alarm';
@@ -84,14 +90,14 @@ class PumpDashboardScreen extends ConsumerWidget {
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(flex: 2, child: _buildParametersSection(context, session, notifier)),
+                          Expanded(flex: 2, child: _buildParametersSection(context, session, notifier, nurseName)),
                           const SizedBox(width: 24),
                           Expanded(flex: 1, child: _buildProgressSection(context, session, notifier)),
                         ],
                       )
                     : Column(
                         children: [
-                          _buildParametersSection(context, session, notifier),
+                          _buildParametersSection(context, session, notifier, nurseName),
                           const SizedBox(height: 24),
                           _buildProgressSection(context, session, notifier),
                         ],
@@ -100,79 +106,56 @@ class PumpDashboardScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // Controls Grid
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: MediaQuery.of(context).size.width > 600 ? 4 : 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 1.5,
-              children: [
-                PumpControlButton(
-                  icon: Icons.play_circle,
-                  label: 'Start',
-                  color: nurseColors.successGreen,
-                  onPressed: isRunning || !canContinue ? null : () => notifier.start(),
+            // Smart Primary Control
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              child: ElevatedButton.icon(
+                onPressed: isAlarm || !canContinue ? null : () {
+                  if (isRunning) {
+                    notifier.pause();
+                  } else {
+                    notifier.start();
+                  }
+                },
+                icon: Icon(
+                  isRunning ? Icons.pause_circle_filled_rounded : Icons.play_circle_filled_rounded,
+                  size: 32,
                 ),
-                PumpControlButton(
-                  icon: Icons.pause_circle,
-                  label: 'Pause',
-                  color: nurseColors.pauseAmber,
-                  onPressed: !isRunning ? null : () => notifier.pause(),
+                label: Text(
+                  isRunning 
+                    ? 'PAUSE INFUSION' 
+                    : isPaused ? 'RESUME INFUSION' : 'START INFUSION',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                  ),
                 ),
-                PumpControlButton(
-                  icon: Icons.play_arrow_outlined,
-                  label: 'Resume',
-                  color: nurseColors.severityInfo,
-                  onPressed: !isPaused || !canContinue ? null : () => notifier.start(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isRunning ? nurseColors.pauseAmber : nurseColors.successGreen,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 28),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 8,
+                  shadowColor: (isRunning ? nurseColors.pauseAmber : nurseColors.successGreen).withValues(alpha: 0.4),
                 ),
-                PumpControlButton(
-                  icon: Icons.stop_circle,
-                  label: 'Stop',
-                  color: nurseColors.stopGrey,
-                  onPressed: isStopped ? null : () => notifier.stop(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            EmergencyStopButton(
-              onStop: () => notifier.stop(),
+              ),
             ),
             
             const SizedBox(height: 24),
             const AlarmActivationPanel(),
-            const SizedBox(height: 24),
-            
-            if (!isRunning)
-              ElevatedButton.icon(
-                onPressed: () {
-                  if (session.drug != null) {
-                    context.push('/nurse/parameters');
-                  } else {
-                    context.push('/nurse/drug-selection');
-                  }
-                },
-                icon: Icon(session.status == 'Programming' || session.drug != null ? Icons.edit_note : Icons.add),
-                label: Text(session.status == 'Programming' || session.drug != null ? 'CONTINUE PROGRAMMING' : 'NEW INFUSION'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: (session.status == 'Programming' || session.drug != null) ? Theme.of(context).colorScheme.secondaryContainer : null,
-                  foregroundColor: (session.status == 'Programming' || session.drug != null) ? Theme.of(context).colorScheme.onSecondaryContainer : null,
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  minimumSize: const Size(double.infinity, 64),
-                ),
-              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildParametersSection(BuildContext context, dynamic session, dynamic notifier) {
+  Widget _buildParametersSection(BuildContext context, dynamic session, dynamic notifier, String nurseName) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -188,24 +171,32 @@ class PumpDashboardScreen extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                    color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
                   ),
-                  child: const Text('ID: 884920-A', style: TextStyle(fontSize: 10, fontFamily: 'monospace')),
+                  child: Text(
+                    nurseName.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 11, 
+                      fontFamily: 'monospace', 
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              mainAxisSpacing: 32,
-              crossAxisSpacing: 16,
-              childAspectRatio: 2.5,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 3.5,
               children: [
                 ParameterDisplayCard(
                   label: 'Infusion Rate',
@@ -237,10 +228,37 @@ class PumpDashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildProgressSection(BuildContext context, dynamic session, dynamic notifier) {
-    return InfusionProgressCard(
-      progress: notifier.progressFraction,
-      drugName: session.drug?.name ?? 'No Medication',
-      containerInfo: '${session.totalVolume.toStringAsFixed(0)} mL Bag',
+    final isRunning = session.status == 'Infusing' || session.status == 'KVO';
+
+    return Column(
+      children: [
+        InfusionProgressCard(
+          progress: notifier.progressFraction,
+          drugName: session.drug?.name ?? 'No Medication',
+          containerInfo: '${session.totalVolume.toStringAsFixed(0)} mL Bag',
+        ),
+        if (!isRunning) ...[
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: () {
+              if (session.drug != null) {
+                context.push('/nurse/parameters');
+              } else {
+                context.push('/nurse/drug-selection');
+              }
+            },
+            icon: Icon(session.status == 'Programming' || session.drug != null ? Icons.edit_note : Icons.add),
+            label: Text(session.status == 'Programming' || session.drug != null ? 'CONTINUE' : 'NEW INFUSION'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              minimumSize: const Size(double.infinity, 56),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
