@@ -12,11 +12,11 @@ _Alarm _$AlarmFromJson(Map<String, dynamic> json) => _Alarm(
   alarmId: json['alarm_id'] as String,
   alarmTime: DateTime.parse(json['timestamp'] as String),
   type: json['type'] as String?,
-  ackRes: json['ack_res'] as bool? ?? false,
-  ackResBy: json['ack_res_by'] as String?,
-  ackResAt: json['ack_res_at'] == null
+  ackRes: json['ack/res'] as bool? ?? false,
+  ackResBy: json['ack/res_by'] as String?,
+  ackResAt: json['ack/res_at'] == null
       ? null
-      : DateTime.parse(json['ack_res_at'] as String),
+      : DateTime.parse(json['ack/res_at'] as String),
   definition: json['definition'] == null
       ? null
       : AlarmDefinition.fromJson(json['definition'] as Map<String, dynamic>),
@@ -28,8 +28,8 @@ Map<String, dynamic> _$AlarmToJson(_Alarm instance) => <String, dynamic>{
   'alarm_id': instance.alarmId,
   'timestamp': instance.alarmTime.toIso8601String(),
   'type': instance.type,
-  'ack_res': instance.ackRes,
-  'ack_res_by': instance.ackResBy,
-  'ack_res_at': instance.ackResAt?.toIso8601String(),
+  'ack/res': instance.ackRes,
+  'ack/res_by': instance.ackResBy,
+  'ack/res_at': instance.ackResAt?.toIso8601String(),
   'definition': instance.definition,
 };

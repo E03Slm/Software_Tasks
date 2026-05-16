@@ -35,7 +35,7 @@ final alarmDefinitionsProvider = FutureProvider<List<AlarmDefinition>>((ref) asy
   return ref.watch(alarmRepositoryProvider).fetchDefinitions();
 });
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AlarmNotifier extends _$AlarmNotifier {
   @override
   List<Alarm> build() {
@@ -60,6 +60,16 @@ class AlarmNotifier extends _$AlarmNotifier {
     if (sessionId.isEmpty) return;
     
     final typeName = type.name.replaceAll('_', ' ').toUpperCase();
+
+    // Duplicate prevention: Don't add if the same type is already active (unhandled)
+    final isDuplicate = state.any((a) => 
+      (a.definition?.name.toUpperCase() == typeName || a.type?.toUpperCase() == typeName) && !a.ackRes
+    );
+    
+    if (isDuplicate) {
+      print('DEBUG: AlarmNotifier.add skipping duplicate active alarm: $typeName');
+      return;
+    }
     
     // Use provided definition or find one from the list
     final AlarmDefinition finalDef;
@@ -135,6 +145,9 @@ class AlarmNotifier extends _$AlarmNotifier {
           newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
           performerId: currentUser?.id,
         );
+        
+        // Refresh history and potentially active list
+        ref.invalidate(alarmHistoryProvider);
       } catch (e) {
         print('Failed to update alarm: $e');
       }
@@ -168,6 +181,9 @@ class AlarmNotifier extends _$AlarmNotifier {
           newValue: {'alarm_id': updatedAlarm!.alarmId, 'severity': updatedAlarm!.definition?.severity},
           performerId: currentUser?.id,
         );
+        
+        // Refresh history and potentially active list
+        ref.invalidate(alarmHistoryProvider);
       } catch (e) {
         print('Failed to update alarm: $e');
       }
@@ -176,13 +192,27 @@ class AlarmNotifier extends _$AlarmNotifier {
 
   void clearAll() => state = [];
 
-  List<Alarm> get active => state.where((a) => !a.ackRes).toList();
+  /// Get only active (unhandled) alarms
+  List<Alarm> get active => state.where((a) => !a.isHandled).toList();
   
   bool get canContinue {
-    // 1. All alarms must be handled (ackRes)
-    final unhandled = state.any((a) => !a.ackRes);
-    if (unhandled) return false;
+    // Strict severity-based decision system
+    for (final alarm in state) {
+      if (alarm.isHandled) continue;
 
+      final severity = alarm.definition?.severity.toUpperCase() ?? 'LOW';
+      
+      if (severity == 'LOW' || severity == 'MEDIUM') {
+        // Requires Acknowledgment (handled) to continue
+        if (!alarm.isHandled) return false;
+      } else if (severity == 'HIGH' || severity == 'CRITICAL') {
+        // Requires Resolution (handled) before infusion can continue
+        if (!alarm.isHandled) return false;
+      } else {
+        // Default: block infusion for unknown active alarms
+        return false;
+      }
+    }
     return true;
   }
 
@@ -202,7 +232,7 @@ class AlarmNotifier extends _$AlarmNotifier {
 }
 
 // ─── Battery Provider ────────────────────────────────────────────────────────
-@riverpod
+@Riverpod(keepAlive: true)
 class BatteryNotifier extends _$BatteryNotifier {
   Timer? _timer;
 
@@ -321,6 +351,15 @@ class InfusionNotifier extends _$InfusionNotifier {
       return; // Prevent setting parameters
     }
 
+    if (drug != null && drug.softLimitHigh != null && infusionRate > drug.softLimitHigh!) {
+       ref.read(alarmProvider.notifier).add(
+        AlarmType.softLimitWarning,
+        AlarmSeverity.medium,
+        state.id,
+      );
+      _logAction('LIMIT_WARNING', newValue: {'rate': infusionRate, 'limit': drug.softLimitHigh});
+    }
+
     final oldParams = {
       'rate': state.infusionRate, 
       'volume': state.totalVolume,
@@ -412,6 +451,7 @@ class InfusionNotifier extends _$InfusionNotifier {
 
     // Safety Check: Enforce alarm acknowledgment and resolution
     if (!ref.read(alarmProvider.notifier).canContinue) {
+      print('DEBUG: InfusionNotifier.start blocked by active alarms');
       return;
     }
 
@@ -425,15 +465,6 @@ class InfusionNotifier extends _$InfusionNotifier {
         );
         _logAction('LIMIT_BLOCK', newValue: {'rate': state.infusionRate, 'limit': drug.hardLimitHigh});
         return;
-      }
-      
-      if (drug.softLimitHigh != null && state.infusionRate > drug.softLimitHigh!) {
-        ref.read(alarmProvider.notifier).add(
-          AlarmType.softLimitWarning,
-          AlarmSeverity.medium,
-          state.id,
-        );
-        _logAction('LIMIT_WARNING', newValue: {'rate': state.infusionRate, 'limit': drug.softLimitHigh});
       }
     }
 

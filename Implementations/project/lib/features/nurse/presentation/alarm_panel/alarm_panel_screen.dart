@@ -98,7 +98,7 @@ class _AlarmPanelScreenState extends ConsumerState<AlarmPanelScreen> {
             itemBuilder: (context, index) {
               final alarm = filteredAlarms[index];
               final severity = (alarm.definition?.severity ?? 'low').toLowerCase();
-              final isCritical = severity == 'high' || severity == 'critical';
+              final isCritical = alarm.isHighSeverity;
 
               return Card(
                 elevation: 0,

@@ -6,6 +6,8 @@ import 'package:project/features/nurse/presentation/providers/patients_provider.
 import 'package:project/features/nurse/domain/models/infusion_session.dart';
 import 'package:project/features/doctor/domain/models/drug.dart';
 import 'package:project/features/admin/domain/models/managed_user.dart';
+import 'package:project/features/nurse/domain/enums/alarm_type.dart';
+import 'package:project/features/nurse/domain/enums/severity_level.dart';
 import '../../../../core/theme/nurse_theme.dart';
 
 class ParameterEntryScreen extends ConsumerStatefulWidget {
@@ -58,13 +60,92 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
 
   void _onConfirm() {
     if (_formKey.currentState!.validate()) {
-      ref.read(infusionProvider.notifier).setParameters(
-            infusionRate: double.parse(_rateController.text),
-            totalVolume: double.parse(_volumeController.text),
-            patientId: _selectedPatientId,
-          );
-      context.go('/nurse');
+      final rate = double.tryParse(_rateController.text) ?? 0;
+      final session = ref.read(infusionProvider);
+      final drug = session.drug;
+
+      if (drug != null && drug.softLimitHigh != null && rate > drug.softLimitHigh!) {
+        _showSoftLimitAcknowledgment(rate, drug.softLimitHigh!);
+      } else {
+        ref.read(infusionProvider.notifier).setParameters(
+              infusionRate: rate,
+              totalVolume: double.parse(_volumeController.text),
+              patientId: _selectedPatientId,
+            );
+        context.go('/nurse');
+      }
     }
+  }
+
+  void _showSoftLimitAcknowledgment(double rate, double limit) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.orange.shade800),
+            const SizedBox(width: 12),
+            const Text('Soft Limit Alert'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'CLINICAL OVERRIDE REQUIRED',
+              style: TextStyle(fontWeight: FontWeight.w900, color: Colors.orange, fontSize: 12),
+            ),
+            const SizedBox(height: 12),
+            Text('The entered rate ($rate mL/hr) exceeds the predefined soft limit ($limit mL/hr).'),
+            const SizedBox(height: 12),
+            const Text('The infusion cannot continue until this override is acknowledged and logged.'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('CANCEL'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final sessionId = ref.read(infusionProvider).id;
+              
+              // 1. Manually trigger and await the alarm to ensure it's in state
+              await ref.read(alarmProvider.notifier).add(
+                AlarmType.softLimitWarning,
+                AlarmSeverity.medium,
+                sessionId,
+              );
+
+              // 2. Set parameters (duplicate prevention will skip second trigger)
+              ref.read(infusionProvider.notifier).setParameters(
+                    infusionRate: rate,
+                    totalVolume: double.parse(_volumeController.text),
+                    patientId: _selectedPatientId,
+                  );
+              
+              // 3. Find and acknowledge the alarm
+              final activeAlarms = ref.read(alarmProvider.notifier).active;
+              final softLimitAlarm = activeAlarms.lastWhere(
+                (a) => !a.ackRes,
+                orElse: () => activeAlarms.last,
+              );
+              
+              await ref.read(alarmProvider.notifier).acknowledge(softLimitAlarm.id);
+              
+              if (mounted) {
+                Navigator.pop(dialogContext);
+                context.go('/nurse');
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade800, foregroundColor: Colors.white),
+            child: const Text('ACKNOWLEDGE'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

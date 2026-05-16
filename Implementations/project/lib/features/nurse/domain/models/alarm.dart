@@ -20,5 +20,12 @@ abstract class Alarm with _$Alarm {
     @JsonKey(name: 'definition') AlarmDefinition? definition,
   }) = _Alarm;
 
+  bool get isHighSeverity {
+    final sev = definition?.severity.toUpperCase() ?? 'LOW';
+    return sev == 'HIGH' || sev == 'CRITICAL';
+  }
+
+  bool get isHandled => ackRes;
+
   factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
 }
