@@ -8,7 +8,6 @@ package "Presentation Tier" #E1F5EE {
   package "Doctor UI (green)" {
     [Drug Library Screen]
     [Reports & Analytics]
-    [Logs Viewer]
     [Audit Trail Screen]
   }
 
@@ -22,7 +21,7 @@ package "Presentation Tier" #E1F5EE {
   package "Admin UI (purple)" {
     [User Management Screen]
     [System Health Screen]
-    [Config Panel]
+    [Audit Trail]
   }
 
   [Login Screen] --> [Role Router] : authenticates
@@ -45,13 +44,10 @@ package "Business Logic Tier" #FAEEDA {
     [Infusion State Machine]
     [Limit Validator]
     [Alarm Controller]
-    [KVO Mode Handler]
   }
 
   package "Admin Service" {
     [Account Manager]
-    [Session Manager]
-    [Global Config Manager]
   }
 
   [Simulation Engine] --> [Infusion State Machine]
