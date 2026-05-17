@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:uuid/uuid.dart';
@@ -26,34 +28,27 @@ class AuthRepository {
     try {
 
 
-      // Step 1: Fetch all users
-      final response = await _client.from('users').select().eq('Is_Deleted', false);
-      final List<Map<String, dynamic>> records = (response as List).cast<Map<String, dynamic>>();
+      // Step 1: Hash the National ID with SHA-256 for deterministic querying
+      final hashedNationalId = sha256.convert(utf8.encode(nationalId)).toString();
 
-      // Step 2: Identify user by National ID hash in a separate isolate
-      final matchedUserRecord = await compute(_findMatchingUser, {
-        'records': records,
-        'nationalId': nationalId,
-      });
+      // Step 2: Fetch the specific user directly (O(1) query)
+      final response = await _client
+          .from('users')
+          .select()
+          .eq('Is_Deleted', false)
+          .eq('national_id', hashedNationalId)
+          .maybeSingle();
 
-      if (matchedUserRecord == null) {
+      if (response == null) {
         print('Auth: No user found matching National ID');
         return null;
       }
 
-      // Step 3: Verify Password in a separate isolate
+      final matchedUserRecord = response as Map<String, dynamic>;
+
+      // Step 3: Verify Password (still using BCrypt for security)
       final String? storedPasswordHash = matchedUserRecord['password_hash'];
-      if (storedPasswordHash == null) {
-        print('Auth: No password hash stored');
-        return null;
-      }
-
-      final isValid = await compute(_verifyPassword, {
-        'password': password,
-        'hash': storedPasswordHash,
-      });
-
-      if (!isValid) {
+      if (storedPasswordHash == null || !BCrypt.checkpw(password, storedPasswordHash)) {
         print('Auth: Password mismatch');
         return null;
       }
@@ -109,25 +104,4 @@ class AuthRepository {
       print('SignOut Error: $e');
     }
   }
-}
-
-// Top-level functions (required by compute)
-
-Map<String, dynamic>? _findMatchingUser(Map<String, dynamic> args) {
-  final records = args['records'] as List<Map<String, dynamic>>;
-  final nationalId = args['nationalId'] as String;
-
-  for (var record in records) {
-    final storedIdHash = record['national_id'] ?? record['user_id'];
-    if (storedIdHash != null && storedIdHash.startsWith(r'$')) {
-      if (BCrypt.checkpw(nationalId, storedIdHash)) {
-        return record;
-      }
-    }
-  }
-  return null;
-}
-
-bool _verifyPassword(Map<String, dynamic> args) {
-  return BCrypt.checkpw(args['password'], args['hash']);
 }

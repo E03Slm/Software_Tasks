@@ -1,4 +1,5 @@
-
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:uuid/uuid.dart';
@@ -48,8 +49,8 @@ class SupabaseAdminRepository implements AdminRepository {
   Future<void> createUser(ManagedUser user, String password, String performerId) async {
     final String userId = const Uuid().v4();
     
-    // Hash National ID and Password with BCrypt
-    final nationalIdHash = user.nationalId != null ? BCrypt.hashpw(user.nationalId!, BCrypt.gensalt()) : null;
+    // Hash National ID with SHA-256 for deterministic querying, Password with BCrypt
+    final nationalIdHash = user.nationalId != null ? sha256.convert(utf8.encode(user.nationalId!)).toString() : null;
     final passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
     
     final userData = {
