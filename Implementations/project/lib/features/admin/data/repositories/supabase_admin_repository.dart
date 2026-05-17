@@ -1,3 +1,4 @@
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:uuid/uuid.dart';
@@ -47,8 +48,7 @@ class SupabaseAdminRepository implements AdminRepository {
   Future<void> createUser(ManagedUser user, String password, String performerId) async {
     final String userId = const Uuid().v4();
     
-    // Hash both National ID and Password using Bcrypt if they are intended to be secure
-    // Note: DESIGN.md says 'national_id' is text, but AuthRepository expects a hash.
+    // Hash National ID and Password with BCrypt
     final nationalIdHash = user.nationalId != null ? BCrypt.hashpw(user.nationalId!, BCrypt.gensalt()) : null;
     final passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
     

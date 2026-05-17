@@ -24,42 +24,36 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      // Step 1: Fetch all users from the database
-      // Note: Full scan is required because BCrypt hashes are non-deterministic.
+
+
+      // Step 1: Fetch all users
       final response = await _client.from('users').select().eq('Is_Deleted', false);
       final List<Map<String, dynamic>> records = (response as List).cast<Map<String, dynamic>>();
 
-      Map<String, dynamic>? matchedUserRecord;
+      // Step 2: Identify user by National ID hash in a separate isolate
+      final matchedUserRecord = await compute(_findMatchingUser, {
+        'records': records,
+        'nationalId': nationalId,
+      });
 
-      // Step 2: Identify user by National ID hash
-      // We use a small delay every 2 iterations to keep the Flutter Web/Mobile UI responsive.
-      for (int i = 0; i < records.length; i++) {
-        if (i % 2 == 0) {
-          await Future.delayed(const Duration(milliseconds: 10));
-        }
-
-        final record = records[i];
-        // The user specified to check 'national_id' column. 
-        // Fallback to 'user_id' only if 'national_id' is null (for legacy support during migration).
-        final String? storedIdHash = record['national_id'] ?? record['user_id'];
-
-        if (storedIdHash != null && storedIdHash.startsWith(r'$')) {
-          if (BCrypt.checkpw(nationalId, storedIdHash)) {
-            matchedUserRecord = record;
-            break;
-          }
-        }
-      }
-
-      // Step 3: If no user matched the National ID, return null
       if (matchedUserRecord == null) {
         print('Auth: No user found matching National ID');
         return null;
       }
 
-      // Step 4: Verify Password
+      // Step 3: Verify Password in a separate isolate
       final String? storedPasswordHash = matchedUserRecord['password_hash'];
-      if (storedPasswordHash == null || !BCrypt.checkpw(password, storedPasswordHash)) {
+      if (storedPasswordHash == null) {
+        print('Auth: No password hash stored');
+        return null;
+      }
+
+      final isValid = await compute(_verifyPassword, {
+        'password': password,
+        'hash': storedPasswordHash,
+      });
+
+      if (!isValid) {
         print('Auth: Password mismatch');
         return null;
       }
@@ -115,4 +109,25 @@ class AuthRepository {
       print('SignOut Error: $e');
     }
   }
+}
+
+// Top-level functions (required by compute)
+
+Map<String, dynamic>? _findMatchingUser(Map<String, dynamic> args) {
+  final records = args['records'] as List<Map<String, dynamic>>;
+  final nationalId = args['nationalId'] as String;
+
+  for (var record in records) {
+    final storedIdHash = record['national_id'] ?? record['user_id'];
+    if (storedIdHash != null && storedIdHash.startsWith(r'$')) {
+      if (BCrypt.checkpw(nationalId, storedIdHash)) {
+        return record;
+      }
+    }
+  }
+  return null;
+}
+
+bool _verifyPassword(Map<String, dynamic> args) {
+  return BCrypt.checkpw(args['password'], args['hash']);
 }
