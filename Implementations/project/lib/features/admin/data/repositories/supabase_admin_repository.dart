@@ -135,11 +135,13 @@ class SupabaseAdminRepository implements AdminRepository {
     final activeSessionsResponse = await _client
         .from('infusion_session')
         .select('session_id')
-        .eq('status', 'Infusing');
+        .neq('status', 'Stopped')
+        .neq('status', 'Idle');
 
     final alarmsCountResponse = await _client
         .from('alarm')
-        .select('alarm_id');
+        .select('alarm_id')
+        .eq('ack_res', false);
 
     return {
       'total_users': (userCountResponse as List).length,

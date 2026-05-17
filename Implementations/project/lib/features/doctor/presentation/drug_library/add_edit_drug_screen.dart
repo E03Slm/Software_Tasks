@@ -146,8 +146,13 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
                             controller: _concentrationController,
                             decoration: const InputDecoration(labelText: 'Concentration'),
                             keyboardType: TextInputType.number,
-                            validator: (v) => v!.isEmpty ? 'Required' : null,
-                          ),
+                            validator: (v) {
+                              if (v == null || v.isEmpty) return 'Required';
+                              final val = double.tryParse(v);
+                              if (val == null) return 'Invalid';
+                              if (val < 0) return 'Cannot be negative';
+                              return null;
+                            },                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -165,8 +170,13 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
                       controller: _defaultRateController,
                       decoration: const InputDecoration(labelText: 'Default Rate (mL/hr)'),
                       keyboardType: TextInputType.number,
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
-                    ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Required';
+                        final val = double.tryParse(v);
+                        if (val == null) return 'Invalid';
+                        if (val < 0) return 'Cannot be negative';
+                        return null;
+                      },                    ),
                     const SizedBox(height: 16),
                     Row(
                       children: [
@@ -178,7 +188,14 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
                               helperText: 'Warning threshold',
                             ),
                             keyboardType: TextInputType.number,
-                          ),
+                            validator: (v) {
+                              if (v != null && v.isNotEmpty) {
+                                final val = double.tryParse(v);
+                                if (val == null) return 'Invalid';
+                                if (val < 0) return 'Cannot be negative';
+                              }
+                              return null;
+                            },                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -189,8 +206,13 @@ class _AddEditDrugScreenState extends ConsumerState<AddEditDrugScreen> {
                               helperText: 'Strict maximum',
                             ),
                             keyboardType: TextInputType.number,
-                            validator: (v) => v!.isEmpty ? 'Required' : null,
-                          ),
+                            validator: (v) {
+                              if (v == null || v.isEmpty) return 'Required';
+                              final val = double.tryParse(v);
+                              if (val == null) return 'Invalid';
+                              if (val < 0) return 'Cannot be negative';
+                              return null;
+                            },                          ),
                         ),
                       ],
                     ),

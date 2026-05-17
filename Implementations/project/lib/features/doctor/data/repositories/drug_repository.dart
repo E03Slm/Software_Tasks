@@ -94,6 +94,18 @@ class DrugRepository {
   }
 
   Future<void> deleteDrug(String id, String userId) async {
+    // Check for active infusion sessions using this drug
+    final activeSessions = await _client
+        .from('infusion_session')
+        .select('session_id')
+        .eq('drug_id', id)
+        .neq('status', 'Stopped')
+        .neq('status', 'Idle');
+
+    if (activeSessions.isNotEmpty) {
+      throw Exception('Drug is currently in use in an active infusion session.');
+    }
+
     final oldData = await _client
         .from('drug')
         .select()

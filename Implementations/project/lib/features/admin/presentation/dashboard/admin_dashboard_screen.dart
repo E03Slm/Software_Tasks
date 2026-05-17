@@ -47,7 +47,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                   ),
                   _buildStatCard(
                     context,
-                    'Total Alarms',
+                    'Pending Alarms',
                     stats['total_alarms'].toString(),
                     Icons.warning,
                     Colors.orange,

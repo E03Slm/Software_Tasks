@@ -417,6 +417,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
                     if (value == null || value.isEmpty) return 'Required';
                     final rate = double.tryParse(value);
                     if (rate == null) return 'Invalid';
+                    if (rate < 0) return 'Cannot be negative';
                     
                     // Specific validation for Infusion Rate if a drug is selected
                     if (label == 'Infusion Rate' && drug != null) {
@@ -552,7 +553,7 @@ class _ParameterEntryScreenState extends ConsumerState<ParameterEntryScreen> {
           data: (patients) => DropdownButtonFormField<String>(
             value: _selectedPatientId,
             decoration: InputDecoration(
-              hintText: 'Select Patient (National ID)',
+              hintText: 'Select Patient (User Name)',
               prefixIcon: const Icon(Icons.person_search),
               filled: true,
               fillColor: Colors.white,

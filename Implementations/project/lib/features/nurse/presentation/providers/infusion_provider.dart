@@ -594,7 +594,7 @@ class InfusionNotifier extends _$InfusionNotifier {
   void stop() {
     _stopTick();
         ref.read(batteryProvider.notifier).stopAll();
-    state = state.copyWith(status: 'Stopped');
+    state = state.copyWith(status: 'Stopped', endTime: DateTime.now());
     _logAction('INFUSION_STOPPED', newValue: {'total_infused': state.volumeInfused});
   }
 
@@ -602,7 +602,7 @@ class InfusionNotifier extends _$InfusionNotifier {
     _stopTick();
         ref.read(batteryProvider.notifier).stopAll();
     
-    state = state.copyWith(status: 'EmergencyStop');
+    state = state.copyWith(status: 'EmergencyStop', endTime: DateTime.now());
     
     if (state.id.isNotEmpty) {
       await ref.read(alarmProvider.notifier).add(
@@ -666,9 +666,10 @@ class InfusionNotifier extends _$InfusionNotifier {
     // Ensure session exists in DB for foreign key integrity
     try {
       final currentUser = ref.read(authProvider);
+      final currentBatteryLevel = ref.read(batteryProvider).level.toInt();
       final sessionToSave = state.id.isEmpty 
-          ? state.copyWith(id: const Uuid().v4(), userId: currentUser?.id)
-          : state.copyWith(userId: currentUser?.id);
+          ? state.copyWith(id: const Uuid().v4(), userId: currentUser?.id, batteryLevel: currentBatteryLevel)
+          : state.copyWith(userId: currentUser?.id, batteryLevel: currentBatteryLevel);
       
       if (state.id.isEmpty) {
         state = sessionToSave;
@@ -778,6 +779,7 @@ class InfusionNotifier extends _$InfusionNotifier {
         state = session.copyWith(
           volumeInfused: session.totalVolume,
           status: 'Stopped',
+          endTime: DateTime.now(),
         );
         _logAction('INFUSION_COMPLETE');
       }

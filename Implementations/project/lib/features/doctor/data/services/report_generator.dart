@@ -52,10 +52,7 @@ class ReportGenerator {
           _buildSafetyAnalytics(alarms, sessions),
           pw.SizedBox(height: 20),
 
-          // 5. Technical & System Status
-          _sectionTitle('5. TECHNICAL & SYSTEM STATUS'),
-          _buildTechnicalStatus(technicalLogs, sessions),
-          
+
           if (isDetailed) ...[
             pw.SizedBox(height: 20),
             // 6. Detailed Session Logs
@@ -184,19 +181,6 @@ class ReportGenerator {
             ],
           ),
         ),
-      ],
-    );
-  }
-
-  pw.Widget _buildTechnicalStatus(List<AuditLog> logs, List<InfusionSession> sessions) {
-    final wifiRestored = logs.where((l) => l.action.contains('WiFi')).length;
-    final kvoSessions = sessions.where((s) => s.status == 'KVO').length;
-
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Bullet(text: 'KVO (Keep Vein Open) Events: $kvoSessions (Catheter patency preserved)', style: const pw.TextStyle(fontSize: 9)),
-        pw.Bullet(text: 'Connectivity Restoration Events: $wifiRestored (Data integrity maintained)', style: const pw.TextStyle(fontSize: 9)),
       ],
     );
   }

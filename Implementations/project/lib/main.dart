@@ -8,6 +8,7 @@ import 'core/theme/doctor_theme.dart';
 import 'core/router/app_router.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/auth/domain/enums/role_type.dart';
+import 'core/widgets/session_timeout_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,10 @@ class SimulatorApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: nurseTheme, // Use nurseTheme as stable base theme
       routerConfig: router,
+      builder: (context, child) {
+        return SessionTimeoutWrapper(child: child!);
+      },
     );
   }
 }
+

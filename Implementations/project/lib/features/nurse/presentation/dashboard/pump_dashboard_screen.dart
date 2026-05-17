@@ -255,14 +255,27 @@ class PumpDashboardScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: () {
+              if (session.status == 'Stopped') {
+                notifier.reset();
+                context.push('/nurse/drug-selection');
+                return;
+              }
               if (session.drug != null) {
                 context.push('/nurse/parameters');
               } else {
                 context.push('/nurse/drug-selection');
               }
             },
-            icon: Icon(session.status == 'Programming' || session.drug != null ? Icons.edit_note : Icons.add),
-            label: Text(session.status == 'Programming' || session.drug != null ? 'CONTINUE' : 'NEW INFUSION'),
+            icon: Icon(
+              (session.status == 'Programming' || session.drug != null) && session.status != 'Stopped' 
+                  ? Icons.edit_note 
+                  : Icons.add
+            ),
+            label: Text(
+              (session.status == 'Programming' || session.drug != null) && session.status != 'Stopped' 
+                  ? 'CONTINUE' 
+                  : 'NEW INFUSION'
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -276,4 +289,5 @@ class PumpDashboardScreen extends ConsumerWidget {
     );
   }
 }
+
 
