@@ -17,7 +17,6 @@ class UserEditorScreen extends ConsumerStatefulWidget {
 
 class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nationalIdController;
   late TextEditingController _fnameController;
   late TextEditingController _mnameController;
   late TextEditingController _lnameController;
@@ -29,7 +28,6 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
   void initState() {
     super.initState();
     _isEditing = widget.userId != null;
-    _nationalIdController = TextEditingController();
     _fnameController = TextEditingController();
     _mnameController = TextEditingController();
     _lnameController = TextEditingController();
@@ -42,7 +40,6 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
         final user = users?.firstWhere((u) => u.id == widget.userId);
         if (user != null) {
           setState(() {
-            _nationalIdController.text = user.nationalId ?? '';
             _fnameController.text = user.fname ?? '';
             _mnameController.text = user.mname ?? '';
             _lnameController.text = user.lname ?? '';
@@ -55,7 +52,6 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
 
   @override
   void dispose() {
-    _nationalIdController.dispose();
     _fnameController.dispose();
     _mnameController.dispose();
     _lnameController.dispose();
@@ -76,17 +72,7 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _nationalIdController,
-                decoration: const InputDecoration(
-                  labelText: 'National ID',
-                  prefixIcon: Icon(Icons.badge),
-                  border: OutlineInputBorder(),
-                ),
-                enabled: !_isEditing,
-                validator: (value) => (value == null || value.isEmpty) ? 'Required' : null,
-              ),
-              const SizedBox(height: 24),
+
               TextFormField(
                 controller: _fnameController,
                 decoration: const InputDecoration(
@@ -169,7 +155,6 @@ class _UserEditorScreenState extends ConsumerState<UserEditorScreen> {
 
     final user = ManagedUser(
       id: widget.userId ?? '',
-      nationalId: _nationalIdController.text,
       fname: _fnameController.text,
       mname: _mnameController.text,
       lname: _lnameController.text,

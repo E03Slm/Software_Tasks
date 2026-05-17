@@ -26,7 +26,7 @@ class AuthRepository {
     try {
       // Step 1: Fetch all users from the database
       // Note: Full scan is required because BCrypt hashes are non-deterministic.
-      final response = await _client.from('users').select();
+      final response = await _client.from('users').select().eq('Is_Deleted', false);
       final List<Map<String, dynamic>> records = (response as List).cast<Map<String, dynamic>>();
 
       Map<String, dynamic>? matchedUserRecord;

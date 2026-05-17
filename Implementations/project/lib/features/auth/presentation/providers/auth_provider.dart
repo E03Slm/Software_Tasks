@@ -3,6 +3,7 @@ import '../../domain/models/app_user.dart';
 import '../../domain/enums/role_type.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../../doctor/presentation/providers/audit_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_provider.g.dart';
 
@@ -14,6 +15,8 @@ AuthRepository authRepository(Ref ref) {
 
 @riverpod
 class AuthNotifier extends _$AuthNotifier {
+  RealtimeChannel? _authSubscription;
+
   @override
   AppUser? build() {
     return null;
@@ -30,6 +33,7 @@ class AuthNotifier extends _$AuthNotifier {
       
       if (user != null) {
         state = user;
+        _setupRealtimeListener(user.id);
         return true;
       }
       return false;
@@ -39,12 +43,37 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
+  void _setupRealtimeListener(String userId) {
+    _authSubscription?.unsubscribe();
+    _authSubscription = Supabase.instance.client
+        .channel('public:users:auth_$userId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'users',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: userId,
+          ),
+          callback: (payload) {
+            final isDeleted = payload.newRecord['Is_Deleted'] == true;
+            if (isDeleted) {
+              logout();
+            }
+          },
+        )
+        .subscribe();
+  }
+
   /// Resets the auth state.
   Future<void> logout() async {
     try {
       await ref.read(authRepositoryProvider).signOut();
     } finally {
       state = null;
+      _authSubscription?.unsubscribe();
+      _authSubscription = null;
     }
   }
 }
