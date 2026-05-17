@@ -7,6 +7,11 @@ import 'package:flutter/foundation.dart';
 import '../../domain/models/app_user.dart';
 import '../../../doctor/data/repositories/audit_repository.dart';
 
+/// Top-level function for background Isolate execution
+bool _verifyPassword(Map<String, dynamic> args) {
+  return BCrypt.checkpw(args['password'] as String, args['hash'] as String);
+}
+
 class AuthRepository {
   final _client = Supabase.instance.client;
   final AuditRepository _auditRepo;
@@ -46,9 +51,12 @@ class AuthRepository {
 
       final matchedUserRecord = response as Map<String, dynamic>;
 
-      // Step 3: Verify Password (still using BCrypt for security)
+      // Step 3: Verify Password in a separate Isolate to prevent UI blocking
       final String? storedPasswordHash = matchedUserRecord['password_hash'];
-      if (storedPasswordHash == null || !BCrypt.checkpw(password, storedPasswordHash)) {
+      if (storedPasswordHash == null || !await compute(_verifyPassword, {
+        'password': password,
+        'hash': storedPasswordHash,
+      })) {
         print('Auth: Password mismatch');
         return null;
       }

@@ -31,26 +31,57 @@ class AlarmActivationPanel extends ConsumerWidget {
               'Select an alarm to test system response:',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
+            const SizedBox(height: 16),
+            Consumer(
+              builder: (context, ref, child) {
+                final powerState = ref.watch(batteryProvider);
+                return SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      if (powerState.isACConnected) {
+                        ref.read(batteryProvider.notifier).disconnectAC(ref.read(infusionProvider).id);
+                      } else {
+                        ref.read(batteryProvider.notifier).connectAC();
+                      }
+                    },
+                    icon: Icon(powerState.isACConnected ? Icons.power_off : Icons.power),
+                    label: Text(powerState.isACConnected ? 'Disconnect AC Power' : 'Connect AC Power'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: powerState.isACConnected ? Colors.red : Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 24),
             definitionsAsync.when(
-              data: (definitions) => ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: definitions.length,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  final def = definitions[index];
-                  return _AlarmTriggerRow(
-                    label: '${def.name} (${def.severity})',
-                    color: _getColorForSeverity(def.severity),
-                    onTap: () => notifier.triggerAlarm(
-                      _mapType(def.name), 
-                      _mapSeverity(def.severity),
-                      definition: def,
-                    ),
-                  );
-                },
-              ),
+              data: (definitions) {
+                final filteredDefs = definitions.where((d) {
+                  final lower = d.name.toLowerCase();
+                  return !lower.contains('soft limit') && !lower.contains('battery');
+                }).toList();
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredDefs.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) {
+                    final def = filteredDefs[index];
+                    return _AlarmTriggerRow(
+                      label: '${def.name} (${def.severity})',
+                      color: _getColorForSeverity(def.severity),
+                      onTap: () => notifier.triggerAlarm(
+                        _mapType(def.name), 
+                        _mapSeverity(def.severity),
+                        definition: def,
+                      ),
+                    );
+                  },
+                );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, s) => Text('Error loading alarms: $e', style: const TextStyle(color: Colors.red)),
             ),

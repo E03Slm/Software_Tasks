@@ -155,6 +155,12 @@ class AlarmNotifier extends _$AlarmNotifier {
         
         final fullName = currentUser != null ? '${currentUser.fname} ${currentUser.lname}' : 'Unknown';
         
+        // Connect AC if it was a battery alarm
+        final alarmName = updatedAlarm!.definition?.name.toUpperCase() ?? updatedAlarm!.type?.toUpperCase() ?? '';
+        if (alarmName.contains('BATTERY')) {
+          ref.read(batteryProvider.notifier).connectAC();
+        }
+
         // Final Unified Resolution Log
         await ref.read(auditRepositoryProvider).logAction(
           actionType: 'ALARM_RESOLVED_ACK',
@@ -246,7 +252,10 @@ class AlarmNotifier extends _$AlarmNotifier {
 
       final severity = alarm.definition?.severity.toUpperCase() ?? 'LOW';
       
-      if (severity == 'LOW' || severity == 'MEDIUM') {
+      if (severity == 'LOW') {
+        // Low/Advisory alarms do not block the infusion
+        continue;
+      } else if (severity == 'MEDIUM') {
         // Requires Acknowledgment (handled) to continue
         if (!alarm.isHandled) return false;
       } else if (severity == 'HIGH' || severity == 'CRITICAL') {
@@ -339,17 +348,14 @@ class BatteryNotifier extends _$BatteryNotifier {
       state = state.copyWith(level: newLevel);
 
       if (newLevel <= 5.0 && newLevel > 4.0) {
-        ref.read(alarmProvider.notifier).add(
+        ref.read(infusionProvider.notifier).triggerAlarm(
               AlarmType.batteryCritical,
               AlarmSeverity.critical,
-              sessionId,
             );
-        ref.read(infusionProvider.notifier).emergencyStop();
       } else if (newLevel <= 20.0 && newLevel > 19.0) {
-        ref.read(alarmProvider.notifier).add(
+        ref.read(infusionProvider.notifier).triggerAlarm(
               AlarmType.batteryLow,
               AlarmSeverity.medium,
-              sessionId,
             );
       }
       

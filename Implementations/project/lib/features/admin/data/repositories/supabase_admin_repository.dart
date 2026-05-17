@@ -142,7 +142,7 @@ class SupabaseAdminRepository implements AdminRepository {
     final alarmsCountResponse = await _client
         .from('alarm')
         .select('alarm_id')
-        .eq('ack_res', false);
+        .eq('"ack/res"', false);
 
     return {
       'total_users': (userCountResponse as List).length,
