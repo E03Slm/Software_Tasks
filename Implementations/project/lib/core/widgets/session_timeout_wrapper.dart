@@ -15,8 +15,6 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
   Timer? _inactivityTimer;
   Timer? _countdownTimer;
   
-  // Set total timeout to 15 minutes, warning duration to 60 seconds
-  static const Duration timeoutDuration = Duration(minutes: 15);
   static const Duration warningDuration = Duration(seconds: 60);
   
   bool _isWarningVisible = false;
@@ -44,6 +42,11 @@ class _SessionTimeoutWrapperState extends ConsumerState<SessionTimeoutWrapper> {
     // Only run the timer if a user is logged in
     final authUser = ref.read(authProvider);
     if (authUser == null) return;
+
+    // Determine timeout duration based on role
+    final timeoutDuration = authUser.role.name.toUpperCase() == 'ADMIN' 
+        ? const Duration(minutes: 10) 
+        : const Duration(minutes: 15);
 
     _inactivityTimer = Timer(timeoutDuration - warningDuration, _showWarning);
   }
