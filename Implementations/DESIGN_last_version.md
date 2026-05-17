@@ -31,44 +31,149 @@ An educational mobile simulator replicating a real infusion pump. Three strictly
 
 ## 3. Folder Structure
 
+```
 lib/
 ├── main.dart
-├── app.dart                    # MaterialApp + ProviderScope + GoRouter
-
+├── app.dart                        # MaterialApp + ProviderScope
+│
 ├── core/
-│   ├── router.dart             # GoRouter + auth/RBAC guards
-│   ├── theme.dart              # ThemeData for all 3 roles
-│   ├── constants.dart
-│   └── utils.dart              # validators + formatters + errors/failures
-
+│   ├── router/
+│   │   ├── app_router.dart         # GoRouter root — role-based routing
+│   │   └── route_guards.dart       # Auth + RBAC guards
+│   ├── theme/
+│   │   ├── app_theme.dart          # ThemeData for all 3 role themes
+│   │   ├── doctor_theme.dart       # Green-teal palette
+│   │   ├── nurse_theme.dart        # Blue palette
+│   │   └── admin_theme.dart        # Purple-grey palette
+│   ├── constants/
+│   │   └── app_constants.dart      # Timeouts, limits, magic numbers
+│   ├── error/
+│   │   ├── app_exception.dart      # Sealed class for all errors
+│   │   └── failure.dart
+│   └── utils/
+│       ├── validators.dart
+│       └── formatters.dart
+│
 ├── features/
 │   ├── auth/
-│   │   ├── auth_repository.dart    # datasource مدمج + AppUser model + RoleType enum
-│   │   └── auth_screen.dart        # LoginScreen + AuthProvider
-
+│   │   ├── data/
+│   │   │   ├── auth_repository.dart
+│   │   │   └── supabase_auth_datasource.dart
+│   │   ├── domain/
+│   │   │   ├── models/
+│   │   │   │   └── app_user.dart           # freezed
+│   │   │   └── enums/
+│   │   │       └── role_type.dart          # DOCTOR | NURSE | ADMIN
+│   │   └── presentation/
+│   │       ├── login_screen.dart
+│   │       └── providers/
+│   │           └── auth_provider.dart
+│   │
 │   ├── doctor/
-│   │   ├── doctor_repository.dart  # Drug + Report repos + models + use cases
-│   │   ├── doctor_providers.dart   # DrugProvider + ReportProvider
-│   │   ├── doctor_shell.dart       # Bottom nav scaffold
-│   │   └── doctor_screens.dart     # Dashboard + DrugLibrary + DrugEditor + Logs + Reports
-
+│   │   ├── data/
+│   │   │   ├── drug_repository.dart
+│   │   │   ├── report_repository.dart
+│   │   │   └── supabase_drug_datasource.dart
+│   │   ├── domain/
+│   │   │   ├── models/
+│   │   │   │   ├── drug.dart               # freezed
+│   │   │   │   └── report.dart             # freezed
+│   │   │   └── use_cases/
+│   │   │       ├── add_drug_usecase.dart
+│   │   │       ├── edit_drug_usecase.dart
+│   │   │       ├── delete_drug_usecase.dart
+│   │   │       └── generate_report_usecase.dart
+│   │   └── presentation/
+│   │       ├── doctor_shell.dart           # Bottom nav scaffold
+│   │       ├── dashboard/
+│   │       │   └── doctor_dashboard_screen.dart
+│   │       ├── drug_library/
+│   │       │   ├── drug_library_screen.dart
+│   │       │   └── drug_editor_screen.dart
+│   │       ├── logs/
+│   │       │   └── logs_viewer_screen.dart
+│   │       ├── reports/
+│   │       │   └── reports_screen.dart
+│   │       └── providers/
+│   │           ├── drug_provider.dart
+│   │           └── report_provider.dart
+│   │
 │   ├── nurse/
-│   │   ├── nurse_repository.dart   # Infusion + Alarm repos + models + enums
-│   │   ├── simulation.dart         # FSM + BatterySimulator + LimitValidator + KvoHandler
-│   │   ├── nurse_providers.dart    # InfusionProvider + AlarmProvider + BatteryProvider
-│   │   ├── nurse_shell.dart        # 3-tab bottom nav + Emergency FAB
-│   │   └── nurse_screens.dart      # Dashboard + DrugSelection + ParameterEntry + Alarm + SessionLog
-
+│   │   ├── data/
+│   │   │   ├── infusion_repository.dart
+│   │   │   └── alarm_repository.dart
+│   │   ├── domain/
+│   │   │   ├── models/
+│   │   │   │   ├── infusion_session.dart   # freezed
+│   │   │   │   ├── alarm.dart              # freezed
+│   │   │   │   └── infusion_parameters.dart # freezed
+│   │   │   ├── enums/
+│   │   │   │   ├── infusion_state.dart     # Idle|Programming|Running|Paused|...
+│   │   │   │   ├── alarm_type.dart
+│   │   │   │   └── severity_level.dart
+│   │   │   └── use_cases/
+│   │   │       ├── start_infusion_usecase.dart
+│   │   │       ├── pause_infusion_usecase.dart
+│   │   │       ├── stop_infusion_usecase.dart
+│   │   │       ├── emergency_stop_usecase.dart
+│   │   │       ├── validate_parameters_usecase.dart
+│   │   │       └── acknowledge_alarm_usecase.dart
+│   │   ├── simulation/
+│   │   │   ├── infusion_state_machine.dart  # Core FSM logic
+│   │   │   ├── battery_simulator.dart
+│   │   │   ├── limit_validator.dart
+│   │   │   └── kvo_handler.dart
+│   │   └── presentation/
+│   │       ├── nurse_shell.dart            # 3-tab bottom nav + Emergency FAB
+│   │       ├── dashboard/
+│   │       │   └── pump_dashboard_screen.dart
+│   │       ├── drug_selection/
+│   │       │   └── drug_selection_screen.dart
+│   │       ├── parameter_entry/
+│   │       │   └── parameter_entry_screen.dart
+│   │       ├── alarm_panel/
+│   │       │   └── alarm_panel_screen.dart
+│   │       ├── session_log/
+│   │       │   └── session_log_screen.dart
+│   │       └── providers/
+│   │           ├── infusion_provider.dart
+│   │           ├── alarm_provider.dart
+│   │           └── battery_provider.dart
+│   │
 │   └── admin/
-│       ├── admin_repository.dart   # User + SystemHealth repos + ManagedUser model + use cases
-│       ├── admin_providers.dart    # UserProvider + SystemHealthProvider
-│       ├── admin_shell.dart        # Drawer navigation
-│       └── admin_screens.dart      # Dashboard + UserList + UserEditor + Logs
-
+│       ├── data/
+│       │   ├── user_repository.dart
+│       │   └── system_health_repository.dart
+│       ├── domain/
+│       │   ├── models/
+│       │   │   └── managed_user.dart       # freezed
+│       │   └── use_cases/
+│       │       ├── create_user_usecase.dart
+│       │       ├── deactivate_user_usecase.dart
+│       │       └── delete_user_usecase.dart
+│       └── presentation/
+│           ├── admin_shell.dart            # Drawer navigation
+│           ├── dashboard/
+│           │   └── admin_dashboard_screen.dart
+│           ├── user_management/
+│           │   ├── user_list_screen.dart
+│           │   └── user_editor_screen.dart
+│           ├── logs/
+│           │   └── admin_logs_screen.dart
+│           └── providers/
+│               ├── user_provider.dart
+│               └── system_health_provider.dart
+│
 └── shared/
-    ├── shared_widgets.dart         # RoleBadge + ConfirmationDialog + TimeoutBanner + AccessDenied
-    └── session_provider.dart
----
+    ├── widgets/
+    │   ├── role_badge.dart             # Coloured chip always visible in AppBar
+    │   ├── confirmation_dialog.dart    # Destructive action dialogs
+    │   ├── session_timeout_banner.dart # 60s countdown banner
+    │   └── access_denied_screen.dart
+    └── providers/
+        └── session_provider.dart      # Session timeout logic
+```
+
 
 ## 4. Database Schema (Supabase / PostgreSQL)
 
