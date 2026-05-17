@@ -8,11 +8,6 @@ Programming --> Running : Start infusion
 Running --> Paused : Pause
 Paused --> Running : Resume
 
-' KVO State Implementation
-Running --> KVO : Infusion complete AND KVO configured
-KVO --> Complete : KVO stopped / volume reached
-KVO --> EmergencyStop : Emergency stop
-
 ' Safety-conscious Alarm Transitions
 Running --> Alarm : Alarm condition (occlusion, air, etc.)
 Alarm --> Alarm : New alarm while in alarm

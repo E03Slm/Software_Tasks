@@ -3,11 +3,11 @@ skinparam classAttributeIconSize 0
 
 ' --- User Management & RBAC (F-A-01, S-ALL-01) ---
 abstract class User {
-  -userId: TEXT
+  -userId: text
   -Fname: String
   -Mname: String
   -Lname: String
-  -passwordHash: TEXT
+  -passwordHash: text
   -role: RoleType
   -created_at: Timestamp
   -last_login: Timestamp
@@ -39,6 +39,7 @@ enum RoleType {
   DOCTOR
   NURSE
   ADMIN
+  PATIENT
   }
 
 ' --- Drug Library & Safety (F-D-01, F-D-02, SF-D-01) ---
@@ -59,44 +60,56 @@ class Drug {
 
 ' --- Infusion & Simulation (F-N-04, F-N-06, SF-N-05) ---
 class InfusionSession {
-  -sessionId: UUID
-  -startTime: DateTime
+  -sessionId: uuid
+  -userId: uuid
+  -PatientID: uuid
   -currentRate: float
   -volumeInfused: float
   -volumeRemaining: float
-  -status: InfusionState
-  -selectedDrug: Drug 
+  -status: varchar
+  -drugID: uuid
+  -startTime: timestamp
+  -endTime: timestamp
   -batteryLevel: float
-  -isCharging: boolean
   +initializeFromDrug(Drug) 
   +start()
+  +resume()
   +pause()
-  +stop()
   +emergencyStop()
   +drain(duration: int)
   +checkStatus(): BatteryState
-  +switchToKVO()
 }
 
-' --- Alarms & Safety Logic (F-N-07, SF-N-03) ---
 class Alarm {
-  -alarmId: UUID
-  -type: AlarmType
-  -severity: SeverityLevel
-  -isAcknowledged: boolean
+  -alarmId: uuid
+  -sessionId: uuid
+  -alarmtime: timestamp
+  -eventid: uuid
+  -ack/res_by: uuid
+  -ack/res_at: timestamp
+  -ack/res: boolean
   +trigger()
   +resolve()
 }
 
+' --- Alarms & Safety Logic (F-N-07, SF-N-03) ---
+class Alarms {
+  -alarmId: uuid
+  -alarmname: text
+  -severity: text
+  -Description: text
+}
+
 class AuditLog {
   ' Immutable Audit Trail (S-D-02, F-D-05)
-  -entries: List<AuditEntry>
-  -timestamp: DateTime
-  -performingUser: UUID
-  -actionType: String
+  -logId: uuid
+  -userId: uuid
+  -action: text
+  -entityType: text
+  -entityId: uuid
+  -timestamp: timestamp
   -oldValue: String
   -newValue: String
-  -traceabilityID: UUID
   +addEntry()
   +previewActiveSession()
   +queryByDateRange() 
@@ -118,10 +131,12 @@ InfusionSession --> Drug : "takes data from"
 
 ' Logging Relations (S-D-02, S-N-03)
 InfusionSession --> AuditLog : records to
-User --> AuditLog : views (infusion sessions access)
+User --> AuditLog : views (Full access except other users logins)
 User --> AuditLog : views (Full access)
 
 ' Admin manages Users (F-A-01)
 User --> User : manages
+
+Alarm --> Alarms : references
 
 @enduml
